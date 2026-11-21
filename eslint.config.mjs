@@ -22,6 +22,7 @@ export default [
   {
     ignores: [
       'dist/**',
+      'coverage/**',
       '.astro/**',
       'node_modules/**',
       'package-lock.json',

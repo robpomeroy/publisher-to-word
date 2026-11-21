@@ -2,6 +2,7 @@ findings/*
 
 # Build output
 dist/
+coverage/
 .astro/
 
 # Dependencies

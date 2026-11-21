@@ -1,3 +1,6 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 export interface LessonMeta {
   slug: string;
   order: number;
@@ -14,7 +17,20 @@ export interface ModuleMeta {
   lessons: LessonMeta[];
 }
 
-export const CURRICULUM: ModuleMeta[] = [
+export interface AuthoredLessonData {
+  title: string;
+  summary: string;
+  order?: number;
+  module?: number;
+}
+
+export interface AuthoredLessonEntry {
+  id: string;
+  slug?: string;
+  data: AuthoredLessonData;
+}
+
+export const MODULE_OUTLINES: ModuleMeta[] = [
   {
     number: 1,
     title: "The Big Shift: How Word Thinks",
@@ -23,10 +39,10 @@ export const CURRICULUM: ModuleMeta[] = [
       {
         slug: "01-how-text-flows",
         order: 1,
-        title: "How Text Flows in Word (The River vs. Pinboard)",
-        summary: "Why pressing Enter moves everything down, and the crucial difference between Enter, Shift+Enter, and Page Break.",
+        title: "", // Dynamically loaded from MDX frontmatter
+        summary: "", // Dynamically loaded from MDX frontmatter
         module: 1,
-        isAvailable: true
+        isAvailable: false
       },
       {
         slug: "02-show-hidden-clues",
@@ -157,16 +173,81 @@ export const CURRICULUM: ModuleMeta[] = [
   }
 ];
 
-export const ALL_LESSONS = CURRICULUM.flatMap(m => m.lessons);
-
-export function getLessonBySlug(slug: string): LessonMeta | undefined {
-  return ALL_LESSONS.find(l => l.slug === slug);
+export function loadAuthoredLessonsFromDisk(): AuthoredLessonEntry[] {
+  try {
+    const lessonsDir = path.resolve('src/content/lessons');
+    if (!fs.existsSync(lessonsDir)) return [];
+    const files = fs.readdirSync(lessonsDir).filter(f => f.endsWith('.md') || f.endsWith('.mdx'));
+    return files.map(file => {
+      const content = fs.readFileSync(path.join(lessonsDir, file), 'utf-8');
+      const slug = file.replace(/\.mdx?$/, '');
+      const titleMatch = content.match(/^title:\s*["']?([^"'\n\r]+)["']?/m);
+      const summaryMatch = content.match(/^summary:\s*["']?([^"'\n\r]+)["']?/m);
+      const moduleMatch = content.match(/^module:\s*(\d+)/m);
+      const orderMatch = content.match(/^order:\s*(\d+)/m);
+      return {
+        id: file,
+        slug,
+        data: {
+          title: titleMatch ? titleMatch[1].trim() : '',
+          summary: summaryMatch ? summaryMatch[1].trim() : '',
+          module: moduleMatch ? parseInt(moduleMatch[1], 10) : 1,
+          order: orderMatch ? parseInt(orderMatch[1], 10) : 1
+        }
+      };
+    });
+  } catch {
+    return [];
+  }
 }
 
-export function getAdjacentLessons(currentSlug: string) {
-  const index = ALL_LESSONS.findIndex(l => l.slug === currentSlug);
+export function buildCurriculum(authoredLessons: AuthoredLessonEntry[] = []): ModuleMeta[] {
+  const authoredMap = new Map<string, AuthoredLessonData>();
+  for (const item of authoredLessons) {
+    const slug = (item.slug || item.id || '').replace(/\.mdx?$/, '');
+    if (slug) authoredMap.set(slug, item.data);
+  }
+
+  return MODULE_OUTLINES.map(mod => ({
+    ...mod,
+    lessons: mod.lessons.map(stub => {
+      const authored = authoredMap.get(stub.slug);
+      if (authored) {
+        return {
+          slug: stub.slug,
+          order: authored.order ?? stub.order,
+          title: authored.title,
+          summary: authored.summary,
+          module: authored.module ?? stub.module,
+          isAvailable: true
+        };
+      }
+      return {
+        ...stub,
+        isAvailable: false
+      };
+    })
+  }));
+}
+
+export function getCurriculum(authoredLessons?: AuthoredLessonEntry[]): ModuleMeta[] {
+  const lessons = authoredLessons ?? loadAuthoredLessonsFromDisk();
+  return buildCurriculum(lessons);
+}
+
+export const CURRICULUM: ModuleMeta[] = getCurriculum();
+export const ALL_LESSONS: LessonMeta[] = CURRICULUM.flatMap(m => m.lessons);
+
+export function getLessonBySlug(slug: string, authoredLessons?: AuthoredLessonEntry[]): LessonMeta | undefined {
+  const curriculum = authoredLessons ? buildCurriculum(authoredLessons) : CURRICULUM;
+  return curriculum.flatMap(m => m.lessons).find(l => l.slug === slug);
+}
+
+export function getAdjacentLessons(currentSlug: string, authoredLessons?: AuthoredLessonEntry[]) {
+  const all = authoredLessons ? buildCurriculum(authoredLessons).flatMap(m => m.lessons) : ALL_LESSONS;
+  const index = all.findIndex(l => l.slug === currentSlug);
   return {
-    prev: index > 0 ? ALL_LESSONS[index - 1] : undefined,
-    next: index >= 0 && index < ALL_LESSONS.length - 1 ? ALL_LESSONS[index + 1] : undefined
+    prev: index > 0 ? all[index - 1] : undefined,
+    next: index >= 0 && index < all.length - 1 ? all[index + 1] : undefined
   };
 }

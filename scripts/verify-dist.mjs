@@ -1,15 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parseHTML } from 'linkedom';
 
-const DIST_DIR = path.resolve('dist');
-
-if (!fs.existsSync(DIST_DIR)) {
-  console.error('Error: dist directory does not exist. Run "npm run build" first.');
-  process.exit(1);
-}
-
-// 1. Collect all HTML files
-function getHtmlFiles(dir) {
+export function getHtmlFiles(dir) {
   let results = [];
   const list = fs.readdirSync(dir);
   for (const file of list) {
@@ -24,147 +18,152 @@ function getHtmlFiles(dir) {
   return results;
 }
 
-const htmlFiles = getHtmlFiles(DIST_DIR);
-console.log(`Auditing ${htmlFiles.length} rendered HTML files in dist/...\n`);
-
-let errors = [];
-const routeMap = new Map(); // routePath -> Set of IDs on that page
-
-// Helper to convert file path to route path
-function fileToRoute(filePath) {
-  const rel = path.relative(DIST_DIR, filePath).replace(/\\/g, '/');
+export function fileToRoute(filePath, distDir) {
+  const rel = path.relative(distDir, filePath).replace(/\\/g, '/');
   if (rel === 'index.html') return '/';
   if (rel.endsWith('/index.html')) return '/' + rel.replace(/\/index\.html$/, '');
   return '/' + rel.replace(/\.html$/, '');
 }
 
-// Pass 1: Parse IDs and register routes
-for (const file of htmlFiles) {
-  const route = fileToRoute(file);
-  const content = fs.readFileSync(file, 'utf-8');
+export function extractDocumentIds(document) {
   const ids = new Set();
-
-  const idMatches = content.matchAll(/\sid=["']([^"']+)["']/g);
-  for (const match of idMatches) {
-    ids.add(match[1]);
+  const elements = document.querySelectorAll('[id]');
+  for (const el of elements) {
+    const id = el.getAttribute('id');
+    if (id) ids.add(id);
   }
-
-  routeMap.set(route, { file, content, ids });
+  return ids;
 }
 
-// Pass 2: Verify each page
-for (const [route, { file, content, ids }] of routeMap) {
-  const relFile = path.relative(process.cwd(), file);
-
-  // 1. Heading structure & sequential hierarchy
-  const h1Matches = [...content.matchAll(/<h1\b[^>]*>/gi)];
-  if (h1Matches.length === 0) {
+export function auditHeadings(document, relFile) {
+  const errors = [];
+  const h1s = document.querySelectorAll('h1');
+  if (h1s.length === 0) {
     errors.push(`[${relFile}] Missing <h1> element on page.`);
-  } else if (h1Matches.length > 1) {
-    errors.push(`[${relFile}] Multiple <h1> elements found (${h1Matches.length}). Expected exactly 1.`);
+  } else if (h1s.length > 1) {
+    errors.push(`[${relFile}] Multiple <h1> elements found (${h1s.length}). Expected exactly 1.`);
   }
 
-  const allHeadings = [...content.matchAll(/<h([1-6])\b[^>]*>/gi)].map(m => parseInt(m[1], 10));
+  const headings = [...document.querySelectorAll('h1, h2, h3, h4, h5, h6')];
   let prevLevel = 0;
-  for (const level of allHeadings) {
+  for (const el of headings) {
+    const level = parseInt(el.tagName.slice(1), 10);
     if (prevLevel > 0 && level > prevLevel + 1) {
       errors.push(`[${relFile}] Non-sequential heading hierarchy: <h${prevLevel}> followed directly by <h${level}>.`);
     }
     prevLevel = level;
   }
+  return errors;
+}
 
-  // 2. Main landmark
-  const mainMatches = [...content.matchAll(/<main\b([^>]*)>/gi)];
-  if (mainMatches.length === 0) {
+export function auditLandmarks(document, relFile) {
+  const errors = [];
+  const mains = document.querySelectorAll('main');
+  if (mains.length === 0) {
     errors.push(`[${relFile}] Missing <main> landmark.`);
-  } else if (mainMatches.length > 1) {
+  } else if (mains.length > 1) {
     errors.push(`[${relFile}] Multiple <main> landmarks found. Expected exactly 1.`);
-  } else {
-    const mainAttrs = mainMatches[0][1];
-    if (!mainAttrs.includes('id="content"')) {
-      errors.push(`[${relFile}] <main> element must have id="content" for skip-link target.`);
-    }
+  } else if (mains[0].getAttribute('id') !== 'content') {
+    errors.push(`[${relFile}] <main> element must have id="content" for skip-link target.`);
   }
+  return errors;
+}
 
-  // 3. Skip link
-  if (!content.includes('href="#content"')) {
+export function auditSkipLink(document, relFile) {
+  const errors = [];
+  const skipLink = document.querySelector('a[href="#content"]');
+  if (!skipLink) {
     errors.push(`[${relFile}] Missing skip link to "#content".`);
   }
+  return errors;
+}
 
-  // 4. Headings inside summary (forbidden by modern-web-guidance)
-  const summaryMatches = content.match(/<summary\b[^>]*>[\s\S]*?<\/summary>/gi) || [];
-  for (const summary of summaryMatches) {
-    if (/<h[1-6]\b/i.test(summary)) {
-      errors.push(`[${relFile}] Found heading tag inside <summary>. JAWS/TalkBack drop headings inside summaries.`);
+export function auditSummaryHeadings(document, relFile) {
+  const errors = [];
+  const headingsInsideSummary = document.querySelectorAll('summary h1, summary h2, summary h3, summary h4, summary h5, summary h6');
+  if (headingsInsideSummary.length > 0) {
+    errors.push(`[${relFile}] Found heading tag inside <summary>. JAWS/TalkBack drop headings inside summaries.`);
+  }
+  return errors;
+}
+
+export function auditPositiveTabindex(document, relFile) {
+  const errors = [];
+  const elementsWithTabindex = document.querySelectorAll('[tabindex]');
+  for (const el of elementsWithTabindex) {
+    const val = parseInt(el.getAttribute('tabindex') || '0', 10);
+    if (val > 0) {
+      errors.push(`[${relFile}] Disallowed positive tabindex="${val}". Use tabindex="0" or "-1".`);
     }
   }
+  return errors;
+}
 
-  // 5. Positive tabindex check
-  const positiveTabindex = content.match(/tabindex=["']([1-9][0-9]*)["']/i);
-  if (positiveTabindex) {
-    errors.push(`[${relFile}] Disallowed positive tabindex="${positiveTabindex[1]}". Use tabindex="0" or "-1".`);
-  }
-
-  // 6. SVG accessibility
-  const svgMatches = content.matchAll(/<svg\b([^>]*)>([\s\S]*?)<\/svg>/gi);
-  for (const match of svgMatches) {
-    const attrs = match[1];
-    const inner = match[2];
-    const isHidden = /aria-hidden=["']true["']/i.test(attrs);
-    const hasRoleImg = /role=["']img["']/i.test(attrs);
-    const hasAriaLabel = /aria-label=["']/i.test(attrs) || /aria-labelledby=["']/i.test(attrs);
-    const hasTitle = /<title\b/i.test(inner);
+export function auditSvgAccessibility(document, relFile) {
+  const errors = [];
+  const svgs = document.querySelectorAll('svg');
+  for (const svg of svgs) {
+    const isHidden = svg.getAttribute('aria-hidden') === 'true';
+    const hasRoleImg = svg.getAttribute('role') === 'img';
+    const hasAriaLabel = svg.hasAttribute('aria-label') || svg.hasAttribute('aria-labelledby');
+    const hasTitle = svg.querySelector('title') !== null;
 
     if (!isHidden && !(hasRoleImg && (hasAriaLabel || hasTitle))) {
       errors.push(`[${relFile}] SVG must have aria-hidden="true" OR role="img" with <title> / aria-label.`);
     }
   }
+  return errors;
+}
 
-  // 7. Image accessibility
-  const imgMatches = content.matchAll(/<img\b([^>]*)>/gi);
-  for (const match of imgMatches) {
-    const attrs = match[1];
-    if (!/(?:^|\s)alt=["']/i.test(attrs)) {
+export function auditImageAccessibility(document, relFile) {
+  const errors = [];
+  const imgs = document.querySelectorAll('img');
+  for (const img of imgs) {
+    if (!img.hasAttribute('alt')) {
       errors.push(`[${relFile}] <img> tag is missing an alt attribute.`);
+      continue;
     }
-    const altValue = attrs.match(/(?:^|\s)alt=["']([^"']*)["']/i);
-    if (altValue && /^(image of|picture of|photo of)\b/i.test(altValue[1].trim())) {
-      errors.push(`[${relFile}] Clichéd alt text prefix "${altValue[1]}". Avoid "Image of..." or "Picture of...".`);
+    const altValue = img.getAttribute('alt') || '';
+    if (/^(image of|picture of|photo of)\b/i.test(altValue.trim())) {
+      errors.push(`[${relFile}] Clichéd alt text prefix "${altValue}". Avoid "Image of..." or "Picture of...".`);
     }
   }
+  return errors;
+}
 
-  // 8. Popovertarget matches a popover
-  const popoverTargets = content.matchAll(/popovertarget=["']([^"']+)["']/gi);
-  for (const target of popoverTargets) {
-    const targetId = target[1];
-    if (!ids.has(targetId)) {
+export function auditPopoverTargets(document, relFile, ids) {
+  const errors = [];
+  const popoverTriggers = document.querySelectorAll('[popovertarget]');
+  for (const trigger of popoverTriggers) {
+    const targetId = trigger.getAttribute('popovertarget');
+    if (targetId && !ids.has(targetId)) {
       errors.push(`[${relFile}] popovertarget="${targetId}" does not match any element ID on the page.`);
     }
   }
+  return errors;
+}
 
-  // 9. Internal link integrity (href)
-  const emptyHrefMatches = content.match(/<a\b[^>]*\bhref=["']\s*["']/gi);
-  if (emptyHrefMatches) {
-    errors.push(`[${relFile}] Found empty href="" attribute on <a> tag.`);
-  }
-
-  const links = content.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi);
+export function auditLinks(document, relFile, route, routeMap, ids) {
+  const errors = [];
+  const links = document.querySelectorAll('a');
   for (const link of links) {
-    const href = link[1];
+    if (!link.hasAttribute('href') || link.getAttribute('href').trim() === '') {
+      errors.push(`[${relFile}] Found empty href="" attribute on <a> tag.`);
+      continue;
+    }
+    const href = link.getAttribute('href');
 
-    // Ignore external links, mailto, tel, javascript
+    // External / protocol links
     if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('javascript:')) {
       continue;
     }
 
     if (href.startsWith('#')) {
-      // In-page anchor link
       const targetId = href.slice(1);
       if (targetId && !ids.has(targetId)) {
         errors.push(`[${relFile}] Broken in-page link "${href}": element #${targetId} not found.`);
       }
     } else {
-      // Internal URL resolution using base URL
       const currentUrl = new URL(route === '/' ? '/' : route + '/', 'https://example.com');
       const resolvedUrl = new URL(href, currentUrl);
       const normalizedPath = resolvedUrl.pathname.replace(/\/$/, '') || '/';
@@ -174,7 +173,7 @@ for (const [route, { file, content, ids }] of routeMap) {
       try {
         decodedAnchor = decodeURIComponent(anchorPart);
       } catch {
-        // Fall back to raw anchor if percent sequence is malformed
+        // Fall back to raw anchor
       }
 
       const targetPage = routeMap.get(normalizedPath);
@@ -185,48 +184,110 @@ for (const [route, { file, content, ids }] of routeMap) {
       }
     }
   }
+  return errors;
+}
 
-  // 10. Author provenance link
-  if (!content.includes('href="https://pomeroy.me/about/"')) {
+export function auditProvenanceLink(document, relFile) {
+  const errors = [];
+  const authorLink = document.querySelector('a[href="https://pomeroy.me/about/"]');
+  if (!authorLink) {
     errors.push(`[${relFile}] Missing author provenance link to "https://pomeroy.me/about/".`);
   }
+  return errors;
+}
 
-  // 11. Root language attribute (British English)
-  if (!content.includes('<html lang="en-GB">') && !content.includes('<html lang="en-GB"')) {
+export function auditLanguage(document, relFile) {
+  const errors = [];
+  const htmlEl = document.documentElement;
+  if (!htmlEl || htmlEl.getAttribute('lang') !== 'en-GB') {
     errors.push(`[${relFile}] Expected root element <html lang="en-GB">.`);
   }
+  return errors;
+}
 
-  // 12. British English spelling in rendered copy
-  const visibleText = content
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, ' ')
-    .replace(/<code\b[^>]*>[\s\S]*?<\/code>/gi, ' ')
-    .replace(/<kbd\b[^>]*>[\s\S]*?<\/kbd>/gi, ' ')
-    .replace(/<samp\b[^>]*>[\s\S]*?<\/samp>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ');
+export function auditBritishSpelling(document, relFile) {
+  const errors = [];
+  const root = document.documentElement || document.body || document;
+  const clone = root.cloneNode(true);
 
+  // Remove code / style / script elements prior to spellcheck
+  const codeNodes = clone.querySelectorAll('script, style, pre, code, kbd, samp');
+  for (const node of codeNodes) {
+    node.remove();
+  }
+
+  const visibleText = clone.textContent || '';
   const usEnglishMatches = visibleText.match(/\b(gray|grayed|organize|organizing|organization|organizations|specialized|recognize|summarize|practiced|behavior|behavioral|dialog)\b/gi);
   if (usEnglishMatches) {
     errors.push(`[${relFile}] Detected US English spelling(s) in rendered copy: ${[...new Set(usEnglishMatches)].join(', ')}. Use British English (e.g. grey, organise, specialised, dialogue).`);
   }
+  return errors;
 }
 
-// Summary
-if (errors.length > 0) {
-  console.error(`❌ Dist Verification Failed (${errors.length} issue(s) found):\n`);
-  for (const err of errors) {
-    console.error(`  - ${err}`);
+export function auditDocument(document, relFile, route, routeMap, ids) {
+  return [
+    ...auditHeadings(document, relFile),
+    ...auditLandmarks(document, relFile),
+    ...auditSkipLink(document, relFile),
+    ...auditSummaryHeadings(document, relFile),
+    ...auditPositiveTabindex(document, relFile),
+    ...auditSvgAccessibility(document, relFile),
+    ...auditImageAccessibility(document, relFile),
+    ...auditPopoverTargets(document, relFile, ids),
+    ...auditLinks(document, relFile, route, routeMap, ids),
+    ...auditProvenanceLink(document, relFile),
+    ...auditLanguage(document, relFile),
+    ...auditBritishSpelling(document, relFile),
+  ];
+}
+
+export function runDistVerification(distDir = path.resolve('dist')) {
+  if (!fs.existsSync(distDir)) {
+    console.error('Error: dist directory does not exist. Run "npm run build" first.');
+    process.exit(1);
   }
-  console.error('\nPlease fix the issues above before committing.');
-  process.exit(1);
-} else {
-  console.log('✅ Dist Verification Passed!');
-  console.log(`   - Verified ${htmlFiles.length} rendered pages.`);
-  console.log('   - 0 broken internal links or anchors.');
-  console.log('   - 0 heading or landmark hierarchy violations.');
-  console.log('   - 0 SVG / Image accessibility violations.');
-  console.log('   - 0 popovertarget target mismatches.');
-  console.log('   - Verified author provenance link (https://pomeroy.me/about/) on all pages.');
-  console.log('   - Verified <html lang="en-GB"> and British English copy on all pages.\n');
+
+  const htmlFiles = getHtmlFiles(distDir);
+  console.log(`Auditing ${htmlFiles.length} rendered HTML files in ${path.relative(process.cwd(), distDir)}/...\n`);
+
+  let errors = [];
+  const routeMap = new Map();
+
+  // Pass 1: Parse DOM & collect route IDs
+  for (const file of htmlFiles) {
+    const route = fileToRoute(file, distDir);
+    const content = fs.readFileSync(file, 'utf-8');
+    const { document } = parseHTML(content);
+    const ids = extractDocumentIds(document);
+    routeMap.set(route, { file, document, ids });
+  }
+
+  // Pass 2: Audit each page
+  for (const [route, { file, document, ids }] of routeMap) {
+    const relFile = path.relative(process.cwd(), file);
+    const pageErrors = auditDocument(document, relFile, route, routeMap, ids);
+    errors.push(...pageErrors);
+  }
+
+  if (errors.length > 0) {
+    console.error(`❌ Dist Verification Failed (${errors.length} issue(s) found):\n`);
+    for (const err of errors) {
+      console.error(`  - ${err}`);
+    }
+    console.error('\nPlease fix the issues above before committing.');
+    process.exit(1);
+  } else {
+    console.log('✅ Dist Verification Passed!');
+    console.log(`   - Verified ${htmlFiles.length} rendered pages.`);
+    console.log('   - 0 broken internal links or anchors.');
+    console.log('   - 0 heading or landmark hierarchy violations.');
+    console.log('   - 0 SVG / Image accessibility violations.');
+    console.log('   - 0 popovertarget target mismatches.');
+    console.log('   - Verified author provenance link (https://pomeroy.me/about/) on all pages.');
+    console.log('   - Verified <html lang="en-GB"> and British English copy on all pages.\n');
+  }
+}
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  runDistVerification();
 }

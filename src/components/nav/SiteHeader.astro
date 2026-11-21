@@ -1,4 +1,6 @@
 ---
+import { isCurrent } from "../../utils/nav";
+
 interface Props {
   currentPath?: string;
 }
@@ -13,11 +15,6 @@ const NAV_LINKS = [
   { href: "/projects", label: "Projects" },
   { href: "/cheat-sheet", label: "Cheat Sheet" },
 ];
-
-function isCurrent(href: string) {
-  if (href === "/") return currentPath === "/";
-  return currentPath === href || currentPath.startsWith(`${href}/`);
-}
 ---
 
 <header class="site-header">
@@ -53,7 +50,7 @@ function isCurrent(href: string) {
 
       <ul id="site-menu" class="site-menu" popover="auto">
         {NAV_LINKS.map(link => {
-          const current = isCurrent(link.href);
+          const current = isCurrent(currentPath, link.href);
           return (
             <li>
               <a
@@ -289,15 +286,18 @@ function isCurrent(href: string) {
 </style>
 
 <script>
+  import { measureNavFits, applyNavLayout } from "../../utils/nav";
+
   // Progressive Enhancement for Popover API
   if (!Object.hasOwn(HTMLElement.prototype, "popover")) {
     import("@oddbird/popover-polyfill");
   }
 
   // Adaptive Content-Aware Navbar (modern-web-guidance)
-  const header = document.querySelector(".site-header");
-  const inner = header?.querySelector(".header-inner");
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const inner = header?.querySelector<HTMLElement>(".header-inner");
   const menu = document.getElementById("site-menu");
+  const menuBtn = header?.querySelector<HTMLButtonElement>(".menu-button");
 
   if (header && inner && menu) {
     let isCurrentlyWide: boolean | null = null;
@@ -306,29 +306,11 @@ function isCurrent(href: string) {
     const updateNavLayout = () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        header.classList.add("is-measuring");
-        header.classList.add("is-wide");
-
-        // Compare scrollWidth vs clientWidth to determine if inline items fit
-        const fitsInline = inner.scrollWidth <= inner.clientWidth;
-        header.classList.remove("is-measuring");
+        const fitsInline = measureNavFits(header, inner);
 
         if (fitsInline !== isCurrentlyWide) {
           isCurrentlyWide = fitsInline;
-          if (fitsInline) {
-            if (menu.matches?.(":popover-open")) {
-              try {
-                (menu as any).hidePopover?.();
-              } catch {
-                // Ignore if not supported or not open
-              }
-            }
-            header.classList.add("is-wide");
-            menu.removeAttribute("popover");
-          } else {
-            header.classList.remove("is-wide");
-            menu.setAttribute("popover", "auto");
-          }
+          applyNavLayout({ header, menu, menuBtn }, fitsInline);
         }
       });
     };

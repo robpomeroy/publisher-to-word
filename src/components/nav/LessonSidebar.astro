@@ -1,11 +1,14 @@
 ---
-import { CURRICULUM } from "../../data/curriculum";
+import { getCollection } from "astro:content";
+import { getCurriculum } from "../../data/curriculum";
 
 interface Props {
   currentSlug?: string;
 }
 
 const { currentSlug } = Astro.props;
+const authored = await getCollection("lessons");
+const curriculum = getCurriculum(authored);
 ---
 
 <aside class="lesson-sidebar">
@@ -13,7 +16,7 @@ const { currentSlug } = Astro.props;
   <details class="disclosure mobile-lesson-drawer">
     <summary>Course Lessons (Browse all 14)</summary>
     <nav class="sidebar-nav" aria-label="Lesson curriculum (mobile)">
-      {CURRICULUM.map(mod => (
+      {curriculum.map(mod => (
         <div class="module-group">
           <div class="module-title">Module {mod.number}: {mod.title}</div>
           <ul class="lesson-list">
@@ -52,7 +55,7 @@ const { currentSlug } = Astro.props;
       <h2 class="sidebar-heading">Course Curriculum</h2>
     </div>
     <nav class="sidebar-nav" aria-label="Lesson curriculum">
-      {CURRICULUM.map(mod => (
+      {curriculum.map(mod => (
         <div class="module-group">
           <div class="module-title">Module {mod.number}: {mod.title}</div>
           <ul class="lesson-list">

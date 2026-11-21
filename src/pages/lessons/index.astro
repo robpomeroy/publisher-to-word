@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { CURRICULUM } from "../../data/curriculum";
+import { getCollection } from "astro:content";
+import { getCurriculum } from "../../data/curriculum";
+
+const authored = await getCollection("lessons");
+const curriculum = getCurriculum(authored);
 ---
 
 <BaseLayout title="All Lessons">
@@ -14,7 +18,7 @@ import { CURRICULUM } from "../../data/curriculum";
     </div>
 
     <div class="modules-stack">
-      {CURRICULUM.map(mod => (
+      {curriculum.map(mod => (
         <section class="card module-section">
           <div class="module-header">
             <span class="badge badge-ribbon">Module {mod.number}</span>

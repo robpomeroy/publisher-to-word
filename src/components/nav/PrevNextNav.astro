@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import { getAdjacentLessons } from "../../data/curriculum";
 
 interface Props {
@@ -6,7 +7,8 @@ interface Props {
 }
 
 const { currentSlug } = Astro.props;
-const { prev, next } = getAdjacentLessons(currentSlug);
+const authored = await getCollection("lessons");
+const { prev, next } = getAdjacentLessons(currentSlug, authored);
 ---
 
 <nav class="prev-next-nav" aria-label="Adjacent lessons">

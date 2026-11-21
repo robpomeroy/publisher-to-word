@@ -14,7 +14,7 @@
     "verify:dist": "node scripts/verify-dist.mjs",
     "verify:mwg": "node scripts/verify-mwg.mjs",
     "quality": "npm run check && npm run lint && npm run test && npm run build && npm run verify:dist && npm run verify:mwg",
-    "test": "vitest run",
+    "test": "vitest run --coverage",
     "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
@@ -27,9 +27,11 @@
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^8.72.1",
+    "@vitest/coverage-v8": "^5.1.0",
     "eslint": "^10.14.0",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-jsx-a11y-x": "^0.2.0",
+    "linkedom": "^0.18.15",
     "modern-web-guidance": "^0.0.202",
     "stylelint": "^18.0.0",
     "stylelint-config-html": "^2.0.0",
