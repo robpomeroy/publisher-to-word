@@ -1,6 +1,7 @@
 # Rules.md
 
 Behavioural guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+This is a British English project. Use Anglicised spellings throughout.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
