@@ -7,14 +7,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
-    "lint:eslint": "eslint .",
-    "lint:stylelint": "stylelint \"src/**/*.{css,astro}\"",
+    "check": "astro check --minimumFailingSeverity hint",
+    "lint:eslint": "eslint . --max-warnings 0",
+    "lint:stylelint": "stylelint \"src/**/*.{css,astro}\" --max-warnings 0",
     "lint": "npm run lint:eslint && npm run lint:stylelint",
     "verify:dist": "node scripts/verify-dist.mjs",
-    "verify:mwg": "modern-web-guidance legacy-scan src --json",
+    "verify:mwg": "node scripts/verify-mwg.mjs",
     "quality": "npm run check && npm run lint && npm run build && npm run verify:dist && npm run verify:mwg",
-    "prepare": "git config core.hooksPath .githooks 2>/dev/null || true"
+    "prepare": "node scripts/setup-hooks.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

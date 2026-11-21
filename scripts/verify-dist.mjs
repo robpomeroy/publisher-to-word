@@ -165,10 +165,17 @@ for (const [route, { file, content, ids }] of routeMap) {
       const normalizedPath = resolvedUrl.pathname.replace(/\/$/, '') || '/';
       const anchorPart = resolvedUrl.hash ? resolvedUrl.hash.slice(1) : '';
 
+      let decodedAnchor = anchorPart;
+      try {
+        decodedAnchor = decodeURIComponent(anchorPart);
+      } catch {
+        // Fall back to raw anchor if percent sequence is malformed
+      }
+
       const targetPage = routeMap.get(normalizedPath);
       if (!targetPage) {
         errors.push(`[${relFile}] Broken internal link "${href}": route "${normalizedPath}" does not exist.`);
-      } else if (anchorPart && !targetPage.ids.has(anchorPart)) {
+      } else if (anchorPart && !targetPage.ids.has(anchorPart) && !targetPage.ids.has(decodedAnchor)) {
         errors.push(`[${relFile}] Broken internal link "${href}": element #${anchorPart} not found on "${normalizedPath}".`);
       }
     }

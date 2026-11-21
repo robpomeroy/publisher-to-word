@@ -324,15 +324,15 @@ To keep the project maintainable and approachable for every stakeholder group, t
 
 ### 10.2 Automated Quality Gate (`npm run quality`)
 
-Every code or content change must pass the 5-step automated quality gate (enforced via `.git/hooks/pre-commit`):
+Every code or content change must pass the 5-step automated quality gate (enforced via `.githooks/pre-commit`):
 
-1. **`npm run check` (`astro check`):** Validates TypeScript types, `.astro` component props, and Content Collection schemas.
-2. **`npm run lint:eslint` (`eslint .`):** Runs `eslint-plugin-astro` and `eslint-plugin-jsx-a11y-x` across `.astro`, `.ts`, and `.mjs` files.
-3. **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}"`):** Validates CSS rules and modern syntax across global stylesheets and scoped `<style>` blocks.
+1. **`npm run check` (`astro check --minimumFailingSeverity hint`):** Validates TypeScript types, `.astro` component props, and Content Collection schemas, failing on any hint, warning, or error.
+2. **`npm run lint:eslint` (`eslint . --max-warnings 0`):** Runs `eslint-plugin-astro` and `eslint-plugin-jsx-a11y-x` across `.astro`, `.ts`, and `.mjs` files, failing on any warning.
+3. **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}" --max-warnings 0`):** Validates CSS rules and modern syntax across global stylesheets and scoped `<style>` blocks, failing on any warning.
 4. **`npm run build` + `npm run verify:dist` (`node scripts/verify-dist.mjs`):** Compiles static HTML to `dist/` and audits every rendered page for:
-   - Zero broken internal links (`href`) or missing `#anchor` targets
-   - Single `<main id="content">`, single `<h1>`, `<html lang="en-GB">`, and skip-link presence
+   - Zero broken internal links (`href`) or missing `#anchor` targets (supporting percent-decoded and raw URL fragments)
+   - Single `<main id="content">`, single `<h1>`, sequential heading structure, `<html lang="en-GB">`, and skip-link presence
    - Zero headings (`<h1>`–`<h6>`) nested inside `<summary>`
    - Valid SVG accessibility (`aria-hidden="true"` or `role="img"` + `<title>`/`aria-label`) and `<img>` `alt` text
    - Valid `[popovertarget]` ID matching, zero positive `tabindex` attributes, and British English spelling verification in rendered copy
-5. **`npm run verify:mwg` (`modern-web-guidance legacy-scan src --json`):** Confirms zero legacy web platform anti-patterns in `src/`.
+5. **`npm run verify:mwg` (`node scripts/verify-mwg.mjs`):** Confirms zero legacy web platform anti-patterns in `src/` (`totalFindings: 0`).

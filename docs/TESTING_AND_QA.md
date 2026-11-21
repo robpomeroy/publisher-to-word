@@ -31,14 +31,14 @@ flowchart LR
 ```
 
 ### Stage 1: Astro & TypeScript Type Checking (`npm run check`)
-- Runs `astro check`.
+- Runs `astro check --minimumFailingSeverity hint`.
 - Validates all frontmatter in `src/content/lessons/*.mdx` against the Zod schema in `src/content.config.ts`.
 - Validates TypeScript props and types across all `.astro` and `.ts` files.
 - **Passing condition:** `0 errors, 0 warnings, 0 hints`.
 
 ### Stage 2: Code & Style Linting (`npm run lint`)
-- **`npm run lint:eslint` (`eslint .`):** Uses ESLint flat config with `eslint-plugin-astro`, `@typescript-eslint/parser`, and `eslint-plugin-jsx-a11y-x`. Enforces semantic HTML, ARIA rules, and TypeScript best practices.
-- **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}"`):** Uses `stylelint-config-standard` and `stylelint-config-html` to lint global CSS and inline `<style>` tags in Astro components. Enforces modern CSS syntax (e.g. space-separated `rgb(0 0 0 / 10%)`), logical properties (`margin-block`), and property validation.
+- **`npm run lint:eslint` (`eslint . --max-warnings 0`):** Uses ESLint flat config with `eslint-plugin-astro`, `@typescript-eslint/parser`, and `eslint-plugin-jsx-a11y-x`. Enforces semantic HTML, ARIA rules, and TypeScript best practices, failing on any warning.
+- **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}" --max-warnings 0`):** Uses `stylelint-config-standard` and `stylelint-config-html` to lint global CSS and inline `<style>` tags in Astro components. Enforces modern CSS syntax (e.g. space-separated `rgb(0 0 0 / 10%)`), logical properties (`margin-block`), and property validation, failing on any warning.
 - **Passing condition:** `0 errors, 0 warnings`.
 
 ### Stage 3: Static Compilation (`npm run build`)
@@ -52,9 +52,9 @@ flowchart LR
 - Inspects every compiled `.html` file in `dist/` directly to catch runtime defects that linters cannot see.
 
 ### Stage 5: Modern Web Platform Scanner (`npm run verify:mwg`)
-- Runs `modern-web-guidance legacy-scan src --json`.
+- Runs `node scripts/verify-mwg.mjs` (wrapping `modern-web-guidance legacy-scan src --json`).
 - Scans `src/` against 35 deterministic rules across 33 guides from Google's `modern-web-guidance` knowledge base to ensure no deprecated or legacy web patterns are introduced.
-- **Passing condition:** `totalFindings: 0`.
+- **Passing condition:** `totalFindings: 0` (the script exits non-zero if any legacy patterns are discovered).
 
 ---
 
