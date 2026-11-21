@@ -87,7 +87,7 @@ export const CURRICULUM: ModuleMeta[] = [
   },
   {
     number: 3,
-    title: "Styling, Aligning & Organizing",
+    title: "Styling, Aligning & Organising",
     summary: "Give your pages polish with fills, clean line borders, smart alignment, and grouping.",
     lessons: [
       {
@@ -110,7 +110,7 @@ export const CURRICULUM: ModuleMeta[] = [
         slug: "10-grouping-and-layering",
         order: 10,
         title: "Grouping, Layering & the Selection Pane",
-        summary: "Lock objects together, fix the 'Group is grayed out' trap, and find objects hidden behind text.",
+        summary: "Lock objects together, fix the 'Group is greyed out' trap, and find objects hidden behind text.",
         module: 3,
         isAvailable: false
       },

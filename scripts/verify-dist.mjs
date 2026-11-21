@@ -167,6 +167,22 @@ for (const [, { file, content, ids }] of routeMap) {
   if (!content.includes('href="https://pomeroy.me/about/"')) {
     errors.push(`[${relFile}] Missing author provenance link to "https://pomeroy.me/about/".`);
   }
+
+  // 11. Root language attribute (British English)
+  if (!content.includes('<html lang="en-GB">') && !content.includes('<html lang="en-GB"')) {
+    errors.push(`[${relFile}] Expected root element <html lang="en-GB">.`);
+  }
+
+  // 12. British English spelling in rendered copy
+  const visibleText = content
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ');
+
+  const usEnglishMatches = visibleText.match(/\b(gray|grayed|organize|organizing|organization|organizations|specialized|recognize|summarize|practiced|behavior|behavioral|dialog)\b/gi);
+  if (usEnglishMatches) {
+    errors.push(`[${relFile}] Detected US English spelling(s) in rendered copy: ${[...new Set(usEnglishMatches)].join(', ')}. Use British English (e.g. grey, organise, specialised, dialogue).`);
+  }
 }
 
 // Summary
@@ -184,5 +200,6 @@ if (errors.length > 0) {
   console.log('   - 0 heading or landmark hierarchy violations.');
   console.log('   - 0 SVG / Image accessibility violations.');
   console.log('   - 0 popovertarget target mismatches.');
-  console.log('   - Verified author provenance link (https://pomeroy.me/about/) on all pages.\n');
+  console.log('   - Verified author provenance link (https://pomeroy.me/about/) on all pages.');
+  console.log('   - Verified <html lang="en-GB"> and British English copy on all pages.\n');
 }

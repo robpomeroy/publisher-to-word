@@ -8,7 +8,7 @@
 
 Microsoft Publisher was loved for its intuitive **pinboard (freeform canvas)** model: you drew a text box or dropped a picture anywhere on the sheet of paper, and it stayed exactly where you placed it.
 
-Microsoft Word thinks completely differently: it operates as a **river of text**, where words, pictures, and shapes flow continuously from top to bottom. For visual learners and everyday computer users accustomed to Publisher, Word's layout behavior often feels unpredictable—pictures jump across page breaks, text boxes sprout unwanted black borders, and specialized formatting ribbon tabs vanish when you click away.
+Microsoft Word thinks completely differently: it operates as a **river of text**, where words, pictures, and shapes flow continuously from top to bottom. For visual learners and everyday computer users accustomed to Publisher, Word's layout behaviour often feels unpredictable—pictures jump across page breaks, text boxes sprout unwanted black borders, and specialised formatting ribbon tabs vanish when you click away.
 
 **Publisher to Word** bridges this mental gap. Created by [Rob Pomeroy](https://pomeroy.me/about/), it provides a reassuring, visual-first static tutorial website designed with low cognitive load, zero popups or distractions, and clear side-by-side comparisons of Publisher habits versus Word solutions.
 
@@ -23,9 +23,9 @@ Microsoft Word thinks completely differently: it operates as a **river of text**
 | **Lessons** | `/lessons` | The structured 4-module, 14-lesson curriculum taking learners from basic text flow to multi-column publishing. |
 | **Lesson 1** | `/lessons/01-how-text-flows` | The foundation: Understanding the river of text and why you should never press <kbd>Enter</kbd> 15 times to reach the next page. |
 | **Translator** | `/translator` | Quick "Rosetta Stone" table translating familiar Publisher terms (*Scratch area*, *Picture Frame*, *Master Page*, *Nudge*) into their exact Word equivalent. |
-| **Rescue Guide** | `/rescue` | Symptom-first troubleshooting guide (*"My picture jumped onto the next page!"*, *"The Group button is grayed out!"*, *"My border gets chopped off when printing!"*). |
-| **Projects** | `/projects` | Guided mini-projects (e.g. 1-Page Event Flyer, 2-Column Newsletter) to practice layout skills from scratch. |
-| **Cheat Sheet** | `/cheat-sheet` | Clean 1-page desk reference card optimized for `@media print` to keep beside your keyboard. |
+| **Rescue Guide** | `/rescue` | Symptom-first troubleshooting guide (*"My picture jumped onto the next page!"*, *"The Group button is greyed out!"*, *"My border gets chopped off when printing!"*). |
+| **Projects** | `/projects` | Guided mini-projects (e.g. 1-Page Event Flyer, 2-Column Newsletter) to practise layout skills from scratch. |
+| **Cheat Sheet** | `/cheat-sheet` | Clean 1-page desk reference card optimised for `@media print` to keep beside your keyboard. |
 
 ---
 
@@ -34,7 +34,7 @@ Microsoft Word thinks completely differently: it operates as a **river of text**
 - **Visual-First Learning:** Every concept is explained visually before showing the numbered steps.
 - **Both Ways to Find It:** Every lesson shows both the **Ribbon Path** (highlighting contextual tabs like `Picture Format`) and the **Right-Click / Floating Icon Path**.
 - **Printer-Friendly:** Every page has clean print styling (`@media print`). Click the **"Print this Page"** button in the footer or press <kbd>Ctrl</kbd> + <kbd>P</kbd> (<kbd>Cmd</kbd> + <kbd>P</kbd> on Mac) to print a clean offline reference without web menus.
-- **Keyboard & Accessibility Support:** High-contrast focus indicators (`:focus-visible`), skip links (`Skip to content`), large $44 \times 44\,\text{px}$ click targets, and native Windows Forced Colors Mode (High Contrast) compatibility.
+- **Keyboard & Accessibility Support:** High-contrast focus indicators (`:focus-visible`), skip links (`Skip to content`), large $44 \times 44\,\text{px}$ click targets, and native Windows Forced Colours Mode (High Contrast) compatibility.
 
 ---
 

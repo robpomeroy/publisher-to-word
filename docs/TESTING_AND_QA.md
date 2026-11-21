@@ -105,12 +105,12 @@ In addition to automated testing, maintainers and QA testers perform the followi
   2. With all troubleshooting accordions closed, press <kbd>Ctrl</kbd> + <kbd>F</kbd> and search for a keyword inside a closed section (e.g. `"Selection Pane"`).
   3. Confirm the browser highlights the text and automatically expands the parent `<details>` element.
 
-### 4. Windows Forced Colors Mode (High Contrast)
+### 4. Windows Forced Colours Mode (High Contrast)
 - **Tool:** Chrome / Edge DevTools → *Rendering* tab → *Emulate CSS media feature forced-colors: active*.
 - **Expected Outcome:**
   - Page background switches to system `Canvas`, body text to `CanvasText`.
   - Borders and buttons switch to `ButtonText` / `Highlight`.
-  - The active page indicator in the header and sidebar remains clearly visible via system color outlines/borders.
+  - The active page indicator in the header and sidebar remains clearly visible via system colour outlines/borders.
 
 ### 5. Print Layout Verification (`@media print`)
 - **Procedure:**

@@ -170,8 +170,8 @@ All interactive elements (buttons, links, disclosures, tabs) must maintain a min
 }
 ```
 
-### Modern Color & Alpha Notation
-Stylelint enforces modern space-separated color function syntax:
+### Modern Colour & Alpha Notation
+Stylelint enforces modern space-separated colour function syntax:
 - **Do:** `rgb(0 0 0 / 10%)`
 - **Don't:** `rgba(0, 0, 0, 0.1)`
 

@@ -13,8 +13,8 @@ Many tutorial websites overwhelm learners with cookie banners, newsletter overla
 
 ### Key Architectural Tenets:
 1. **Zero Client-Side Framework Overhead:** No React, Vue, or heavy client runtime is shipped to the browser. Interactive features use native HTML and CSS first, augmented by lightweight vanilla JavaScript progressive enhancements.
-2. **Accessible Native Web Platform First:** We align with Google's `modern-web-guidance` skill recommendations. We favor native elements (`<details>`, `popover`, CSS Anchor Positioning, Container Queries, `@view-transition`) over custom script-heavy abstractions.
-3. **Strict Content Modeling via Content Collections:** All lesson content is authored in MDX, validated against strict TypeScript/Zod schemas at build time, preventing runtime layout errors or missing frontmatter fields.
+2. **Accessible Native Web Platform First:** We align with Google's `modern-web-guidance` skill recommendations. We favour native elements (`<details>`, `popover`, CSS Anchor Positioning, Container Queries, `@view-transition`) over custom script-heavy abstractions.
+3. **Strict Content Modelling via Content Collections:** All lesson content is authored in MDX, validated against strict TypeScript/Zod schemas at build time, preventing runtime layout errors or missing frontmatter fields.
 4. **Resilient Static Compilation:** The output in `dist/` consists of standalone, pre-rendered HTML, CSS, and SVG files. It can be hosted on any static web server with zero database or server runtime dependencies.
 
 ---
@@ -137,8 +137,8 @@ While individual MDX files supply the content of available lessons, `src/data/cu
 ### Strict Light-Mode Policy
 The website enforces `color-scheme: light` on the root element. This design choice mirrors the familiar white-paper sheet inside Microsoft Publisher and Word, creating a serene, glare-free, and predictable reading experience.
 
-### Color Tokens (`src/styles/tokens.css`)
-All colors meet or exceed WCAG AA/AAA minimum contrast standards:
+### Colour Tokens (`src/styles/tokens.css`)
+All colours meet or exceed WCAG AA/AAA minimum contrast standards:
 - `--surface-page` (`#FAF9F6`): Warm off-white paper canvas.
 - `--surface-card` (`#FFFFFF`): Pure white elevated card surfaces.
 - `--ink-primary` (`#1E293B`): Deep slate body text ($\approx 14:1$ contrast against `#FAF9F6`).
@@ -149,7 +149,7 @@ All colors meet or exceed WCAG AA/AAA minimum contrast standards:
 - `--accent-tip` (`#B45309`): Warm amber for "Watch Out" gotchas ($\approx 5.0:1$ contrast).
 - `--accent-success` (`#15803D`): Forest green for "Try It" exercises ($\approx 5.2:1$ contrast).
 
-### Windows Forced Colors Mode (High Contrast)
+### Windows Forced Colours Mode (High Contrast)
 In accordance with modern accessibility practices (`color` guide), all visual boundaries and states adapt under `@media (forced-colors: active)` using system keywords:
 ```css
 @media (forced-colors: active) {

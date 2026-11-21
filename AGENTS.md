@@ -3,8 +3,9 @@
 ## Repository Overview
 - **Project:** *Publisher to Word* — a calm, step-by-step visual tutorial website helping former Microsoft Publisher users adapt to Microsoft Word.
 - **Tech Stack:** Static Multi-Page Application (MPA) built with Astro, MDX, and vanilla web platform APIs.
-- **Design System:** *Calm Stationery* — strictly light-mode (`color-scheme: light`), warm paper background (`#FAF9F6`), high-contrast ink (`#1E293B`), bounded typography scales (`rem` and `clamp()`), and Windows Forced Colors Mode (`@media (forced-colors: active)`) support.
+- **Design System:** *Calm Stationery* — strictly light-mode (`color-scheme: light`), warm paper background (`#FAF9F6`), high-contrast ink (`#1E293B`), bounded typography scales (`rem` and `clamp()`), and Windows Forced Colours Mode (`@media (forced-colors: active)`) support.
 - **Standards:** Complies with Google's `modern-web-guidance` skill recommendations for accessibility, responsive navigation, native disclosures, and container queries.
+- **Language & Spelling:** British English (`en-GB`) throughout all editorial copy, curriculum headings, UI explanations, and documentation. All rendered pages declare `<html lang="en-GB">`.
 
 ## Mandatory Quality Gate
 
@@ -28,6 +29,7 @@ The quality suite executes:
 
 ## Implementation Rules
 - **No unverified commits:** Never bypass the quality gate.
+- **British English throughout:** Always use British English spellings (`en-GB`) across content, UI strings, and documentation (e.g. *colour*, *grey*, *organise*, *practise* [verb], *dialogue*).
 - **No broken links:** If adding a lesson, companion page, or component, verify its route and anchor links resolve properly.
 - **Accessible disclosures:** Always use native `<details class="disclosure">` with chevrons placed before the summary text. Never put `<h1>`–`<h6>` inside `<summary>`.
 - **Target sizes:** Maintain `min-block-size: 2.75rem` and `min-inline-size: 2.75rem` (44×44px minimum) on interactive controls.
