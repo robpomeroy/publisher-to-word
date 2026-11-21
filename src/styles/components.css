@@ -8,7 +8,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-6);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 5%);
 }
 
 .card:hover {
@@ -79,6 +79,7 @@
   border-inline-start-width: 4px;
   border-inline-start-color: var(--accent-publisher);
 }
+
 .callout-publisher .callout-header {
   color: var(--accent-publisher);
 }
@@ -89,6 +90,7 @@
   border-inline-start-width: 4px;
   border-inline-start-color: var(--accent-tip);
 }
+
 .callout-tip .callout-header {
   color: var(--accent-tip);
 }
@@ -99,6 +101,7 @@
   border-inline-start-width: 4px;
   border-inline-start-color: var(--accent-success);
 }
+
 .callout-success .callout-header {
   color: var(--accent-success);
 }
@@ -109,6 +112,7 @@
   border-inline-start-width: 4px;
   border-inline-start-color: var(--accent-word);
 }
+
 .callout-word .callout-header {
   color: var(--accent-word);
 }
@@ -172,7 +176,7 @@ details.disclosure summary::before {
   inline-size: 1.1em;
   block-size: 1.1em;
   flex-shrink: 0;
-  background-color: currentColor;
+  background-color: currentcolor;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E") no-repeat center / contain;
   rotate: -90deg;
   transition: rotate 0.2s ease;

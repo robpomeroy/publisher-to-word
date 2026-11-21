@@ -1,0 +1,17 @@
+{
+    "autopep8.args": [
+        "--max-line-length",
+        "80",
+        "--indent-size=4"
+    ],
+    "editor.insertSpaces": true,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "file": ".antigravity/rules.md"
+        }
+    ]
+}

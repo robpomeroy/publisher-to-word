@@ -27,15 +27,12 @@
   --accent-word: #1D4ED8;        /* Word blue (~6.5:1 on white) */
   --accent-word-bg: #EFF6FF;
   --accent-word-border: #93C5FD;
-
   --accent-publisher: #0F766E;   /* Publisher teal (~5.4:1 on white) */
   --accent-publisher-bg: #F0FDFA;
   --accent-publisher-border: #99F6E4;
-
   --accent-tip: #B45309;         /* Amber warning (~5.0:1 on white) */
   --accent-tip-bg: #FFFBEB;
   --accent-tip-border: #FDE68A;
-
   --accent-success: #15803D;     /* Forest green (~5.2:1 on white) */
   --accent-success-bg: #F0FDF4;
   --accent-success-border: #BBF7D0;
@@ -43,7 +40,6 @@
   /* Typography Scale: fluid with clamp() keeping max <= 2.5 * min (WCAG 1.4.4) */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
   --font-size-xs: 0.8125rem;    /* 13px */
   --font-size-sm: 0.9375rem;    /* 15px */
   --font-size-base: 1.125rem;   /* 18px base text for effortless reading */
