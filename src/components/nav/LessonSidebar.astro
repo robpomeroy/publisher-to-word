@@ -138,7 +138,8 @@ const { currentSlug } = Astro.props;
 
   .sidebar-link {
     display: flex;
-    align-items: baseline;
+    align-items: center;
+    min-block-size: var(--target-min-size);
     gap: var(--space-2);
     padding: var(--space-2);
     border-radius: var(--radius-md);
@@ -172,8 +173,7 @@ const { currentSlug } = Astro.props;
   }
 
   .sidebar-link.is-upcoming {
-    color: var(--ink-muted);
-    opacity: 0.75;
+    color: var(--ink-secondary);
     cursor: default;
   }
 
@@ -183,7 +183,7 @@ const { currentSlug } = Astro.props;
     border-radius: var(--radius-sm);
     background-color: var(--surface-subtle);
     border: 1px solid var(--border-subtle);
-    color: var(--ink-muted);
+    color: var(--ink-secondary);
   }
 
   /* Responsive toggling */

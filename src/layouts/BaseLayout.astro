@@ -32,5 +32,33 @@ const {
     <SiteHeader />
     <slot />
     <SiteFooter />
+
+    <script>
+      // 1. Delegated print trigger for strict CSP environments
+      document.addEventListener("click", (event) => {
+        const target = event.target as HTMLElement | null;
+        if (target?.closest("[data-print-trigger]")) {
+          window.print();
+        }
+      });
+
+      // 2. Cross-browser print expansion for <details> (Firefox, Safari & non-Chromium)
+      let originallyClosedDetails: HTMLDetailsElement[] = [];
+
+      window.addEventListener("beforeprint", () => {
+        originallyClosedDetails = [];
+        document.querySelectorAll<HTMLDetailsElement>("details.disclosure:not([open])").forEach((el) => {
+          originallyClosedDetails.push(el);
+          el.open = true;
+        });
+      });
+
+      window.addEventListener("afterprint", () => {
+        originallyClosedDetails.forEach((el) => {
+          el.open = false;
+        });
+        originallyClosedDetails = [];
+      });
+    </script>
   </body>
 </html>

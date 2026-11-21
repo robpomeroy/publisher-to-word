@@ -143,6 +143,11 @@ for (const [route, { file, content, ids }] of routeMap) {
   }
 
   // 9. Internal link integrity (href)
+  const emptyHrefMatches = content.match(/<a\b[^>]*\bhref=["']\s*["']/gi);
+  if (emptyHrefMatches) {
+    errors.push(`[${relFile}] Found empty href="" attribute on <a> tag.`);
+  }
+
   const links = content.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["']/gi);
   for (const link of links) {
     const href = link[1];
@@ -195,6 +200,10 @@ for (const [route, { file, content, ids }] of routeMap) {
   const visibleText = content
     .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<pre\b[^>]*>[\s\S]*?<\/pre>/gi, ' ')
+    .replace(/<code\b[^>]*>[\s\S]*?<\/code>/gi, ' ')
+    .replace(/<kbd\b[^>]*>[\s\S]*?<\/kbd>/gi, ' ')
+    .replace(/<samp\b[^>]*>[\s\S]*?<\/samp>/gi, ' ')
     .replace(/<[^>]+>/g, ' ');
 
   const usEnglishMatches = visibleText.match(/\b(gray|grayed|organize|organizing|organization|organizations|specialized|recognize|summarize|practiced|behavior|behavioral|dialog)\b/gi);

@@ -24,7 +24,7 @@ export const CURRICULUM: ModuleMeta[] = [
         slug: "01-how-text-flows",
         order: 1,
         title: "How Text Flows in Word (The River vs. Pinboard)",
-        summary: "Why pressing Enter moves everything down, and the difference between Enter, Shift+Enter, and Page Break.",
+        summary: "Why pressing Enter moves everything down, and the crucial difference between Enter, Shift+Enter, and Page Break.",
         module: 1,
         isAvailable: true
       },

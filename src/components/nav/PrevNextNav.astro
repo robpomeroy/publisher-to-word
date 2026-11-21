@@ -11,22 +11,32 @@ const { prev, next } = getAdjacentLessons(currentSlug);
 
 <nav class="prev-next-nav" aria-label="Adjacent lessons">
   <div class="nav-slot prev-slot">
-    {prev && (
-      <a href={prev.isAvailable ? `/lessons/${prev.slug}` : undefined} class:list={["nav-card", { "is-disabled": !prev.isAvailable }]}>
+    {prev && (prev.isAvailable ? (
+      <a href={`/lessons/${prev.slug}`} class="nav-card">
         <span class="nav-direction">← Previous Lesson</span>
         <span class="nav-title">{prev.order}. {prev.title}</span>
       </a>
-    )}
+    ) : (
+      <div class="nav-card is-disabled">
+        <span class="nav-direction">← Previous Lesson</span>
+        <span class="nav-title">{prev.order}. {prev.title}</span>
+      </div>
+    ))}
   </div>
 
   <div class="nav-slot next-slot">
-    {next && (
-      <a href={next.isAvailable ? `/lessons/${next.slug}` : undefined} class:list={["nav-card", { "is-disabled": !next.isAvailable }]}>
+    {next && (next.isAvailable ? (
+      <a href={`/lessons/${next.slug}`} class="nav-card">
         <span class="nav-direction">Next Lesson →</span>
         <span class="nav-title">{next.order}. {next.title}</span>
-        {!next.isAvailable && <span class="nav-badge">Coming in Phase 3</span>}
       </a>
-    )}
+    ) : (
+      <div class="nav-card is-disabled">
+        <span class="nav-direction">Next Lesson →</span>
+        <span class="nav-title">{next.order}. {next.title}</span>
+        <span class="nav-badge">Coming in Phase 3</span>
+      </div>
+    ))}
   </div>
 </nav>
 
@@ -64,8 +74,12 @@ const { prev, next } = getAdjacentLessons(currentSlug);
   }
 
   .nav-card.is-disabled {
-    opacity: 0.6;
+    opacity: 0.85;
     cursor: default;
+  }
+
+  .nav-card.is-disabled .nav-title {
+    color: var(--ink-secondary);
   }
 
   .nav-direction {

@@ -16,7 +16,7 @@ const NAV_LINKS = [
 
 function isCurrent(href: string) {
   if (href === "/") return currentPath === "/";
-  return currentPath.startsWith(href);
+  return currentPath === href || currentPath.startsWith(`${href}/`);
 }
 ---
 
@@ -92,13 +92,15 @@ function isCurrent(href: string) {
     }
   }
 
-  /* Keep header visible whenever keyboard focus is inside */
-  .site-header:focus-within {
+  /* Keep header visible whenever keyboard focus is inside or menu is open */
+  .site-header:focus-within,
+  .site-header:has([popover]:popover-open),
+  .site-header:has([class~=":popover-open"]) {
     transform: none !important;
   }
 
   /* JavaScript passive scroll fallback */
-  .site-header.is-hidden:not(:focus-within) {
+  .site-header.is-hidden:not(:focus-within, :has([popover]:popover-open), :has([class~=":popover-open"])) {
     transform: translateY(-100%);
   }
 
@@ -298,23 +300,36 @@ function isCurrent(href: string) {
   const menu = document.getElementById("site-menu");
 
   if (header && inner && menu) {
+    let isCurrentlyWide: boolean | null = null;
+    let rafId: number | null = null;
+
     const updateNavLayout = () => {
-      header.classList.add("is-measuring");
-      header.classList.add("is-wide");
-
-      // Compare scrollWidth vs clientWidth to determine if inline items fit
-      const fitsInline = inner.scrollWidth <= inner.clientWidth;
-
-      if (fitsInline) {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        header.classList.add("is-measuring");
         header.classList.add("is-wide");
-        menu.removeAttribute("popover");
-      } else {
-        header.classList.remove("is-wide");
-        menu.setAttribute("popover", "auto");
-      }
 
-      requestAnimationFrame(() => {
+        // Compare scrollWidth vs clientWidth to determine if inline items fit
+        const fitsInline = inner.scrollWidth <= inner.clientWidth;
         header.classList.remove("is-measuring");
+
+        if (fitsInline !== isCurrentlyWide) {
+          isCurrentlyWide = fitsInline;
+          if (fitsInline) {
+            if (menu.matches?.(":popover-open")) {
+              try {
+                (menu as any).hidePopover?.();
+              } catch {
+                // Ignore if not supported or not open
+              }
+            }
+            header.classList.add("is-wide");
+            menu.removeAttribute("popover");
+          } else {
+            header.classList.remove("is-wide");
+            menu.setAttribute("popover", "auto");
+          }
+        }
       });
     };
 

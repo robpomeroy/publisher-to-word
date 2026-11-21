@@ -55,6 +55,12 @@
   border-color: var(--ink-primary);
 }
 
+@media (forced-colors: active) {
+  .btn {
+    border: 1px solid ButtonText !important;
+  }
+}
+
 /* Callout Boxes (WCAG 1.4.1 - Never color alone) */
 .callout {
   border-radius: var(--radius-md);
