@@ -10,7 +10,7 @@ Microsoft Publisher was loved for its intuitive **pinboard (freeform canvas)** m
 
 Microsoft Word thinks completely differently: it operates as a **river of text**, where words, pictures, and shapes flow continuously from top to bottom. For visual learners and everyday computer users accustomed to Publisher, Word's layout behavior often feels unpredictable—pictures jump across page breaks, text boxes sprout unwanted black borders, and specialized formatting ribbon tabs vanish when you click away.
 
-**Publisher to Word** bridges this mental gap. It provides a reassuring, visual-first static tutorial website designed with low cognitive load, zero popups or distractions, and clear side-by-side comparisons of Publisher habits versus Word solutions.
+**Publisher to Word** bridges this mental gap. Created by [Rob Pomeroy](https://pomeroy.me/about/), it provides a reassuring, visual-first static tutorial website designed with low cognitive load, zero popups or distractions, and clear side-by-side comparisons of Publisher habits versus Word solutions.
 
 ---
 
@@ -106,6 +106,12 @@ This builds and validates the production output in `dist/`.
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md):** Comprehensive technical architecture, Astro MPA design, data modeling, and `modern-web-guidance` platform patterns.
 - **[docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md):** Maintainer guide covering daily workflows, authoring lessons/SVGs, and component conventions.
 - **[docs/TESTING_AND_QA.md](docs/TESTING_AND_QA.md):** Complete guide to the 5-step automated quality gate, post-build HTML verification, and manual accessibility testing.
+
+---
+
+## ✍️ Author & Provenance
+
+Created and maintained by [Rob Pomeroy](https://pomeroy.me/about/) as a free, independent public educational guide to help everyday computer users adapt smoothly to Microsoft Word.
 
 ---
 

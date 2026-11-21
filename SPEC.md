@@ -21,6 +21,7 @@ Most tutorials assume readers already understand Word's terminology or overwhelm
    - **Right-Click / On-Object Path** (Right-click menu and/or the floating **Layout Options** arch icon)
 4. **Low Cognitive Load:** One concept per lesson, short 3–5 step instructions, plain English paired with Word's exact button labels in distinct UI badges, and zero popups, sign-up prompts, or visual clutter.
 5. **No Dead Ends:** Every lesson ends with a quick **"Try It in 60 Seconds"** practice prompt, a **"Common Snag"** collapsible helper, and clear Previous / Next lesson buttons.
+6. **Human Provenance & Trust:** Everyday users are rightly cautious of anonymous websites. Establish clear, reassuring provenance by linking to **[About Rob Pomeroy](https://pomeroy.me/about/)** in the global footer (`SiteFooter.astro`) and in a brief *"Who Made This Guide?"* note on `/start-here/`, while keeping the primary top navigation bar strictly focused on learning tasks (`content-first-noise-reduction`).
 
 ---
 
@@ -203,6 +204,7 @@ The site is built as a **static Multi-Page Application (MPA) in Astro** with zer
 - **Generous Target Sizes:** All buttons, simulator controls, hotspot pins, and lesson nav links use `min-block-size: 2.75rem; min-inline-size: 2.75rem` (`44×44 CSS px`, exceeding WCAG 2.5.8's `24×24px` minimum — ideal for less-confident mouse users and touchscreens).
 - **Clear Focus Rings:** High-contrast `3px solid` `:focus-visible` outline with `outline-offset: 3px`.
 - **Media & SVG Accessibility:** Informative `alt` text (no *"Image of..."* prefixes, hyphenated filenames), `<figure>` + `<figcaption>` for complex diagrams, `role="img"` + `<title>` for meaningful inline SVGs, and `aria-hidden="true"` for decorative icons.
+- **Consistent Link Naming:** Multiple links pointing to the same destination (such as `https://pomeroy.me/about/`) maintain consistent visible text and accessible names (*"About Rob Pomeroy"*).
 - **Interactive Simulators:** Full keyboard operability using native `<button>`, `<input type="radio">`, and `<input type="range">` controls, plus a single polite `aria-live="polite"` status sentence summarizing what changed in the visual demo (e.g., *"Text wrapping set to Square: text now flows cleanly around the rectangular edge of the photo."*).
 
 ---
@@ -212,6 +214,7 @@ The site is built as a **static Multi-Page Application (MPA) in Astro** with zer
 | Component | Purpose |
 | :--- | :--- |
 | `BaseLayout.astro` | Semantic shell (`<html lang="en">`), unique front-loaded `<title>`, Skip Link, sticky auto-hiding header, View Transition CSS, print styles. |
+| `SiteFooter.astro` | Calm global footer with Learning & Quick Help links, *"Print this Page"* action, author attribution link to `https://pomeroy.me/about/`, and independent trademark notice. |
 | `LessonLayout.astro` | 2-column reading layout (collapsible/sticky Lesson Sidebar + `60ch` main content column) with module progress indicator and Prev/Next footer navigation. |
 | `WhereToFindIt.astro` | Signature dual-path lookup card showing **Ribbon Path** (with contextual tab badge) and **Right-Click / Floating Icon Path**. |
 | `PublisherCompare.astro` | Calm teal callout card: *"How you did it in Publisher → How it works in Word"*. |

@@ -162,6 +162,11 @@ for (const [, { file, content, ids }] of routeMap) {
       }
     }
   }
+
+  // 10. Author provenance link
+  if (!content.includes('href="https://pomeroy.me/about/"')) {
+    errors.push(`[${relFile}] Missing author provenance link to "https://pomeroy.me/about/".`);
+  }
 }
 
 // Summary
@@ -178,5 +183,6 @@ if (errors.length > 0) {
   console.log('   - 0 broken internal links or anchors.');
   console.log('   - 0 heading or landmark hierarchy violations.');
   console.log('   - 0 SVG / Image accessibility violations.');
-  console.log('   - 0 popovertarget target mismatches.\n');
+  console.log('   - 0 popovertarget target mismatches.');
+  console.log('   - Verified author provenance link (https://pomeroy.me/about/) on all pages.\n');
 }
