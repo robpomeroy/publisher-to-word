@@ -53,15 +53,24 @@ for (const file of htmlFiles) {
 }
 
 // Pass 2: Verify each page
-for (const [, { file, content, ids }] of routeMap) {
+for (const [route, { file, content, ids }] of routeMap) {
   const relFile = path.relative(process.cwd(), file);
 
-  // 1. Heading structure
+  // 1. Heading structure & sequential hierarchy
   const h1Matches = [...content.matchAll(/<h1\b[^>]*>/gi)];
   if (h1Matches.length === 0) {
     errors.push(`[${relFile}] Missing <h1> element on page.`);
   } else if (h1Matches.length > 1) {
     errors.push(`[${relFile}] Multiple <h1> elements found (${h1Matches.length}). Expected exactly 1.`);
+  }
+
+  const allHeadings = [...content.matchAll(/<h([1-6])\b[^>]*>/gi)].map(m => parseInt(m[1], 10));
+  let prevLevel = 0;
+  for (const level of allHeadings) {
+    if (prevLevel > 0 && level > prevLevel + 1) {
+      errors.push(`[${relFile}] Non-sequential heading hierarchy: <h${prevLevel}> followed directly by <h${level}>.`);
+    }
+    prevLevel = level;
   }
 
   // 2. Main landmark
@@ -115,10 +124,10 @@ for (const [, { file, content, ids }] of routeMap) {
   const imgMatches = content.matchAll(/<img\b([^>]*)>/gi);
   for (const match of imgMatches) {
     const attrs = match[1];
-    if (!/alt=["']/i.test(attrs)) {
+    if (!/(?:^|\s)alt=["']/i.test(attrs)) {
       errors.push(`[${relFile}] <img> tag is missing an alt attribute.`);
     }
-    const altValue = attrs.match(/alt=["']([^"']*)["']/i);
+    const altValue = attrs.match(/(?:^|\s)alt=["']([^"']*)["']/i);
     if (altValue && /^(image of|picture of|photo of)\b/i.test(altValue[1].trim())) {
       errors.push(`[${relFile}] Clichéd alt text prefix "${altValue[1]}". Avoid "Image of..." or "Picture of...".`);
     }
@@ -150,10 +159,12 @@ for (const [, { file, content, ids }] of routeMap) {
         errors.push(`[${relFile}] Broken in-page link "${href}": element #${targetId} not found.`);
       }
     } else {
-      // Internal route link
-      const [pathPart, anchorPart] = href.split('#');
-      let normalizedPath = pathPart.replace(/\/$/, '') || '/';
-      
+      // Internal URL resolution using base URL
+      const currentUrl = new URL(route === '/' ? '/' : route + '/', 'https://example.com');
+      const resolvedUrl = new URL(href, currentUrl);
+      const normalizedPath = resolvedUrl.pathname.replace(/\/$/, '') || '/';
+      const anchorPart = resolvedUrl.hash ? resolvedUrl.hash.slice(1) : '';
+
       const targetPage = routeMap.get(normalizedPath);
       if (!targetPage) {
         errors.push(`[${relFile}] Broken internal link "${href}": route "${normalizedPath}" does not exist.`);

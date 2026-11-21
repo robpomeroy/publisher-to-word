@@ -87,7 +87,7 @@ In addition to automated testing, maintainers and QA testers perform the followi
 - **Tool:** Physical keyboard (mouse/trackpad disconnected).
 - **Procedure:**
   1. Press <kbd>Tab</kbd> immediately after page load. Verify the **Skip to main content** link appears prominently at top-left.
-  2. Press <kbd>Enter</kbd> on the skip link. Verify keyboard focus moves directly to `<h1 id="content">`.
+  2. Press <kbd>Enter</kbd> on the skip link. Verify keyboard focus moves directly to the main landmark `<main id="content">`, and subsequent keyboard navigation continues into the main content.
   3. Continue tabbing through the page. Verify every link, button, and disclosure displays a crisp high-contrast outline (`3px solid var(--border-focus)`).
   4. Activate a `<details class="disclosure">` item with <kbd>Enter</kbd> or <kbd>Space</kbd>. Confirm it opens and closes smoothly.
   5. In narrow viewports, open the **Menu** popover using <kbd>Enter</kbd>. Press <kbd>Esc</kbd> to confirm light-dismiss works.
@@ -126,10 +126,10 @@ In addition to automated testing, maintainers and QA testers perform the followi
 
 ## 5. Git Pre-Commit Hook
 
-The automated quality gate is enforced by Git via `.git/hooks/pre-commit`:
+The automated quality gate is enforced by Git via the tracked repository hook `.githooks/pre-commit`, configured automatically on `npm install` via `npm run prepare`:
 
 ```sh
-#!/bin/sh
+#!/usr/bin/env sh
 echo "🛡️  Running Publisher-to-Word Quality Gate..."
 npm run quality
 ```

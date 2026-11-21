@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Publisher to Word - Pre-commit Quality Gate
+
+echo "🛡️  Running Publisher-to-Word Quality Gate..."
+npm run quality

@@ -125,7 +125,7 @@ All foreground/background pairs meet or exceed **4.5:1** for body text and **3:1
 | `--surface-subtle` | `#F1F5F9` | Soft tint for UI breadcrumbs, code/menu pills, and table headers. |
 | `--ink-primary` | `#1E293B` | Deep slate charcoal for body text (~14:1 contrast on `#FAF9F6`). |
 | `--ink-secondary` | `#475569` | Muted slate for captions and secondary labels (~7:1 contrast on `#FFFFFF`). |
-| `--border-ui` | `#94A3B8` | Clear non-text boundary colour (~3:1+ on white) for inputs, buttons, and cards. |
+| `--border-ui` | `#64748B` | Clear non-text boundary colour (~4.5:1 on white, WCAG 1.4.11) for inputs, buttons, and cards. |
 | `--border-subtle` | `#CBD5E1` | Decorative dividers (never used alone to denote interactive boundaries). |
 | `--accent-word` | `#1D4ED8` | Friendly Word-inspired blue for primary actions, links, and Ribbon path pills (~6.5:1 on white). |
 | `--accent-publisher` | `#0F766E` | Calm Publisher-nod teal for *"Coming from Publisher"* callout boxes (~5.4:1 on white). |

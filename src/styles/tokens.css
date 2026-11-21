@@ -19,7 +19,7 @@
   --ink-muted: #64748B;
 
   /* Borders & Dividers */
-  --border-ui: #94A3B8;          /* Accessible non-text boundary (>=3:1 on white) */
+  --border-ui: #64748B;          /* Accessible non-text boundary (~4.5:1 on white, WCAG 1.4.11) */
   --border-subtle: #CBD5E1;      /* Decorative dividers */
   --border-focus: #1D4ED8;       /* High-contrast focus outline */
 

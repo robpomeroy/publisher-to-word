@@ -143,7 +143,7 @@ All colours meet or exceed WCAG AA/AAA minimum contrast standards:
 - `--surface-card` (`#FFFFFF`): Pure white elevated card surfaces.
 - `--ink-primary` (`#1E293B`): Deep slate body text ($\approx 14:1$ contrast against `#FAF9F6`).
 - `--ink-secondary` (`#475569`): Muted slate for captions and secondary text ($\approx 7:1$ contrast).
-- `--border-ui` (`#94A3B8`): Structural boundary for buttons and inputs ($\ge 3:1$ contrast against white).
+- `--border-ui` (`#64748B`): Structural boundary for buttons and inputs ($\approx 4.5:1$ contrast against white, WCAG 1.4.11).
 - `--accent-word` (`#1D4ED8`): Word-inspired blue for primary interactive elements ($\approx 6.5:1$ contrast).
 - `--accent-publisher` (`#0F766E`): Publisher-inspired teal for comparison callouts ($\approx 5.4:1$ contrast).
 - `--accent-tip` (`#B45309`): Warm amber for "Watch Out" gotchas ($\approx 5.0:1$ contrast).

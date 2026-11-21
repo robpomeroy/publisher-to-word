@@ -76,7 +76,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
             <strong>Move with text:</strong> The picture travels with its paragraph. Good for photos accompanying specific text.
           </li>
           <li>
-            <strong>Fix position on page:</strong> The picture stays pinned to that exact spot on the sheet of paper, just like Publisher.
+            <strong>Fix position on page:</strong> The picture stays pinned to that spot on the page, but still travels if its anchor paragraph moves onto another page. Drag the blue anchor (⚓) to an earlier paragraph if this happens.
           </li>
           <li>
             <strong>Where to change it:</strong> Click the floating arch icon beside the picture → choose <em>Fix position on page</em>.
@@ -146,7 +146,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .cheat-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: var(--space-6);
   }
 

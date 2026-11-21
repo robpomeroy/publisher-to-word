@@ -48,7 +48,7 @@ Microsoft Word thinks completely differently: it operates as a **river of text**
 
 ```sh
 # 1. Clone the repository
-git clone https://github.com/your-org/publisher-to-word.git
+git clone https://github.com/robpomeroy/publisher-to-word.git
 cd publisher-to-word
 
 # 2. Install dependencies
