@@ -231,8 +231,19 @@ The site is built as a **static Multi-Page Application (MPA) in Astro** with zer
 
 ```text
 publisher-to-word/
+├── README.md                     # Project overview, getting started, build & static deployment guide
+├── AGENTS.md                     # Agent guidelines & mandatory quality gate rules
+├── SPEC.md                       # Master product, curriculum, design & technical specification
 ├── astro.config.mjs              # Static output, MDX integration, sitemap
+├── eslint.config.mjs             # ESLint flat config (Astro, TypeScript, JSX-A11y)
+├── .stylelintrc.mjs              # Stylelint config for CSS and Astro <style> blocks
 ├── package.json
+├── docs/
+│   ├── ARCHITECTURE.md           # System architecture, MPA design, tokens & modern-web-guidance patterns
+│   ├── DEVELOPER_GUIDE.md        # Maintainer workflow, authoring lessons/SVGs, component conventions
+│   └── TESTING_AND_QA.md         # Automated quality gate, verify-dist invariants & manual a11y test plan
+├── scripts/
+│   └── verify-dist.mjs           # Post-build static HTML, link integrity, landmark & SVG a11y verifier
 ├── public/
 │   ├── favicon.svg
 │   └── fonts/                    # Self-hosted WOFF2 fonts (optional / zero external requests)
@@ -243,12 +254,13 @@ publisher-to-word/
     │   ├── rescue/               # Troubleshooting entries for /rescue/
     │   └── projects/             # Guided mini-project walkthroughs
     ├── data/
+    │   ├── curriculum.ts         # Ordered 4-Module, 14-Lesson master catalog & adjacency helpers
     │   └── translator.ts         # Structured Publisher → Word lookup data
     ├── layouts/
     │   ├── BaseLayout.astro
     │   └── LessonLayout.astro
     ├── components/
-    │   ├── nav/                  # SiteHeader, LessonSidebar, Breadcrumbs, PrevNext
+    │   ├── nav/                  # SiteHeader, SiteFooter, LessonSidebar, PrevNextNav
     │   ├── teaching/             # WhereToFindIt, PublisherCompare, StepList, GotchaBox, MacNote, TryItCard
     │   └── interactive/          # WrapSimulator, AnchorSimulator, BoxMarginSimulator, AlignSimulator, UiHotspotMap
     ├── styles/
@@ -259,10 +271,13 @@ publisher-to-word/
     └── pages/
         ├── index.astro
         ├── start-here.astro
-        ├── lessons/[...slug].astro
+        ├── lessons/
+        │   ├── index.astro
+        │   └── [...slug].astro
         ├── translator.astro
         ├── rescue.astro
-        ├── projects/[...slug].astro
+        ├── projects/
+        │   └── index.astro
         └── cheat-sheet.astro
 ```
 
@@ -270,10 +285,10 @@ publisher-to-word/
 
 ## 8. Implementation Roadmap (Phased Delivery)
 
-1. **Phase 1 — Foundation & Design System:** Scaffold Astro + MDX, implement `tokens.css` / `base.css` / `print.css`, accessible `BaseLayout`, adaptive `SiteHeader` (`navbar` + scroll-state hiding), and `LessonLayout`.
-2. **Phase 2 — Core Teaching Components & Interactive Simulators:** Build `WhereToFindIt`, `PublisherCompare`, `StepList`, `GotchaBox`, `UiHotspotMap`, and the 4 visual simulators (*Wrap*, *Anchor/Position*, *Text Box Internal Margins*, *Align & Distribute*).
+1. **Phase 1 — Foundation, Design System, Quality Gate & Core Documentation:** Scaffold Astro + MDX, implement `tokens.css` / `base.css` / `components.css` / `print.css`, accessible `BaseLayout`, adaptive `SiteHeader` (`navbar` + scroll-state hiding), `LessonLayout`, automated 5-step Quality Gate (`npm run quality` + pre-commit hook), and foundational project documentation (`README.md`, `docs/ARCHITECTURE.md`, `docs/DEVELOPER_GUIDE.md`, `docs/TESTING_AND_QA.md`).
+2. **Phase 2 — Core Teaching Components & Interactive Simulators:** Build `WhereToFindIt`, `PublisherCompare`, `StepList`, `GotchaBox`, `MacNote`, `TryItCard`, `UiHotspotMap`, and the 4 visual simulators (*Wrap*, *Anchor/Position*, *Text Box Internal Margins*, *Align & Distribute*).
 3. **Phase 3 — Full Curriculum Content (Modules 1–4):** Author all 14 visual lessons with crisp inline SVG diagrams (and slots/guidelines for optional real Word screenshots if desired).
-4. **Phase 4 — Reference Tools:** Build the *Publisher → Word Translator*, *"Why Did That Happen?" Rescue Guide*, *Printable Cheat Sheets*, and *Guided Mini-Projects*.
+4. **Phase 4 — Reference Tools:** Expand the *Publisher → Word Translator*, *"Why Did That Happen?" Rescue Guide*, *Printable Cheat Sheets*, and *Guided Mini-Projects*.
 5. **Phase 5 — Verification & Accessibility Audit:** Test keyboard-only navigation, 200% zoom reflow (`320px` viewport), `Ctrl+F` search inside collapsed troubleshooting cards, Windows Forced Colors Mode, print preview, and Lighthouse/axe-core audits.
 
 ---
@@ -285,3 +300,34 @@ publisher-to-word/
 3. **Color Mode:** **Light mode only** (`color-scheme: light`), reflecting the familiar paper-page feel of Publisher and Word, with full `@media (forced-colors: active)` support for Windows High Contrast users.
 4. **Stateless Pages:** **No progress checkboxes or `localStorage` tracking** at this stage — pages remain completely stateless, fast, and uncluttered.
 5. **Browser Support Policy:** Standard Baseline + the lightweight progressive fallbacks defined in Section 5 (covering modern Chrome, Edge, Firefox, and Safari).
+
+---
+
+## 10. Documentation & Quality Assurance Specification
+
+To keep the project maintainable and approachable for every stakeholder group, the repository maintains a structured documentation suite alongside its automated quality gate:
+
+### 10.1 Stakeholder Documentation Map
+
+| Document | Primary Audience | Scope & Responsibilities |
+| :--- | :--- | :--- |
+| **`README.md`** | Developers, Administrators / Installers, End Users | Project mission, live route overview, local development quick start, build commands, static hosting/deployment guide (`dist/`), and end-user offline/printing tips. |
+| **`docs/ARCHITECTURE.md`** | System Architects, UI/UX Designers | Astro static MPA architecture, Content Collections + Curriculum data model, *Calm Stationery* design token specification, Forced Colors support, and `modern-web-guidance` implementation patterns. |
+| **`docs/DEVELOPER_GUIDE.md`** | Developers, Content Authors, Maintainers | Day-to-day workflow, how to add/unlock MDX lessons, authoring accessible inline SVG Word diagrams, CSS/Stylelint conventions, and phased component architecture. |
+| **`docs/TESTING_AND_QA.md`** | Testers, QA Engineers, Contributors | Detailed breakdown of the 5-step `npm run quality` gate, `scripts/verify-dist.mjs` HTML assertions, and the manual accessibility/reflow/print testing checklist. |
+| **`AGENTS.md`** | AI Coding Agents, Contributors | Workspace rules and mandatory pre-commit quality gate enforcement. |
+
+### 10.2 Automated Quality Gate (`npm run quality`)
+
+Every code or content change must pass the 5-step automated quality gate (enforced via `.git/hooks/pre-commit`):
+
+1. **`npm run check` (`astro check`):** Validates TypeScript types, `.astro` component props, and Content Collection schemas.
+2. **`npm run lint:eslint` (`eslint .`):** Runs `eslint-plugin-astro` and `eslint-plugin-jsx-a11y-x` across `.astro`, `.ts`, and `.mjs` files.
+3. **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}"`):** Validates CSS rules and modern syntax across global stylesheets and scoped `<style>` blocks.
+4. **`npm run build` + `npm run verify:dist` (`node scripts/verify-dist.mjs`):** Compiles static HTML to `dist/` and audits every rendered page for:
+   - Zero broken internal links (`href`) or missing `#anchor` targets
+   - Single `<main id="content">`, single `<h1>`, and skip-link presence
+   - Zero headings (`<h1>`–`<h6>`) nested inside `<summary>`
+   - Valid SVG accessibility (`aria-hidden="true"` or `role="img"` + `<title>`/`aria-label`) and `<img>` `alt` text
+   - Valid `[popovertarget]` ID matching and zero positive `tabindex` attributes
+5. **`npm run verify:mwg` (`modern-web-guidance legacy-scan src --json`):** Confirms zero legacy web platform anti-patterns in `src/`.
