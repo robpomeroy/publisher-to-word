@@ -1,0 +1,23 @@
+{
+  "name": "publisher-to-word",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "@oddbird/popover-polyfill": "^0.7.3",
+    "astro": "^5.4.2",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.68.0"
+  }
+}

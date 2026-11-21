@@ -1,0 +1,206 @@
+/* ==========================================================================
+   Component Styles: Cards, Buttons, Callouts, Disclosures & Badges
+   ========================================================================== */
+
+/* Cards */
+.card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  border-color: var(--border-ui);
+}
+
+/* Accessible Interactive Targets (WCAG 2.5.8 - min 44x44px) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min-size);
+  min-inline-size: var(--target-min-size);
+  padding-inline: var(--space-5);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--accent-word);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background-color: #1E40AF;
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background-color: var(--surface-card);
+  color: var(--ink-primary);
+  border-color: var(--border-ui);
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--ink-primary);
+}
+
+/* Callout Boxes (WCAG 1.4.1 - Never color alone) */
+.callout {
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-block: var(--space-6);
+  border: 1px solid var(--border-ui);
+  background-color: var(--surface-card);
+}
+
+.callout-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  margin-block-end: var(--space-2);
+}
+
+.callout-publisher {
+  background-color: var(--accent-publisher-bg);
+  border-color: var(--accent-publisher-border);
+  border-inline-start-width: 4px;
+  border-inline-start-color: var(--accent-publisher);
+}
+.callout-publisher .callout-header {
+  color: var(--accent-publisher);
+}
+
+.callout-tip {
+  background-color: var(--accent-tip-bg);
+  border-color: var(--accent-tip-border);
+  border-inline-start-width: 4px;
+  border-inline-start-color: var(--accent-tip);
+}
+.callout-tip .callout-header {
+  color: var(--accent-tip);
+}
+
+.callout-success {
+  background-color: var(--accent-success-bg);
+  border-color: var(--accent-success-border);
+  border-inline-start-width: 4px;
+  border-inline-start-color: var(--accent-success);
+}
+.callout-success .callout-header {
+  color: var(--accent-success);
+}
+
+.callout-word {
+  background-color: var(--accent-word-bg);
+  border-color: var(--accent-word-border);
+  border-inline-start-width: 4px;
+  border-inline-start-color: var(--accent-word);
+}
+.callout-word .callout-header {
+  color: var(--accent-word);
+}
+
+/* UI Badges & Ribbon Path Chips */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  border: 1px solid var(--border-ui);
+  background-color: var(--surface-subtle);
+  color: var(--ink-primary);
+}
+
+.badge-ribbon {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+  border-color: #93C5FD;
+}
+
+.badge-contextual {
+  background-color: #FEF3C7;
+  color: #92400E;
+  border-color: #FCD34D;
+}
+
+/* Native Accordion / Details Component (modern-web-guidance) */
+details.disclosure {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-card);
+  margin-block: var(--space-4);
+  overflow: clip;
+}
+
+details.disclosure summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  font-weight: 600;
+  cursor: pointer;
+  min-block-size: var(--target-min-size);
+  user-select: none;
+}
+
+details.disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Chevron placed immediately before label text */
+details.disclosure summary::before {
+  content: "";
+  display: inline-block;
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  flex-shrink: 0;
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='currentColor'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E") no-repeat center / contain;
+  rotate: -90deg;
+  transition: rotate 0.2s ease;
+}
+
+details.disclosure[open] summary::before {
+  rotate: 0deg;
+}
+
+details.disclosure summary:hover {
+  background-color: var(--surface-hover);
+}
+
+/* Slide animation for modern browsers */
+details.disclosure::details-content {
+  interpolate-size: allow-keywords;
+  overflow: clip;
+  contain: layout;
+  padding: 0 var(--space-5) var(--space-5) var(--space-5);
+}
+
+details.disclosure:not([open])::details-content {
+  block-size: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  details.disclosure::details-content {
+    transition: block-size 0.25s ease-in-out, content-visibility 0.25s ease-in-out;
+    transition-behavior: allow-discrete;
+  }
+}

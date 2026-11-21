@@ -1,0 +1,172 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const TRANSLATIONS = [
+  {
+    publisher: "Scratch Area (Gray canvas outside page)",
+    word: "No direct equivalent. Store temporary text/images in a scratch table cell or use a temporary extra page at the end of the document.",
+    ribbon: "Insert → Page Break",
+    tip: "Word deletes anything placed outside page boundaries unless it's anchored inside."
+  },
+  {
+    publisher: "Draw Text Box",
+    word: "Insert → Text Box → Draw Text Box (or use an Invisible Table for multi-column layout).",
+    ribbon: "Insert → Text Box",
+    tip: "Remember to remove the default black outline: Shape Format → Shape Outline → No Outline."
+  },
+  {
+    publisher: "Picture Frame (Drop photo into framed box)",
+    word: "Insert → Pictures → This Device, then set Text Wrap to Square or In Front of Text.",
+    ribbon: "Picture Format → Wrap Text",
+    tip: "To crop to a specific shape, use Picture Format → Crop → Crop to Shape."
+  },
+  {
+    publisher: "Master Page (Repeating header/logo on all pages)",
+    word: "Header and Footer layer (double-click top or bottom margin).",
+    ribbon: "Insert → Header / Footer",
+    tip: "Check 'Different First Page' on the Header & Footer tab to leave the cover page clean."
+  },
+  {
+    publisher: "Text Box Overflow Linking (Flowing text between boxes)",
+    word: "Create Link tool between two empty text boxes.",
+    ribbon: "Shape Format → Create Link",
+    tip: "Click the first box, click Create Link, then click the second empty box with the pitcher icon."
+  },
+  {
+    publisher: "Nudge object slightly with arrow keys",
+    word: "Select object and press Ctrl + Arrow Keys for micro-nudging.",
+    ribbon: "Keyboard shortcut",
+    tip: "Holding Ctrl while pressing Arrow keys nudges by a single pixel instead of a full grid step."
+  },
+  {
+    publisher: "Bring to Front / Send to Back",
+    word: "Bring Forward / Send Backward on the Shape/Picture Format tab.",
+    ribbon: "Shape Format → Arrange",
+    tip: "Use the Selection Pane (Home → Select → Selection Pane) to easily click layers hidden behind text."
+  }
+];
+---
+
+<BaseLayout title="Publisher → Word Translator">
+  <main id="content" class="translator-main" tabindex="-1">
+    <div class="page-header">
+      <span class="badge badge-ribbon">Quick Lookup</span>
+      <h1>Publisher → Word Translator</h1>
+      <p class="lead">
+        Find the exact Word feature for the Publisher tools and habits you already know by heart.
+      </p>
+    </div>
+
+    <div class="table-container">
+      <table class="translator-table">
+        <caption class="visually-hidden">Table comparing Microsoft Publisher features to their Microsoft Word equivalents</caption>
+        <thead>
+          <tr>
+            <th scope="col">In Publisher</th>
+            <th scope="col">In Microsoft Word</th>
+            <th scope="col">Where to Find It</th>
+          </tr>
+        </thead>
+        <tbody>
+          {TRANSLATIONS.map(item => (
+            <tr>
+              <td class="col-publisher">
+                <strong>{item.publisher}</strong>
+              </td>
+              <td class="col-word">
+                <p>{item.word}</p>
+                <div class="tip-inline">
+                  <span aria-hidden="true">💡</span>
+                  <span>{item.tip}</span>
+                </div>
+              </td>
+              <td class="col-path">
+                <span class="badge badge-contextual">{item.ribbon}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .translator-main {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .page-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+  }
+
+  .table-container {
+    overflow-x: auto;
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    background-color: var(--surface-card);
+  }
+
+  .translator-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: start;
+    font-size: var(--font-size-base);
+  }
+
+  .translator-table th {
+    background-color: var(--surface-subtle);
+    padding: var(--space-4);
+    border-bottom: 2px solid var(--border-ui);
+    color: var(--ink-primary);
+    font-weight: 700;
+    text-align: start;
+  }
+
+  .translator-table td {
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+
+  .translator-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .col-publisher {
+    width: 28%;
+    color: var(--accent-publisher);
+  }
+
+  .col-word {
+    width: 48%;
+  }
+
+  .col-word p {
+    margin-block-end: var(--space-2);
+  }
+
+  .tip-inline {
+    display: flex;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    background-color: var(--surface-subtle);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+  }
+
+  .col-path {
+    width: 24%;
+  }
+</style>

@@ -1,0 +1,339 @@
+---
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = Astro.url.pathname } = Astro.props;
+
+const NAV_LINKS = [
+  { href: "/start-here", label: "Start Here" },
+  { href: "/lessons", label: "Lessons" },
+  { href: "/translator", label: "Translator" },
+  { href: "/rescue", label: "Rescue Guide" },
+  { href: "/projects", label: "Projects" },
+  { href: "/cheat-sheet", label: "Cheat Sheet" },
+];
+
+function isCurrent(href: string) {
+  if (href === "/") return currentPath === "/";
+  return currentPath.startsWith(href);
+}
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="site-brand" href="/" aria-label="Publisher to Word Guide Home">
+      <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28" fill="none" aria-hidden="true">
+        <rect x="4" y="2" width="24" height="28" rx="3" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2"/>
+        <rect x="8" y="6" width="16" height="4" rx="1.5" fill="#1D4ED8"/>
+        <rect x="8" y="13" width="7" height="7" rx="1.5" fill="#0F766E"/>
+        <rect x="17" y="13" width="7" height="2" rx="1" fill="#94A3B8"/>
+        <rect x="17" y="17" width="5" height="2" rx="1" fill="#94A3B8"/>
+      </svg>
+      <span class="brand-text">
+        <span class="brand-publisher">Publisher</span>
+        <span class="brand-arrow" aria-hidden="true">→</span>
+        <span class="brand-word">Word</span>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <button
+        class="menu-button"
+        type="button"
+        popovertarget="site-menu"
+        popovertargetaction="toggle"
+        aria-controls="site-menu"
+      >
+        <svg class="menu-icon" viewBox="0 0 20 20" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M2.5 5A.75.75 0 013.25 4.25h13.5a.75.75 0 010 1.5H3.25A.75.75 0 012.5 5zm0 5A.75.75 0 013.25 9.25h13.5a.75.75 0 010 1.5H3.25A.75.75 0 012.5 10zm0 5a.75.75 0 01.75-.75h13.5a.75.75 0 010 1.5H3.25a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+        </svg>
+        <span>Menu</span>
+      </button>
+
+      <ul id="site-menu" class="site-menu" popover="auto">
+        {NAV_LINKS.map(link => {
+          const current = isCurrent(link.href);
+          return (
+            <li>
+              <a
+                href={link.href}
+                class:list={["nav-link", { "is-active": current }]}
+                aria-current={current ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--surface-card);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+    min-block-size: var(--header-height);
+    display: flex;
+    align-items: center;
+    transition: transform 0.25s ease-in-out;
+  }
+
+  /* Auto-hide while scrolling down (Container Scroll-State Queries) */
+  @container scroll-state((scrolled: bottom) and (scrollable: top)) {
+    .site-header {
+      transform: translateY(-100%);
+    }
+  }
+
+  /* Keep header visible whenever keyboard focus is inside */
+  .site-header:focus-within {
+    transform: none !important;
+  }
+
+  /* JavaScript passive scroll fallback */
+  .site-header.is-hidden:not(:focus-within) {
+    transform: translateY(-100%);
+  }
+
+  .header-inner {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .header-inner > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Brand */
+  .site-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--ink-primary);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+  }
+
+  .brand-publisher {
+    color: var(--accent-publisher);
+  }
+
+  .brand-arrow {
+    color: var(--ink-secondary);
+    font-weight: 400;
+  }
+
+  .brand-word {
+    color: var(--accent-word);
+  }
+
+  /* Mobile menu button */
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--target-min-size);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    color: var(--ink-primary);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    anchor-name: --menu-button;
+  }
+
+  .menu-button:hover {
+    background-color: var(--surface-hover);
+  }
+
+  /* Collapsed layout (native popover) */
+  .site-menu {
+    position: fixed;
+    inset: auto;
+    inset-block-start: 4.25rem;
+    inset-block-start: anchor(--menu-button bottom);
+    inset-inline-end: 1rem;
+    inline-size: min(85dvw, 20rem);
+    max-inline-size: calc(100dvw - 2rem);
+    block-size: fit-content;
+    max-block-size: calc(100dvh - 6rem);
+    margin: 0;
+    padding: var(--space-3);
+    list-style: none;
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: auto;
+  }
+
+  .site-menu li {
+    margin: 0;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--target-min-size);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--ink-primary);
+    font-weight: 600;
+  }
+
+  .nav-link:hover {
+    background-color: var(--surface-subtle);
+    color: var(--accent-word);
+  }
+
+  /* Current page indicator */
+  .nav-link[aria-current="page"],
+  .nav-link.is-active {
+    background-color: var(--accent-word-bg);
+    color: var(--accent-word);
+    border-left: 3px solid var(--accent-word);
+  }
+
+  /* Wide layout (Inline Navigation) */
+  .site-header.is-wide .menu-button {
+    display: none;
+  }
+
+  .site-header.is-wide .site-menu {
+    position: static;
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    inline-size: auto;
+    max-inline-size: none;
+    block-size: auto;
+    max-block-size: none;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .site-header.is-wide .site-menu::backdrop {
+    display: none;
+  }
+
+  .site-header.is-wide .nav-link {
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    border-left: none;
+    position: relative;
+  }
+
+  .site-header.is-wide .nav-link[aria-current="page"],
+  .site-header.is-wide .nav-link.is-active {
+    background-color: transparent;
+    color: var(--accent-word);
+  }
+
+  /* Visual bottom pill indicator with high contrast (>= 3:1) */
+  .site-header.is-wide .nav-link[aria-current="page"]::after,
+  .site-header.is-wide .nav-link.is-active::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--space-3);
+    inset-block-end: 0;
+    block-size: 3px;
+    background-color: var(--accent-word);
+    border-radius: var(--radius-pill);
+  }
+
+  /* High contrast mode support */
+  @media (forced-colors: active) {
+    .site-header.is-wide .nav-link[aria-current="page"]::after,
+    .site-header.is-wide .nav-link.is-active::after {
+      background-color: Highlight;
+    }
+  }
+
+  /* Measuring state prevents flicker during resize */
+  .is-measuring * {
+    transition: none !important;
+  }
+</style>
+
+<script>
+  // Progressive Enhancement for Popover API
+  if (!Object.hasOwn(HTMLElement.prototype, "popover")) {
+    import("@oddbird/popover-polyfill");
+  }
+
+  // Adaptive Content-Aware Navbar (modern-web-guidance)
+  const header = document.querySelector(".site-header");
+  const inner = header?.querySelector(".header-inner");
+  const menu = document.getElementById("site-menu");
+
+  if (header && inner && menu) {
+    const updateNavLayout = () => {
+      header.classList.add("is-measuring");
+      header.classList.add("is-wide");
+
+      // Compare scrollWidth vs clientWidth to determine if inline items fit
+      const fitsInline = inner.scrollWidth <= inner.clientWidth;
+
+      if (fitsInline) {
+        header.classList.add("is-wide");
+        menu.removeAttribute("popover");
+      } else {
+        header.classList.remove("is-wide");
+        menu.setAttribute("popover", "auto");
+      }
+
+      requestAnimationFrame(() => {
+        header.classList.remove("is-measuring");
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateNavLayout();
+    });
+
+    resizeObserver.observe(inner);
+    updateNavLayout();
+  }
+
+  // Scroll down auto-hide fallback for browsers without Container Scroll-State queries
+  if (!CSS.supports("container-type", "scroll-state")) {
+    const bar = document.querySelector(".site-header");
+    let lastY = window.scrollY;
+
+    window.addEventListener("scroll", () => {
+      const y = Math.max(0, Math.min(window.scrollY, document.documentElement.scrollHeight - window.innerHeight));
+      if (y === lastY) return;
+
+      if (bar) {
+        const barHeight = (bar as HTMLElement).offsetHeight || 60;
+        bar.classList.toggle("is-hidden", y > lastY && y > barHeight);
+      }
+      lastY = y;
+    }, { passive: true });
+  }
+</script>

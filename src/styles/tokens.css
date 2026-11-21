@@ -1,0 +1,102 @@
+/* ==========================================================================
+   Design Tokens: Calm Stationery (Publisher to Word)
+   WCAG AA/AAA compliant color palette, fluid scales, and forced-colors
+   ========================================================================== */
+
+:root {
+  /* Enforce light color scheme across UA form controls and scrollbars */
+  color-scheme: light;
+
+  /* Surfaces */
+  --surface-page: #FAF9F6;       /* Warm paper off-white (reduces screen glare) */
+  --surface-card: #FFFFFF;       /* Clean elevated card background */
+  --surface-subtle: #F1F5F9;     /* Soft slate tint for breadcrumbs, pills, table headers */
+  --surface-hover: #F8FAFC;
+
+  /* Ink / Typography */
+  --ink-primary: #1E293B;        /* Deep slate charcoal (14:1 contrast on page) */
+  --ink-secondary: #475569;      /* Muted slate for captions & guides (~7:1 contrast) */
+  --ink-muted: #64748B;
+
+  /* Borders & Dividers */
+  --border-ui: #94A3B8;          /* Accessible non-text boundary (>=3:1 on white) */
+  --border-subtle: #CBD5E1;      /* Decorative dividers */
+  --border-focus: #1D4ED8;       /* High-contrast focus outline */
+
+  /* Accents & Status */
+  --accent-word: #1D4ED8;        /* Word blue (~6.5:1 on white) */
+  --accent-word-bg: #EFF6FF;
+  --accent-word-border: #93C5FD;
+
+  --accent-publisher: #0F766E;   /* Publisher teal (~5.4:1 on white) */
+  --accent-publisher-bg: #F0FDFA;
+  --accent-publisher-border: #99F6E4;
+
+  --accent-tip: #B45309;         /* Amber warning (~5.0:1 on white) */
+  --accent-tip-bg: #FFFBEB;
+  --accent-tip-border: #FDE68A;
+
+  --accent-success: #15803D;     /* Forest green (~5.2:1 on white) */
+  --accent-success-bg: #F0FDF4;
+  --accent-success-border: #BBF7D0;
+
+  /* Typography Scale: fluid with clamp() keeping max <= 2.5 * min (WCAG 1.4.4) */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --font-size-xs: 0.8125rem;    /* 13px */
+  --font-size-sm: 0.9375rem;    /* 15px */
+  --font-size-base: 1.125rem;   /* 18px base text for effortless reading */
+  --font-size-lg: 1.25rem;      /* 20px */
+  --font-size-xl: 1.5rem;       /* 24px */
+  --font-size-2xl: clamp(1.5rem, 1.25rem + 1vw, 2rem);        /* h2: max <= 1.33 * min */
+  --font-size-3xl: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);  /* h1: max <= 1.57 * min */
+
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.6;
+
+  /* Layout Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Border Radii */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-pill: 9999px;
+
+  /* Sizing Constraints */
+  --max-prose-width: 60ch;
+  --header-height: 3.75rem;
+  --sidebar-width: 18rem;
+
+  /* Touch / Click Target minimums (WCAG 2.5.8) */
+  --target-min-size: 2.75rem; /* 44px */
+}
+
+/* Forced Colors Mode (Windows High Contrast Mode) */
+@media (forced-colors: active) {
+  :root {
+    --surface-page: Canvas;
+    --surface-card: Canvas;
+    --surface-subtle: Canvas;
+    --ink-primary: CanvasText;
+    --ink-secondary: CanvasText;
+    --ink-muted: GrayText;
+    --border-ui: ButtonText;
+    --border-subtle: GrayText;
+    --border-focus: Highlight;
+    --accent-word: Highlight;
+    --accent-publisher: Highlight;
+    --accent-tip: Highlight;
+    --accent-success: Highlight;
+  }
+}

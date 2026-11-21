@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const PROJECTS = [
+  {
+    title: "Project 1: The 1-Page Community Event Flyer",
+    duration: "15 minutes",
+    skills: ["Page Border", "Title Text Box (No Outline)", "Square-wrapped Photo", "Invisible Table for details"],
+    summary: "Put what you've learned into practice by designing a clean, printable A4 or Letter flyer with a bold header, a side-by-side photo with flowing text, and a neat contact box."
+  },
+  {
+    title: "Project 2: The 2-Column Club Newsletter",
+    duration: "25 minutes",
+    skills: ["Section Breaks", "2-Column Layout", "Linked Text Boxes", "Drop Caps", "PDF Export"],
+    summary: "Build a classic Publisher-style newsletter with a 1-column title banner across the top, 2 columns of running article text, and a pull-quote callout box."
+  }
+];
+---
+
+<BaseLayout title="Hands-On Projects">
+  <main id="content" class="projects-main" tabindex="-1">
+    <div class="page-header">
+      <span class="badge badge-ribbon">Hands-On Practice</span>
+      <h1>Guided Layout Projects</h1>
+      <p class="lead">
+        Practice your layout skills with realistic, step-by-step document templates you can recreate from scratch in Microsoft Word.
+      </p>
+    </div>
+
+    <div class="projects-grid">
+      {PROJECTS.map(proj => (
+        <article class="card project-card">
+          <div class="project-header">
+            <span class="badge badge-contextual">{proj.duration}</span>
+            <h2 class="project-title">{proj.title}</h2>
+          </div>
+
+          <p class="project-summary">{proj.summary}</p>
+
+          <div class="project-skills">
+            <h3 class="skills-label">Skills Practiced:</h3>
+            <ul class="skills-list">
+              {proj.skills.map(s => (
+                <li><span class="badge">{s}</span></li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="project-footer">
+            <span class="badge badge-ribbon">Detailed Walkthrough Coming in Phase 4</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .projects-main {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .page-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .project-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-header {
+    margin-block-end: var(--space-3);
+  }
+
+  .project-title {
+    font-size: var(--font-size-xl);
+    margin-block-start: var(--space-2);
+    margin-block-end: 0;
+  }
+
+  .project-summary {
+    color: var(--ink-secondary);
+    font-size: var(--font-size-base);
+    margin-block-end: var(--space-4);
+    flex-grow: 1;
+  }
+
+  .project-skills {
+    margin-block-end: var(--space-6);
+    border-top: 1px solid var(--border-subtle);
+    padding-block-start: var(--space-3);
+  }
+
+  .skills-label {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    margin: 0;
+    margin-block-end: var(--space-2);
+  }
+
+  .skills-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .skills-list li {
+    margin: 0;
+  }
+
+  .project-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding-block-start: var(--space-4);
+  }
+</style>

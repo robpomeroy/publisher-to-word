@@ -1,0 +1,204 @@
+---
+import { CURRICULUM } from "../../data/curriculum";
+
+interface Props {
+  currentSlug?: string;
+}
+
+const { currentSlug } = Astro.props;
+---
+
+<aside class="lesson-sidebar">
+  <!-- Mobile Collapsible Disclosure -->
+  <details class="disclosure mobile-lesson-drawer">
+    <summary>Course Lessons (Browse all 14)</summary>
+    <nav class="sidebar-nav" aria-label="Lesson curriculum (mobile)">
+      {CURRICULUM.map(mod => (
+        <div class="module-group">
+          <div class="module-title">Module {mod.number}: {mod.title}</div>
+          <ul class="lesson-list">
+            {mod.lessons.map(lesson => {
+              const isCurrent = lesson.slug === currentSlug;
+              return (
+                <li>
+                  {lesson.isAvailable ? (
+                    <a
+                      href={`/lessons/${lesson.slug}`}
+                      class:list={["sidebar-link", { "is-active": isCurrent }]}
+                      aria-current={isCurrent ? "page" : undefined}
+                    >
+                      <span class="lesson-number">{lesson.order}.</span>
+                      <span class="lesson-title">{lesson.title}</span>
+                    </a>
+                  ) : (
+                    <span class="sidebar-link is-upcoming">
+                      <span class="lesson-number">{lesson.order}.</span>
+                      <span class="lesson-title">{lesson.title}</span>
+                      <span class="upcoming-badge">Soon</span>
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </details>
+
+  <!-- Desktop Sticky Navigation -->
+  <div class="desktop-sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-heading">Course Curriculum</h2>
+    </div>
+    <nav class="sidebar-nav" aria-label="Lesson curriculum">
+      {CURRICULUM.map(mod => (
+        <div class="module-group">
+          <div class="module-title">Module {mod.number}: {mod.title}</div>
+          <ul class="lesson-list">
+            {mod.lessons.map(lesson => {
+              const isCurrent = lesson.slug === currentSlug;
+              return (
+                <li>
+                  {lesson.isAvailable ? (
+                    <a
+                      href={`/lessons/${lesson.slug}`}
+                      class:list={["sidebar-link", { "is-active": isCurrent }]}
+                      aria-current={isCurrent ? "page" : undefined}
+                    >
+                      <span class="lesson-number">{lesson.order}.</span>
+                      <span class="lesson-title">{lesson.title}</span>
+                    </a>
+                  ) : (
+                    <span class="sidebar-link is-upcoming">
+                      <span class="lesson-number">{lesson.order}.</span>
+                      <span class="lesson-title">{lesson.title}</span>
+                      <span class="upcoming-badge">Soon</span>
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </div>
+</aside>
+
+<style>
+  .lesson-sidebar {
+    width: 100%;
+  }
+
+  /* Desktop layout */
+  .desktop-sidebar {
+    display: none;
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-4));
+    max-height: calc(100vh - var(--header-height) - var(--space-8));
+    overflow-y: auto;
+    padding-inline-end: var(--space-2);
+  }
+
+  .sidebar-header {
+    margin-block-end: var(--space-4);
+  }
+
+  .sidebar-heading {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin: 0;
+    color: var(--ink-primary);
+  }
+
+  .module-group {
+    margin-block-end: var(--space-6);
+  }
+
+  .module-title {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    margin-block-end: var(--space-2);
+    padding-inline-start: var(--space-2);
+  }
+
+  .lesson-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lesson-list li {
+    margin-block-end: 2px;
+  }
+
+  .sidebar-link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--ink-secondary);
+    font-size: var(--font-size-sm);
+    line-height: 1.35;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .sidebar-link:hover:not(.is-upcoming) {
+    background-color: var(--surface-subtle);
+    color: var(--accent-word);
+  }
+
+  .sidebar-link.is-active {
+    background-color: var(--accent-word-bg);
+    color: var(--accent-word);
+    font-weight: 600;
+    border-inline-start: 3px solid var(--accent-word);
+  }
+
+  .lesson-number {
+    font-weight: 600;
+    flex-shrink: 0;
+    width: 1.5rem;
+  }
+
+  .lesson-title {
+    flex-grow: 1;
+  }
+
+  .sidebar-link.is-upcoming {
+    color: var(--ink-muted);
+    opacity: 0.75;
+    cursor: default;
+  }
+
+  .upcoming-badge {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--ink-muted);
+  }
+
+  /* Responsive toggling */
+  @media (min-width: 900px) {
+    .mobile-lesson-drawer {
+      display: none;
+    }
+    .desktop-sidebar {
+      display: block;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .mobile-lesson-drawer {
+      margin-block-end: var(--space-6);
+    }
+  }
+</style>

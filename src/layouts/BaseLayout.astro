@@ -1,0 +1,36 @@
+---
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/components.css";
+import "../styles/print.css";
+
+import SiteHeader from "../components/nav/SiteHeader.astro";
+import SiteFooter from "../components/nav/SiteFooter.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "A simple, reassuring step-by-step visual tutorial website helping former Microsoft Publisher users comfortably master layout, text boxes, and pictures in Microsoft Word."
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Publisher to Word Guide</title>
+  </head>
+  <body>
+    <a href="#content" class="skip-link visually-hidden">Skip to main content</a>
+    <SiteHeader />
+    <slot />
+    <SiteFooter />
+  </body>
+</html>
