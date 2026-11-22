@@ -1,0 +1,190 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { getCurriculum } from "../../data/curriculum";
+
+const authored = await getCollection("lessons");
+const curriculum = getCurriculum(authored);
+---
+
+<BaseLayout title="All Lessons">
+  <main id="content" class="lessons-main" tabindex="-1">
+    <div class="page-header">
+      <span class="badge badge-ribbon">Full Curriculum</span>
+      <h1>All 14 Lessons</h1>
+      <p class="lead">
+        Browse the complete step-by-step curriculum designed to guide you comfortably through Microsoft Word's layout concepts.
+      </p>
+    </div>
+
+    <div class="modules-stack">
+      {curriculum.map(mod => (
+        <section class="card module-section">
+          <div class="module-header">
+            <span class="badge badge-ribbon">Module {mod.number}</span>
+            <h2 class="module-title">{mod.title}</h2>
+            <p class="module-summary">{mod.summary}</p>
+          </div>
+
+          <ol class="lesson-cards-list">
+            {mod.lessons.map(lesson => (
+              <li class="lesson-item">
+                {lesson.isAvailable ? (
+                  <a href={`/lessons/${lesson.slug}`} class="lesson-card-link">
+                    <div class="lesson-card-top">
+                      <span class="lesson-number">Lesson {lesson.order}</span>
+                      <span class="lesson-status available">Ready to Learn</span>
+                    </div>
+                    <h3 class="lesson-heading">{lesson.title}</h3>
+                    <p class="lesson-card-desc">{lesson.summary}</p>
+                  </a>
+                ) : (
+                  <div class="lesson-card-upcoming">
+                    <div class="lesson-card-top">
+                      <span class="lesson-number">Lesson {lesson.order}</span>
+                      <span class="lesson-status upcoming">Coming in Phase 3</span>
+                    </div>
+                    <h3 class="lesson-heading">{lesson.title}</h3>
+                    <p class="lesson-card-desc">{lesson.summary}</p>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .lessons-main {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .page-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+  }
+
+  .modules-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .module-section {
+    padding: var(--space-6);
+  }
+
+  .module-header {
+    margin-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-block-end: var(--space-4);
+  }
+
+  .module-title {
+    font-size: var(--font-size-2xl);
+    margin-block: var(--space-2) var(--space-1);
+  }
+
+  .module-summary {
+    color: var(--ink-secondary);
+    font-size: var(--font-size-base);
+    margin: 0;
+  }
+
+  .lesson-cards-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: var(--space-4);
+  }
+
+  .lesson-card-link,
+  .lesson-card-upcoming {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    text-decoration: none;
+  }
+
+  .lesson-card-link {
+    background-color: var(--surface-card);
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .lesson-card-link:hover {
+    border-color: var(--accent-word);
+    transform: translateY(-1px);
+  }
+
+  .lesson-card-upcoming {
+    background-color: var(--surface-subtle);
+  }
+
+  .lesson-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-end: var(--space-2);
+  }
+
+  .lesson-number {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-secondary);
+  }
+
+  .lesson-status {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+
+  .lesson-status.available {
+    background-color: var(--accent-success-bg);
+    color: var(--accent-success);
+    border: 1px solid var(--accent-success-border);
+  }
+
+  .lesson-status.upcoming {
+    background-color: var(--surface-subtle);
+    color: var(--ink-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .lesson-heading {
+    font-size: var(--font-size-lg);
+    margin-block: 0 var(--space-2);
+    color: var(--accent-word);
+  }
+
+  .lesson-card-upcoming .lesson-heading {
+    color: var(--ink-secondary);
+  }
+
+  .lesson-card-desc {
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    margin: 0;
+    flex-grow: 1;
+  }
+</style>

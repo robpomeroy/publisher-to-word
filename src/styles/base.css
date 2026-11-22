@@ -1,0 +1,167 @@
+/* ==========================================================================
+   Base Styles: Reset, Typography, Accessibility & View Transitions
+   ========================================================================== */
+
+/* Modern box model */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Enable scroll-state container queries for auto-hiding top bar */
+html {
+  container-type: scroll-state;
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Native Cross-Document View Transitions */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+body {
+  background-color: var(--surface-page);
+  color: var(--ink-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  text-align: start;
+  overflow-wrap: break-word;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Typography & Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--ink-primary);
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  margin-block-end: var(--space-4);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+  margin-block: var(--space-8) var(--space-3);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+  margin-block: var(--space-6) var(--space-2);
+}
+
+p {
+  margin-block-end: var(--space-4);
+  text-wrap: pretty;
+}
+
+/* Prose Line Length Cap (max 60ch ~ 80 characters for readability) */
+.prose,
+article > p,
+article > ul,
+article > ol {
+  max-inline-size: var(--max-prose-width);
+}
+
+/* Links */
+a {
+  color: var(--accent-word);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #1E40AF;
+}
+
+/* Accessible Focus Outlines (WCAG 2.4.7 & 1.4.11) */
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 3px;
+}
+
+/* Remove default outline only when focus is visible */
+:where(a, button, input, select, textarea, summary):focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Anchor Target Scroll Offset (prevents in-page link targets hiding under sticky bar) */
+:target {
+  scroll-margin-top: 4.5rem;
+}
+
+/* Visually Hidden Utility for Skip Links and Screen-Reader Descriptions */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Skip Link styling when focused */
+.skip-link {
+  position: fixed;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 1000;
+  background-color: var(--surface-card);
+  color: var(--ink-primary);
+  padding: var(--space-2) var(--space-4);
+  border: 2px solid var(--border-focus);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
+}
+
+/* Lists */
+ul, ol {
+  padding-inline-start: var(--space-6);
+  margin-block-end: var(--space-4);
+}
+
+li {
+  margin-block-end: var(--space-2);
+}
+
+/* Images & SVGs */
+img, svg {
+  display: block;
+  max-inline-size: 100%;
+  height: auto;
+}
+
+code, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+kbd {
+  display: inline-block;
+  padding: 0.1em 0.4em;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border-ui);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 10%);
+}

@@ -1,0 +1,149 @@
+---
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand-col">
+      <div class="footer-brand">
+        <span class="brand-publisher">Publisher</span>
+        <span class="brand-arrow" aria-hidden="true">→</span>
+        <span class="brand-word">Word</span>
+      </div>
+      <p class="footer-desc">
+        A calm, step-by-step visual guide designed specifically for former Microsoft Publisher users adapting to Microsoft Word.
+      </p>
+      <button type="button" class="btn btn-secondary print-btn" data-print-trigger>
+        <svg viewBox="0 0 20 20" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5 2.75C5 2.06 5.56 1.5 6.25 1.5h7.5c.69 0 1.25.56 1.25 1.25v2.5H5v-2.5zm-1.5 4h13A2.25 2.25 0 0118.75 9v5A2.25 2.25 0 0116.5 16.25h-1.5V17c0 .69-.56 1.25-1.25 1.25H6.25A1.25 1.25 0 015 17v-.75H3.5A2.25 2.25 0 011.25 14V9A2.25 2.25 0 013.5 6.75zm3 6h7a.75.75 0 00.75-.75V10.5a.75.75 0 00-.75-.75h-7a.75.75 0 00-.75.75v1.5c0 .414.336.75.75.75z" clip-rule="evenodd"/>
+        </svg>
+        <span>Print this Page</span>
+      </button>
+    </div>
+
+    <div class="footer-links-col">
+      <h2 class="footer-heading">Learning Guide</h2>
+      <ul class="footer-links">
+        <li><a href="/start-here">Start Here (Orientation)</a></li>
+        <li><a href="/lessons">All 14 Lessons</a></li>
+        <li><a href="/lessons/01-how-text-flows">Lesson 1: How Text Flows</a></li>
+        <li><a href="/projects">Hands-On Projects</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-links-col">
+      <h2 class="footer-heading">Quick Help & About</h2>
+      <ul class="footer-links">
+        <li><a href="/translator">Publisher → Word Translator</a></li>
+        <li><a href="/rescue">"Why Did That Happen?" Rescue Guide</a></li>
+        <li><a href="/cheat-sheet">Printable Cheat Sheets</a></li>
+        <li><a href="https://pomeroy.me/about/" rel="author">About Rob Pomeroy</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>
+      Created by Rob Pomeroy as an independent educational resource. Microsoft, Word, and Publisher are trademarks of Microsoft Corporation. This website is not affiliated with or endorsed by Microsoft.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--surface-card);
+    border-top: 1px solid var(--border-subtle);
+    margin-block-start: auto;
+    padding-block: var(--space-10) var(--space-6);
+  }
+
+  .footer-inner {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-8);
+  }
+
+  @media (max-width: 768px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  .footer-brand {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-block-end: var(--space-2);
+  }
+
+  .brand-publisher {
+    color: var(--accent-publisher);
+  }
+
+  .brand-arrow {
+    color: var(--ink-secondary);
+  }
+
+  .brand-word {
+    color: var(--accent-word);
+  }
+
+  .footer-desc {
+    color: var(--ink-secondary);
+    font-size: var(--font-size-sm);
+    max-inline-size: 45ch;
+    margin-block-end: var(--space-4);
+  }
+
+  .print-btn {
+    font-size: var(--font-size-sm);
+  }
+
+  .footer-heading {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    margin-block: 0 var(--space-3);
+  }
+
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links li {
+    margin-block-end: var(--space-2);
+  }
+
+  .footer-links a {
+    color: var(--ink-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    min-block-size: var(--target-min-size);
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .footer-links a:hover {
+    color: var(--accent-word);
+    text-decoration: underline;
+  }
+
+  .footer-bottom {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    margin-block-start: var(--space-8);
+    padding-block-start: var(--space-4);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .footer-bottom p {
+    font-size: var(--font-size-xs);
+    color: var(--ink-muted);
+    margin: 0;
+    text-align: center;
+  }
+</style>

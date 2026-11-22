@@ -1,0 +1,47 @@
+{
+  "name": "publisher-to-word",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check --minimumFailingSeverity hint",
+    "lint:eslint": "eslint . --max-warnings 0",
+    "lint:stylelint": "stylelint \"src/**/*.{css,astro}\" --max-warnings 0",
+    "lint": "npm run lint:eslint && npm run lint:stylelint",
+    "verify:dist": "node scripts/verify-dist.mjs",
+    "verify:mwg": "node scripts/verify-mwg.mjs",
+    "quality": "npm run check && npm run lint && npm run test && npm run build && npm run verify:dist && npm run verify:mwg",
+    "test": "vitest run --coverage",
+    "prepare": "node scripts/setup-hooks.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/sitemap": "^3.2.1",
+    "@oddbird/popover-polyfill": "^0.7.3",
+    "astro": "^5.4.2",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^8.72.1",
+    "@vitest/coverage-v8": "^5.1.0",
+    "eslint": "^10.14.0",
+    "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-jsx-a11y-x": "^0.2.0",
+    "linkedom": "^0.18.15",
+    "modern-web-guidance": "^0.0.202",
+    "stylelint": "^18.0.0",
+    "stylelint-config-html": "^2.0.0",
+    "stylelint-config-standard": "^41.0.0",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^5.1.0",
+    "yaml": "^2.9.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.68.0",
+    "@rollup/rollup-win32-x64-msvc": "^4.68.0"
+  }
+}

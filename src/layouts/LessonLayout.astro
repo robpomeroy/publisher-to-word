@@ -1,0 +1,148 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import LessonSidebar from "../components/nav/LessonSidebar.astro";
+import PrevNextNav from "../components/nav/PrevNextNav.astro";
+
+interface Props {
+  title: string;
+  module: number;
+  moduleTitle: string;
+  order: number;
+  summary: string;
+  slug: string;
+  wordTabs?: string[];
+  hasMacNotes?: boolean;
+}
+
+const {
+  title,
+  module,
+  moduleTitle,
+  order,
+  summary,
+  slug,
+  wordTabs = []
+} = Astro.props;
+---
+
+<BaseLayout title={`Lesson ${order}: ${title}`}>
+  <div class="lesson-container">
+    <div class="lesson-grid">
+      <LessonSidebar currentSlug={slug} />
+
+      <main id="content" class="lesson-main" tabindex="-1">
+        <article class="prose">
+          <header class="lesson-header">
+            <div class="module-badge">
+              <span class="badge badge-ribbon">Module {module}</span>
+              <span class="module-name">{moduleTitle}</span>
+            </div>
+
+            <h1 class="lesson-h1">Lesson {order}: {title}</h1>
+            <p class="lesson-summary">{summary}</p>
+
+            {wordTabs.length > 0 && (
+              <div class="ribbon-tabs-used">
+                <span class="tabs-label">Ribbon Tabs Used:</span>
+                <div class="tabs-list">
+                  {wordTabs.map(tab => (
+                    <span class="badge badge-contextual">{tab}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </header>
+
+          <div class="lesson-body">
+            <slot />
+          </div>
+
+          <PrevNextNav currentSlug={slug} />
+        </article>
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .lesson-container {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    gap: var(--space-8);
+    align-items: start;
+  }
+
+  @media (max-width: 899px) {
+    .lesson-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+
+  .lesson-main {
+    min-width: 0;
+  }
+
+  .lesson-header {
+    margin-block-end: var(--space-6);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .module-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-block-end: var(--space-3);
+  }
+
+  .module-name {
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    font-weight: 600;
+  }
+
+  .lesson-h1 {
+    font-size: var(--font-size-3xl);
+    line-height: var(--line-height-tight);
+    margin-block-end: var(--space-3);
+  }
+
+  .lesson-summary {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+    margin-block-end: var(--space-4);
+  }
+
+  .ribbon-tabs-used {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    font-size: var(--font-size-sm);
+  }
+
+  .tabs-label {
+    color: var(--ink-muted);
+    font-weight: 600;
+  }
+
+  .tabs-list {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .lesson-body {
+    margin-block-start: var(--space-6);
+  }
+</style>

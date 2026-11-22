@@ -1,0 +1,158 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const RESCUE_ITEMS = [
+  {
+    symptom: "My picture jumped to the next page when I typed above it!",
+    cause: "The picture is set to 'Move with text', or its anchor paragraph was pushed across the page break.",
+    fix: "Click the picture, click the floating Layout arch icon beside it, and choose 'Fix position on page'. If it still jumped, its anchor paragraph moved across the page break: turn on Show/Hide ¶ on the Home tab to see the anchor (⚓), and drag it back to a paragraph on the intended page."
+  },
+  {
+    symptom: "The 'Picture Format' or 'Shape Format' tab disappeared from the top ribbon!",
+    cause: "Word only displays object-specific ribbon tabs while the object is actively selected.",
+    fix: "Click directly on the picture or text box border. The specialised tab will immediately reappear at the far right of the top ribbon."
+  },
+  {
+    symptom: "The 'Group' button is greyed out and I can't click it!",
+    cause: "Word refuses to group items if even one of the selected objects is set to 'In Line with Text'.",
+    fix: "Select each item individually, click its floating Layout arch icon, and change Text Wrapping from 'In Line with Text' to 'Square' or 'In Front of Text'. Once none of them are inline, select both and Group will become active."
+  },
+  {
+    symptom: "I sent a picture 'Behind Text' and now I can't click or select it!",
+    cause: "When an image is behind text, clicking the area selects the typed text layer instead of the picture.",
+    fix: "Go to the Home tab → Select (far right) → Selection Pane. In the list of objects on the right side of your screen, click your picture's name. It will immediately select the picture so you can move or reformat it."
+  },
+  {
+    symptom: "My text box has an unwanted black border and a solid white background!",
+    cause: "Word gives all newly drawn text boxes a default 1pt black line outline and a white solid fill.",
+    fix: "Click the border of the text box. Go to Shape Format on the top ribbon. Set Shape Fill to 'No Fill' (makes background transparent) and set Shape Outline to 'No Outline' (removes the black box border)."
+  },
+  {
+    symptom: "My text is squished right up against the border of the text box!",
+    cause: "Word's internal text box margins are set too tight or unevenly.",
+    fix: "Right-click the border of the text box → Format Shape. In the right pane, click 'Text Options' → click the little Text Box icon (3rd icon) → adjust the Left, Right, Top, and Bottom margins to 0.2 cm or more."
+  },
+  {
+    symptom: "My page border gets cut off at the bottom when I print it!",
+    cause: "By default, Word measures page borders from the 'Edge of page', which often falls inside your desktop printer's unprintable physical margin.",
+    fix: "Go to the Design tab → Page Borders → click the 'Options...' button (bottom right of the dialogue box). Change 'Measure from: Edge of page' to 'Measure from: Text'. This pulls the border safely inside the printable area."
+  },
+  {
+    symptom: "There's a stubborn blank page at the end of my document that won't delete!",
+    cause: "A table or large graphic at the very bottom of page 1 forces a mandatory hidden paragraph mark (¶) onto the next page.",
+    fix: "Turn on Show/Hide ¶ on the Home tab. Locate the lone ¶ on the blank page. Highlight that single mark, go to the Home tab, and set its font size to '1' pt and line spacing to 1.0. This shrinks the mark so tiny it pulls back onto page 1."
+  }
+];
+---
+
+<BaseLayout title="Rescue Guide: Why Did That Happen?">
+  <main id="content" class="rescue-main" tabindex="-1">
+    <div class="page-header">
+      <span class="badge badge-ribbon">Troubleshooting</span>
+      <h1>"Why Did That Happen?" Rescue Guide</h1>
+      <p class="lead">
+        Click any common frustration below to see why Word behaves that way and the immediate 2-click fix.
+      </p>
+    </div>
+
+    <div class="rescue-stack">
+      {RESCUE_ITEMS.map((item, index) => (
+        <details class="disclosure rescue-card" id={`snag-${index + 1}`}>
+          <summary class="rescue-summary">
+            <span class="symptom-text">{item.symptom}</span>
+          </summary>
+          <div class="rescue-body">
+            <div class="rescue-section">
+              <h2 class="section-label">Why it happens:</h2>
+              <p>{item.cause}</p>
+            </div>
+            <div class="rescue-section fix-section">
+              <h2 class="section-label">How to fix it:</h2>
+              <p>{item.fix}</p>
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .rescue-main {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .page-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+  }
+
+  .rescue-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .rescue-card {
+    border: 1px solid var(--border-ui);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 3%);
+  }
+
+  .rescue-summary {
+    font-size: var(--font-size-lg);
+    color: var(--ink-primary);
+  }
+
+  .symptom-text {
+    color: var(--ink-primary);
+  }
+
+  .rescue-card[open] .symptom-text {
+    color: var(--accent-word);
+  }
+
+  .rescue-body {
+    border-top: 1px solid var(--border-subtle);
+    padding-block-start: var(--space-4);
+  }
+
+  .rescue-section {
+    margin-block-end: var(--space-4);
+  }
+
+  .section-label {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+    margin: 0;
+    margin-block-end: var(--space-1);
+  }
+
+  .fix-section {
+    background-color: var(--accent-success-bg);
+    border: 1px solid var(--accent-success-border);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .fix-section .section-label {
+    color: var(--accent-success);
+  }
+
+  .fix-section p {
+    color: var(--ink-primary);
+    margin: 0;
+    font-weight: 500;
+  }
+</style>

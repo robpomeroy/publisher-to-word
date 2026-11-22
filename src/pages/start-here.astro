@@ -1,0 +1,114 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Start Here (Orientation)">
+  <main id="content" class="start-here-main" tabindex="-1">
+    <article class="prose">
+      <header class="page-header">
+        <span class="badge badge-ribbon">Quick Orientation</span>
+        <h1>Welcome to Publisher → Word</h1>
+        <p class="lead">
+          If you are transitioning from Microsoft Publisher, you are probably feeling frustrated.
+          Things jump across the page, buttons seem to disappear, and nothing stays where you put it.
+          <strong>This guide is here to help.</strong>
+        </p>
+      </header>
+
+      <section class="section">
+        <h2>Why Does Word Feel So Tricky?</h2>
+        <p>
+          In Publisher, every piece of text was inside an independent box. You could drag it around the page or even park it in the grey "scratch area" on the side.
+        </p>
+        <p>
+          In Word, text flows like water in a river. When you drop a photo in, Word treats it like a giant typed character by default. When you press Enter, everything downstream moves forward.
+        </p>
+
+        <div class="callout callout-publisher">
+          <div class="callout-header">
+            <span aria-hidden="true">💡</span>
+            <span>Coming from Publisher?</span>
+          </div>
+          <p>
+            You don't have to fight Word! Once you learn to change the <strong>Text Wrap</strong> setting to <span class="badge badge-ribbon">Square</span> or <span class="badge badge-ribbon">In Front of Text</span>, photos and text boxes behave almost exactly like they did in Publisher.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Three Switches to Turn On Right Now</h2>
+        <p>Before doing any layout work in Word, turn on these three visual clues:</p>
+
+        <ol>
+          <li>
+            <strong>Show/Hide Formatting Marks (<samp>¶</samp>):</strong> Located on the <span class="badge badge-ribbon">Home</span> tab. This reveals paragraph marks, spaces, and object anchors so you can see why things are moving.
+          </li>
+          <li>
+            <strong>The Ruler:</strong> Go to the <span class="badge badge-ribbon">View</span> tab and tick <strong>Ruler</strong>. This shows your page margins and lets you drag indents visually.
+          </li>
+          <li>
+            <strong>Alignment Guides:</strong> Under the <span class="badge badge-ribbon">Layout</span> tab → <strong>Align</strong>, tick <strong>Use Alignment Guides</strong>. Word will now show green guidelines when objects line up with margins or each other.
+          </li>
+        </ol>
+
+        <div class="callout callout-tip">
+          <div class="callout-header">
+            <span aria-hidden="true">⚠️</span>
+            <span>Watch Out: Disappearing Ribbon Tabs</span>
+          </div>
+          <p>
+            In Word, the tabs for formatting pictures and shapes (like <span class="badge badge-contextual">Picture Format</span> or <span class="badge badge-contextual">Shape Format</span>) only appear at the top of your screen <em>while the object is clicked and selected</em>. If you click away into the blank page, those tabs vanish!
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Who Made This Guide?</h2>
+        <p>
+          This guide is an independent project created by Rob Pomeroy to help individuals, schools, charities, and small organisations transition smoothly after Microsoft announced the retirement of Microsoft Publisher.
+        </p>
+        <p>
+          It is completely free, carries no ads or sponsored content, and is maintained as a public educational service. To learn more about the author, background, and other open resources, visit <a href="https://pomeroy.me/about/" rel="author">About Rob Pomeroy</a>.
+        </p>
+      </section>
+
+      <section class="section next-step-section">
+        <h2>Ready to Begin?</h2>
+        <p>Start with Lesson 1 to master how Word flows text and learn why you should never press Enter 15 times to reach the next page.</p>
+        <a href="/lessons/01-how-text-flows" class="btn btn-primary">
+          <span>Go to Lesson 1: How Text Flows</span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </section>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .start-here-main {
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .page-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  .next-step-section {
+    margin-block-start: var(--space-10);
+    padding: var(--space-6);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+  }
+</style>
