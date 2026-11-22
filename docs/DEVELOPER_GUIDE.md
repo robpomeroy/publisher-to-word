@@ -1,7 +1,7 @@
 # Developer & Maintainer Guide: Publisher to Word
 
 > **Audience:** Developers, Content Authors, and Maintainers  
-> **Status:** Phase 1 Foundation Active
+> **Status:** Phase 2 Complete (Core Teaching Components & Interactive Simulators)
 
 ---
 
@@ -192,3 +192,83 @@ npm run quality
 ```
 
 The Git pre-commit hook in `.git/hooks/pre-commit` will automatically block any commit if there are lint errors, type failures, broken links, or accessibility violations.
+
+---
+
+## 7. Using Teaching Components in Lessons
+
+Phase 2 provides 6 specialized teaching components in `src/components/teaching/` and 5 visual simulators in `src/components/interactive/`. You can import and use them in any MDX lesson file:
+
+```mdx
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+```
+
+### Component Examples:
+
+#### 1. `<PublisherCompare>`
+```mdx
+<PublisherCompare
+  title="Pinboard vs. River of Text"
+  publisherWay="Every text box and picture was an independent island pinned to a static canvas."
+  wordWay="All text flows continuously from top to bottom. Pictures and text boxes anchor into the river."
+/>
+```
+
+#### 2. `<WhereToFindIt>`
+```mdx
+<WhereToFindIt
+  title="Where to Find Page Break in Word"
+  ribbonPath={["Insert", "Pages", "Page Break"]}
+  contextualTab="Picture Format"
+  rightClickPath={["Layout", "Page Setup", "Breaks", "Page"]}
+  floatingIconTip="Use keyboard shortcut Ctrl + Enter for instant page breaks anywhere."
+/>
+```
+
+#### 3. `<StepList>`
+```mdx
+<StepList
+  steps={[
+    {
+      title: "Normal Paragraph Break: Enter",
+      detail: "Creates a brand new paragraph mark (¶).",
+      ribbonBadge: "Enter",
+    },
+    {
+      title: "Gentle Line Break: Shift + Enter",
+      detail: "Drops to the next line without starting a new paragraph.",
+      ribbonBadge: "Shift + Enter",
+    },
+  ]}
+/>
+```
+
+#### 4. `<GotchaBox>`
+```mdx
+<GotchaBox title="Common Snag — The 15 Enters Trap" collapsible={false}>
+  <p>Never press Enter multiple times to push content onto the next page!</p>
+</GotchaBox>
+```
+
+#### 5. `<MacNote>`
+```mdx
+<MacNote summary="Using Word on a Mac? Shortcut & menu differences">
+  <p>On macOS, press <kbd>Cmd ⌘</kbd> + <kbd>Return</kbd> instead of <kbd>Ctrl</kbd> + <kbd>Enter</kbd>.</p>
+</MacNote>
+```
+
+#### 6. `<TryItCard>`
+```mdx
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Open a blank document in Microsoft Word.",
+    "Type a short heading and press Enter.",
+  ]}
+/>
+```

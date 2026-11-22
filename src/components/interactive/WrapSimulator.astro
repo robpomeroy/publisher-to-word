@@ -1,0 +1,440 @@
+---
+import { getWrapModes, getWrapMode, getWrapStatus } from "../../utils/simulators";
+
+const modes = getWrapModes();
+const defaultMode = getWrapMode("square");
+const initialStatus = getWrapStatus("square");
+---
+
+<div class="wrap-simulator card" id="wrap-simulator">
+  <div class="simulator-header">
+    <div class="header-text">
+      <h3 id="wrap-sim-title" class="simulator-title">
+        <svg
+          class="sim-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="9" y2="12"></line>
+          <line x1="15" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+          <rect x="9" y="9" width="6" height="6" rx="1"></rect>
+        </svg>
+        Word Text Wrap Simulator
+      </h3>
+      <p class="simulator-subtitle">
+        Select any of the 7 Word wrapping modes below to see how paragraphs and the object anchor (⚓) respond in real time.
+      </p>
+    </div>
+  </div>
+
+  <!-- Mode Selector Toolbar -->
+  <div class="wrap-toolbar" role="toolbar" aria-label="Text wrapping modes">
+    {modes.map((mode) => (
+      <button
+        type="button"
+        class={`btn-wrap-mode ${mode.id === defaultMode.id ? "is-active" : ""}`}
+        data-mode={mode.id}
+        aria-pressed={mode.id === defaultMode.id ? "true" : "false"}
+      >
+        {mode.label}
+      </button>
+    ))}
+  </div>
+
+  <!-- Dynamic Feedback Banner -->
+  <div class="mode-feedback" id="wrap-feedback">
+    <div class="feedback-badge-row">
+      <span class="badge badge-ribbon" id="wrap-badge">{defaultMode.label}</span>
+      <span class="anchor-status-pill" id="wrap-anchor-pill">
+        <span class="anchor-glyph" aria-hidden="true">⚓</span>
+        <span id="wrap-anchor-desc">{defaultMode.anchorLabel}</span>
+      </span>
+    </div>
+    <p class="feedback-recommendation" id="wrap-recommendation">
+      <strong>Recommendation:</strong> {defaultMode.recommendation}
+    </p>
+  </div>
+
+  <!-- Mock Word Page Preview -->
+  <div class="mock-word-page wrap-square" id="wrap-preview-page">
+    <div class="mock-page-header">
+      <span class="mock-ruler-notch" aria-hidden="true"></span>
+      <span class="mock-page-tag">Page 1 of 1</span>
+    </div>
+
+    <div class="mock-page-canvas">
+      <p class="mock-p p-intro">
+        In Microsoft Word, paragraphs flow like water down a riverbed. When you introduce a picture, graphic, or pull quote, Word recalculates the boundary lines of every surrounding sentence.
+      </p>
+
+      <!-- The Wrapped Object -->
+      <div class="sim-object" id="sim-object" aria-hidden="true">
+        <div class="sim-object-anchor" id="sim-object-anchor" title="Anchored to this paragraph">
+          ⚓
+        </div>
+        <div class="sim-object-image">
+          <svg
+            class="object-svg"
+            viewBox="0 0 120 90"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect width="120" height="90" rx="4" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" />
+            <circle cx="35" cy="30" r="14" fill="#60A5FA" />
+            <polygon points="15,80 55,40 85,70 110,45 115,80" fill="#2563EB" opacity="0.8" />
+          </svg>
+          <span class="object-label">Photo Object</span>
+        </div>
+      </div>
+
+      <p class="mock-p p-body-1">
+        Publisher users often expect objects to stay put on a fixed canvas. In Word, wrapping mode decides whether text carves a neat rectangular channel, hugs contour edges, halts above and below, or allows the picture to drift over and under the text.
+      </p>
+
+      <p class="mock-p p-body-2">
+        Notice how selecting <strong id="wrap-inline-callout">Square</strong> gives you predictable margins on all four sides. For 90% of former Publisher layouts, Square or Top and Bottom provides the reliable structure you need.
+      </p>
+    </div>
+  </div>
+
+  <!-- Accessible Screen Reader Status Region -->
+  <div class="sr-only" role="status" aria-live="polite" id="wrap-live-status">
+    {initialStatus}
+  </div>
+</div>
+
+<script>
+  import { getWrapMode, getWrapStatus } from "../../utils/simulators";
+
+  const container = document.getElementById("wrap-simulator");
+  if (container) {
+    const buttons = container.querySelectorAll<HTMLButtonElement>(".btn-wrap-mode");
+    const previewPage = document.getElementById("wrap-preview-page");
+    const wrapBadge = document.getElementById("wrap-badge");
+    const anchorDesc = document.getElementById("wrap-anchor-desc");
+    const anchorPill = document.getElementById("wrap-anchor-pill");
+    const recommendation = document.getElementById("wrap-recommendation");
+    const liveStatus = document.getElementById("wrap-live-status");
+    const inlineCallout = document.getElementById("wrap-inline-callout");
+    const simAnchor = document.getElementById("sim-object-anchor");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const modeId = btn.getAttribute("data-mode");
+        if (!modeId) return;
+
+        const config = getWrapMode(modeId);
+
+        // Update button states
+        buttons.forEach((b) => {
+          const isActive = b === btn;
+          b.classList.toggle("is-active", isActive);
+          b.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+
+        // Update preview container class
+        if (previewPage) {
+          previewPage.className = `mock-word-page wrap-${config.id}`;
+        }
+
+        // Update feedback
+        if (wrapBadge) wrapBadge.textContent = config.label;
+        if (anchorDesc) anchorDesc.textContent = config.anchorLabel;
+        if (recommendation) {
+          recommendation.innerHTML = `<strong>Recommendation:</strong> ${config.recommendation}`;
+        }
+        if (inlineCallout) inlineCallout.textContent = config.label;
+
+        // Toggle anchor visibility
+        if (anchorPill) {
+          anchorPill.style.opacity = config.hasAnchor ? "1" : "0.5";
+        }
+        if (simAnchor) {
+          simAnchor.style.display = config.hasAnchor ? "flex" : "none";
+        }
+
+        // Update live region for assistive tech
+        if (liveStatus) {
+          liveStatus.textContent = getWrapStatus(config.id);
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  .wrap-simulator {
+    margin-block: var(--space-8);
+    padding: var(--space-6);
+  }
+
+  .simulator-header {
+    margin-block-end: var(--space-5);
+  }
+
+  .simulator-title {
+    margin: 0 0 var(--space-2) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  .sim-icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    color: var(--accent-word);
+    flex-shrink: 0;
+  }
+
+  .simulator-subtitle {
+    margin: 0;
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  /* Wrap Toolbar */
+  .wrap-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-end: var(--space-4);
+  }
+
+  .btn-wrap-mode {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--target-min-size);
+    min-inline-size: var(--target-min-size);
+    padding-inline: var(--space-4);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--ink-primary);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .btn-wrap-mode:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--accent-word);
+  }
+
+  .btn-wrap-mode.is-active {
+    background-color: var(--accent-word);
+    color: #FFFFFF;
+    border-color: var(--accent-word);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+  }
+
+  /* Mode Feedback Card */
+  .mode-feedback {
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    margin-block-end: var(--space-5);
+  }
+
+  .feedback-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-block-end: var(--space-2);
+  }
+
+  .anchor-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--accent-word);
+    background-color: var(--accent-word-bg);
+    border: 1px solid var(--accent-word-border);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-pill);
+    transition: opacity 0.2s ease;
+  }
+
+  .feedback-recommendation {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+    line-height: var(--line-height-normal);
+  }
+
+  /* Mock Page Canvas */
+  .mock-word-page {
+    background-color: #FFFFFF;
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
+    overflow: hidden;
+  }
+
+  .mock-page-header {
+    background-color: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+    padding: var(--space-2) var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-xs);
+    color: var(--ink-muted);
+  }
+
+  .mock-page-canvas {
+    padding: var(--space-6);
+    position: relative;
+    min-block-size: 20rem;
+  }
+
+  .mock-p {
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--ink-primary);
+    margin: 0 0 var(--space-4) 0;
+  }
+
+  /* Simulation Object */
+  .sim-object {
+    position: relative;
+    border: 2px dashed var(--accent-word);
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-card);
+    padding: var(--space-2);
+    inline-size: 10rem;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 8%);
+    transition: all 0.25s ease;
+  }
+
+  .sim-object-anchor {
+    position: absolute;
+    top: -0.75rem;
+    left: -0.75rem;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    background-color: #EFF6FF;
+    border: 1.5px solid var(--accent-word);
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--accent-word);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 15%);
+  }
+
+  .sim-object-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .object-svg {
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  .object-label {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--ink-secondary);
+  }
+
+  /* Wrap Mode Rules */
+  .wrap-square .sim-object {
+    float: right;
+    margin-inline-start: var(--space-4);
+    margin-block-end: var(--space-4);
+  }
+
+  .wrap-inline .sim-object {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+    margin-inline: var(--space-2);
+    margin-block: var(--space-1);
+    inline-size: 7.5rem;
+  }
+
+  .wrap-tight .sim-object {
+    float: right;
+    margin-inline-start: var(--space-2);
+    margin-block-end: var(--space-2);
+    border-radius: var(--radius-pill);
+  }
+
+  .wrap-through .sim-object {
+    float: right;
+    margin-inline-start: var(--space-2);
+    margin-block-end: var(--space-2);
+  }
+
+  .wrap-top-bottom .sim-object {
+    float: none;
+    margin-inline: auto;
+    margin-block: var(--space-4);
+    clear: both;
+  }
+
+  .wrap-behind .sim-object {
+    position: absolute;
+    top: 3.5rem;
+    right: 2rem;
+    z-index: 0;
+    opacity: 0.45;
+  }
+
+  .wrap-behind .mock-p {
+    position: relative;
+    z-index: 1;
+  }
+
+  .wrap-front .sim-object {
+    position: absolute;
+    top: 4.5rem;
+    right: 2rem;
+    z-index: 2;
+    box-shadow: 0 8px 16px rgb(0 0 0 / 15%);
+  }
+
+  .wrap-front .mock-p {
+    position: relative;
+    z-index: 0;
+  }
+
+  @media (forced-colors: active) {
+    .btn-wrap-mode {
+      border: 1px solid ButtonText !important;
+    }
+
+    .btn-wrap-mode.is-active {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .sim-object {
+      border: 2px dashed Highlight;
+    }
+  }
+</style>

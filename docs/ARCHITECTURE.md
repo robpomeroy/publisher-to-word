@@ -1,7 +1,7 @@
 # System Architecture: Publisher to Word
 
 > **Audience:** System Architects, Lead Engineers, UI/UX Designers  
-> **Status:** Phase 1 Foundation Active
+> **Status:** Phase 2 Complete (Core Teaching Components & Interactive Simulators)
 
 ---
 
@@ -215,3 +215,24 @@ This delivers a smooth, calm transition between tutorial pages without shipping 
 - **Static Generation (`astro build`):** Generates static files in `dist/`.
 - **CSS Strategy:** Global tokens and shared base styles are loaded in `BaseLayout.astro`. Component styles are scoped by Astro with `scopedStyleStrategy: 'where'` (low specificity, allowing easy composition).
 - **Tooling Integration:** ESLint (flat config with Astro and JSX-A11y plugins), Stylelint (HTML/Astro CSS parser), and an automated verification script (`scripts/verify-dist.mjs`) work together in `npm run quality`.
+
+---
+
+## 7. Phase 2 Component Architecture
+
+### Teaching Components (`src/components/teaching/`)
+All teaching components follow the Calm Stationery design system with high-contrast tokens, WCAG 1.4.1 non-colour indicators, and forced-colors support:
+- `WhereToFindIt.astro`: Dual-path card showing both the Ribbon breadcrumb trail and Right-Click / floating arch paths, with contextual tab badges.
+- `PublisherCompare.astro`: Reassuring teal comparison card bridging Publisher muscle memory to Word's layout model.
+- `StepList.astro`: Numbered visual step cards with optional ribbon badges and detail instructions.
+- `GotchaBox.astro`: Amber warning callout highlighting common Word traps, available as a static callout or collapsible disclosure.
+- `MacNote.astro`: Collapsible native disclosure (`<details class="disclosure mac-note">`) detailing macOS menu and keyboard shortcut differences (`Cmd ⌘` vs `Ctrl`).
+- `TryItCard.astro`: Botanical green end-of-lesson 60-second hands-on practice prompt.
+
+### Interactive Simulators & Logic Layer (`src/components/interactive/` & `src/utils/simulators.ts`)
+Interactive visual simulators use semantic HTML controls, enforce minimum $44 \times 44\,\text{px}$ target sizes, provide `aria-live="polite"` status announcements, and delegate all state transitions and coordinate calculations to pure functions in `src/utils/simulators.ts`:
+- `UiHotspotMap.astro`: Inline SVG schematic of Word's interface with numbered popover pins showing the 3 ways to reach layout controls (Contextual Ribbon tab, Floating arch, and Context menu).
+- `WrapSimulator.astro`: Interactive toolbar testing all 7 Word text-wrapping modes with live text reflow and anchor visibility.
+- `AnchorSimulator.astro`: Interactive comparison between *Move with text* and *Fix position on page* with dynamic paragraph insertion.
+- `BoxMarginSimulator.astro`: Multi-option preview testing internal margins (0 to 1.0 cm), shape fill, and border outline.
+- `AlignSimulator.astro`: Interactive alignment and distribution sandbox demonstrating alignment relative to margins, page edges, or selected objects.

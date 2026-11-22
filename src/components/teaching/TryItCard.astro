@@ -1,0 +1,106 @@
+---
+interface Props {
+  title?: string;
+  steps?: string[];
+}
+
+const {
+  title = "Try It in Word (60 Seconds)",
+  steps = [],
+} = Astro.props;
+---
+
+<aside class="callout callout-success try-it-card" aria-labelledby="try-it-title">
+  <div class="callout-header">
+    <svg
+      class="try-it-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 6 12 12 16 14"></polyline>
+    </svg>
+    <h3 id="try-it-title" class="try-it-heading">{title}</h3>
+  </div>
+
+  <div class="try-it-body">
+    {steps.length > 0 && (
+      <ol class="try-it-steps">
+        {steps.map(step => (
+          <li class="try-it-step">{step}</li>
+        ))}
+      </ol>
+    )}
+
+    <div class="try-it-slot">
+      <slot />
+    </div>
+  </div>
+</aside>
+
+<style>
+  .try-it-card {
+    margin-block: var(--space-6);
+  }
+
+  .try-it-icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .try-it-heading {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--accent-success);
+    line-height: var(--line-height-tight);
+  }
+
+  .try-it-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .try-it-steps {
+    margin: 0;
+    padding-inline-start: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: var(--font-size-base);
+    color: var(--ink-primary);
+    line-height: var(--line-height-normal);
+  }
+
+  .try-it-step::marker {
+    font-weight: 700;
+    color: var(--accent-success);
+  }
+
+  .try-it-slot:empty {
+    display: none;
+  }
+
+  .try-it-slot {
+    font-size: var(--font-size-base);
+    color: var(--ink-primary);
+  }
+
+  @media (forced-colors: active) {
+    .try-it-card {
+      border: 1px solid ButtonText;
+    }
+
+    .try-it-heading {
+      color: Highlight;
+    }
+  }
+</style>

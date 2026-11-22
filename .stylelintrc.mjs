@@ -19,7 +19,7 @@ export default {
     'selector-pseudo-class-no-unknown': [
       true,
       {
-        ignorePseudoClasses: ['popover-open'],
+        ignorePseudoClasses: ['popover-open', 'global'],
       },
     ],
     'selector-pseudo-element-no-unknown': [
