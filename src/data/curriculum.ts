@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import YAML from 'yaml';
 
 export interface LessonMeta {
   slug: string;
@@ -173,26 +174,38 @@ export const MODULE_OUTLINES: ModuleMeta[] = [
   }
 ];
 
-export function loadAuthoredLessonsFromDisk(): AuthoredLessonEntry[] {
+export function parseFrontmatter(fileContent: string): Record<string, unknown> {
+  const match = fileContent.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return {};
   try {
-    const lessonsDir = path.resolve('src/content/lessons');
+    const parsed = YAML.parse(match[1]);
+    return typeof parsed === 'object' && parsed !== null ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+export function loadAuthoredLessonsFromDisk(lessonsDir: string = path.resolve('src/content/lessons')): AuthoredLessonEntry[] {
+  try {
     if (!fs.existsSync(lessonsDir)) return [];
     const files = fs.readdirSync(lessonsDir).filter(f => f.endsWith('.md') || f.endsWith('.mdx'));
     return files.map(file => {
       const content = fs.readFileSync(path.join(lessonsDir, file), 'utf-8');
       const slug = file.replace(/\.mdx?$/, '');
-      const titleMatch = content.match(/^title:\s*["']?([^"'\n\r]+)["']?/m);
-      const summaryMatch = content.match(/^summary:\s*["']?([^"'\n\r]+)["']?/m);
-      const moduleMatch = content.match(/^module:\s*(\d+)/m);
-      const orderMatch = content.match(/^order:\s*(\d+)/m);
+      const frontmatter = parseFrontmatter(content);
+      const title = typeof frontmatter.title === 'string' ? frontmatter.title.trim() : '';
+      const summary = typeof frontmatter.summary === 'string' ? frontmatter.summary.trim() : '';
+      const moduleNum = typeof frontmatter.module === 'number' ? frontmatter.module : 1;
+      const orderNum = typeof frontmatter.order === 'number' ? frontmatter.order : 1;
+
       return {
         id: file,
         slug,
         data: {
-          title: titleMatch ? titleMatch[1].trim() : '',
-          summary: summaryMatch ? summaryMatch[1].trim() : '',
-          module: moduleMatch ? parseInt(moduleMatch[1], 10) : 1,
-          order: orderMatch ? parseInt(orderMatch[1], 10) : 1
+          title,
+          summary,
+          module: moduleNum,
+          order: orderNum
         }
       };
     });

@@ -1,35 +1,71 @@
 import { spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const result = spawnSync('npx modern-web-guidance legacy-scan src --json', {
-  encoding: 'utf-8',
-  shell: true,
-});
+export function verifyMwgOutput(stdout = '', _stderr = '', exitStatus = 0) {
+  let parsed;
+  try {
+    parsed = JSON.parse(stdout);
+  } catch (err) {
+    return {
+      success: false,
+      error: `failed to parse JSON output from scanner: ${err instanceof Error ? err.message : String(err)}`
+    };
+  }
 
-const stdout = result.stdout || '';
-const stderr = result.stderr || '';
+  if (typeof parsed.totalFindings !== 'number') {
+    return {
+      success: false,
+      error: 'output did not contain a valid totalFindings count.'
+    };
+  }
 
-if (stdout) {
-  process.stdout.write(stdout);
+  if (parsed.totalFindings > 0) {
+    return {
+      success: false,
+      totalFindings: parsed.totalFindings,
+      error: `${parsed.totalFindings} legacy pattern finding(s) detected.`
+    };
+  }
+
+  if (exitStatus !== 0) {
+    return {
+      success: false,
+      error: `scanner process exited with non-zero status ${exitStatus}.`
+    };
+  }
+
+  return {
+    success: true,
+    totalFindings: 0
+  };
 }
-if (stderr) {
-  process.stderr.write(stderr);
-}
 
-try {
-  const data = JSON.parse(stdout);
-  if (typeof data.totalFindings !== 'number') {
-    console.error('\n❌ modern-web-guidance verification failed: output did not contain a valid totalFindings count.\n');
+export function runMwgVerification(targetDir = 'src', runner = spawnSync) {
+  const result = runner(`npx modern-web-guidance legacy-scan ${targetDir} --json`, {
+    encoding: 'utf-8',
+    shell: true,
+  });
+
+  const stdout = result.stdout || '';
+  const stderr = result.stderr || '';
+
+  if (stdout) {
+    process.stdout.write(stdout);
+  }
+  if (stderr) {
+    process.stderr.write(stderr);
+  }
+
+  const verification = verifyMwgOutput(stdout, stderr, result.status ?? 0);
+  if (!verification.success) {
+    console.error(`\n❌ modern-web-guidance verification failed: ${verification.error}\n`);
     process.exit(1);
   }
-  if (data.totalFindings > 0) {
-    console.error(`\n❌ modern-web-guidance verification failed: ${data.totalFindings} legacy pattern finding(s) detected.\n`);
-    process.exit(1);
-  }
-} catch (err) {
-  console.error('\n❌ modern-web-guidance verification failed: failed to parse JSON output from scanner.\n', err);
-  process.exit(1);
+
+  return verification;
 }
 
-if (result.status !== 0) {
-  process.exit(result.status);
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  runMwgVerification();
 }

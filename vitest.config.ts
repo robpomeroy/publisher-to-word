@@ -10,8 +10,10 @@ export default defineConfig({
         'src/utils/**/*.ts',
         'src/data/curriculum.ts',
         'scripts/verify-dist.mjs',
+        'scripts/verify-mwg.mjs',
       ],
       thresholds: {
+        perFile: true,
         lines: 85,
         branches: 80,
         functions: 85,
