@@ -23,8 +23,7 @@
     "@astrojs/sitemap": "^3.2.1",
     "@oddbird/popover-polyfill": "^0.7.3",
     "astro": "^5.4.2",
-    "typescript": "^5.7.3",
-    "yaml": "^2.9.1"
+    "typescript": "^5.7.3"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^8.72.1",
@@ -38,7 +37,8 @@
     "stylelint-config-html": "^2.0.0",
     "stylelint-config-standard": "^41.0.0",
     "typescript-eslint": "^8.72.1",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "yaml": "^2.9.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.68.0",
