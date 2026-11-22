@@ -40,10 +40,10 @@ export const MODULE_OUTLINES: ModuleMeta[] = [
       {
         slug: "01-how-text-flows",
         order: 1,
-        title: "", // Dynamically loaded from MDX frontmatter
-        summary: "", // Dynamically loaded from MDX frontmatter
+        title: "How Text Flows in Word (The River vs. Pinboard)",
+        summary: "Why pressing Enter moves everything down, and the crucial difference between Enter, Shift+Enter, and Page Break.",
         module: 1,
-        isAvailable: false
+        isAvailable: true
       },
       {
         slug: "02-show-hidden-clues",
