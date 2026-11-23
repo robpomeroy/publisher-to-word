@@ -75,28 +75,28 @@ const initialStatus = getWrapStatus("square");
         In Microsoft Word, paragraphs flow like water down a riverbed. When you introduce a picture, graphic, or pull quote, Word recalculates the boundary lines of every surrounding sentence.
       </p>
 
-      <!-- The Wrapped Object -->
-      <div class="sim-object" id="sim-object" aria-hidden="true">
-        <div class="sim-object-anchor" id="sim-object-anchor" title="Anchored to this paragraph">
-          ⚓
-        </div>
-        <div class="sim-object-image">
-          <svg
-            class="object-svg"
-            viewBox="0 0 120 90"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <rect width="120" height="90" rx="4" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" />
-            <circle cx="35" cy="30" r="14" fill="#60A5FA" />
-            <polygon points="15,80 55,40 85,70 110,45 115,80" fill="#2563EB" opacity="0.8" />
-          </svg>
-          <span class="object-label">Photo Object</span>
-        </div>
-      </div>
-
       <p class="mock-p p-body-1">
-        Publisher users often expect objects to stay put on a fixed canvas. In Word, wrapping mode decides whether text carves a neat rectangular channel, hugs contour edges, halts above and below, or allows the picture to drift over and under the text.
+        Publisher users
+        <!-- The Wrapped Object placed directly within paragraph text flow -->
+        <span class="sim-object" id="sim-object" aria-hidden="true">
+          <span class="sim-object-anchor" id="sim-object-anchor" title="Anchored to this paragraph">
+            ⚓
+          </span>
+          <span class="sim-object-image">
+            <svg
+              class="object-svg"
+              viewBox="0 0 120 90"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <rect width="120" height="90" rx="4" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" />
+              <circle cx="35" cy="30" r="14" fill="#60A5FA" />
+              <polygon points="15,80 55,40 85,70 110,45 115,80" fill="#2563EB" opacity="0.8" />
+            </svg>
+            <span class="object-label">Photo Object</span>
+          </span>
+        </span>
+        often expect objects to stay put on a fixed canvas. In Word, wrapping mode decides whether text carves a neat rectangular channel, hugs contour edges, halts above and below, or allows the picture to drift over and under the text.
       </p>
 
       <p class="mock-p p-body-2">
@@ -315,6 +315,7 @@ const initialStatus = getWrapStatus("square");
 
   /* Simulation Object */
   .sim-object {
+    display: block;
     position: relative;
     border: 2px dashed var(--accent-word);
     border-radius: var(--radius-sm);
@@ -364,8 +365,10 @@ const initialStatus = getWrapStatus("square");
   /* Wrap Mode Rules */
   .wrap-square .sim-object {
     float: right;
+    display: block;
     margin-inline-start: var(--space-4);
     margin-block-end: var(--space-4);
+    inline-size: 10rem;
   }
 
   .wrap-inline .sim-object {
@@ -374,35 +377,47 @@ const initialStatus = getWrapStatus("square");
     vertical-align: middle;
     margin-inline: var(--space-2);
     margin-block: var(--space-1);
-    inline-size: 7.5rem;
+    inline-size: 5rem;
   }
 
   .wrap-tight .sim-object {
     float: right;
-    margin-inline-start: var(--space-2);
+    display: block;
+    margin-inline-start: var(--space-3);
     margin-block-end: var(--space-2);
+    inline-size: 9rem;
+    shape-outside: circle(50%);
+    clip-path: circle(50%);
     border-radius: var(--radius-pill);
   }
 
   .wrap-through .sim-object {
     float: right;
-    margin-inline-start: var(--space-2);
+    display: block;
+    margin-inline-start: var(--space-3);
     margin-block-end: var(--space-2);
+    inline-size: 9rem;
+    shape-outside: polygon(35% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 45%);
+    clip-path: polygon(35% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 45%);
   }
 
   .wrap-top-bottom .sim-object {
     float: none;
+    display: block;
     margin-inline: auto;
     margin-block: var(--space-4);
     clear: both;
+    inline-size: 10rem;
   }
 
   .wrap-behind .sim-object {
     position: absolute;
+    display: block;
     top: 3.5rem;
     right: 2rem;
     z-index: 0;
     opacity: 0.45;
+    inline-size: 10rem;
   }
 
   .wrap-behind .mock-p {
@@ -412,10 +427,12 @@ const initialStatus = getWrapStatus("square");
 
   .wrap-front .sim-object {
     position: absolute;
+    display: block;
     top: 4.5rem;
     right: 2rem;
     z-index: 2;
     box-shadow: 0 8px 16px rgb(0 0 0 / 15%);
+    inline-size: 10rem;
   }
 
   .wrap-front .mock-p {

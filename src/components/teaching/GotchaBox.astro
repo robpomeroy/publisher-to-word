@@ -1,13 +1,17 @@
 ---
 interface Props {
+  id?: string;
   title?: string;
   collapsible?: boolean;
 }
 
 const {
+  id,
   title = "Common Snag — Watch Out!",
   collapsible = false,
 } = Astro.props;
+
+const headingId = id || `gotcha-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
 {collapsible ? (
@@ -21,7 +25,7 @@ const {
     </div>
   </details>
 ) : (
-  <aside class="callout callout-tip gotcha-box" aria-labelledby="gotcha-title">
+  <aside class="callout callout-tip gotcha-box" aria-labelledby={headingId}>
     <div class="callout-header">
       <svg
         class="gotcha-icon"
@@ -38,7 +42,7 @@ const {
         <line x1="12" y1="9" x2="12" y2="13"></line>
         <line x1="12" y1="17" x2="12.01" y2="17"></line>
       </svg>
-      <h3 id="gotcha-title" class="gotcha-heading">{title}</h3>
+      <h3 id={headingId} class="gotcha-heading">{title}</h3>
     </div>
     <div class="gotcha-content">
       <slot />

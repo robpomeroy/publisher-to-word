@@ -221,12 +221,20 @@ import TryItCard from '../../components/teaching/TryItCard.astro';
 
 #### 2. `<WhereToFindIt>`
 ```mdx
+<!-- Standard dual-route lookup -->
 <WhereToFindIt
   title="Where to Find Page Break in Word"
   ribbonPath={["Insert", "Pages", "Page Break"]}
+  altRibbonPath={["Layout", "Page Setup", "Breaks", "Page"]}
+/>
+
+<!-- Object formatting with contextual tab, right-click, and arch icon -->
+<WhereToFindIt
+  title="Where to Find Text Wrap in Word"
+  ribbonPath={["Picture Format", "Arrange", "Wrap Text"]}
   contextualTab="Picture Format"
-  rightClickPath={["Layout", "Page Setup", "Breaks", "Page"]}
-  floatingIconTip="Use keyboard shortcut Ctrl + Enter for instant page breaks anywhere."
+  rightClickPath={["Right-click photo", "Wrap Text", "Square"]}
+  floatingIconTip="Click the arch icon next to the selected photo for one-click wrap modes."
 />
 ```
 

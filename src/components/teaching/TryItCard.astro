@@ -1,16 +1,20 @@
 ---
 interface Props {
+  id?: string;
   title?: string;
   steps?: string[];
 }
 
 const {
+  id,
   title = "Try It in Word (60 Seconds)",
   steps = [],
 } = Astro.props;
+
+const headingId = id || `try-it-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<aside class="callout callout-success try-it-card" aria-labelledby="try-it-title">
+<aside class="callout callout-success try-it-card" aria-labelledby={headingId}>
   <div class="callout-header">
     <svg
       class="try-it-icon"
@@ -26,7 +30,7 @@ const {
       <circle cx="12" cy="12" r="10"></circle>
       <polyline points="12 6 12 12 16 14"></polyline>
     </svg>
-    <h3 id="try-it-title" class="try-it-heading">{title}</h3>
+    <h3 id={headingId} class="try-it-heading">{title}</h3>
   </div>
 
   <div class="try-it-body">

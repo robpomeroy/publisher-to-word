@@ -1,18 +1,22 @@
 ---
 interface Props {
+  id?: string;
   title?: string;
   publisherWay: string;
   wordWay: string;
 }
 
 const {
+  id,
   title = "Coming from Microsoft Publisher",
   publisherWay,
   wordWay,
 } = Astro.props;
+
+const headingId = id || `pub-compare-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<aside class="callout callout-publisher publisher-compare" aria-labelledby="pub-compare-title">
+<aside class="callout callout-publisher publisher-compare" aria-labelledby={headingId}>
   <div class="callout-header">
     <svg
       class="compare-title-icon"
@@ -30,7 +34,7 @@ const {
       <path d="M21 3 14 10"></path>
       <path d="m3 21 7-7"></path>
     </svg>
-    <h3 id="pub-compare-title" class="compare-heading">{title}</h3>
+    <h3 id={headingId} class="compare-heading">{title}</h3>
   </div>
 
   <div class="compare-grid">

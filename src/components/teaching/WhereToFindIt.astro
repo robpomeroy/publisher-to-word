@@ -1,24 +1,33 @@
 ---
 interface Props {
+  id?: string;
   title?: string;
   ribbonPath: string[];
+  altRibbonPath?: string[];
   contextualTab?: string;
   rightClickPath?: string[];
   floatingIconTip?: string;
 }
 
 const {
+  id,
   title = "Where to Find It in Word",
   ribbonPath,
+  altRibbonPath,
   contextualTab,
   rightClickPath,
   floatingIconTip,
 } = Astro.props;
 
-const hasSecondaryPath = Boolean((rightClickPath && rightClickPath.length > 0) || floatingIconTip);
+const headingId = id || `wtfi-${Math.random().toString(36).slice(2, 9)}`;
+const hasSecondaryPath = Boolean(
+  (altRibbonPath && altRibbonPath.length > 0) ||
+  (rightClickPath && rightClickPath.length > 0) ||
+  floatingIconTip
+);
 ---
 
-<section class="card where-to-find-it" aria-labelledby="wtfi-title">
+<section class="card where-to-find-it" aria-labelledby={headingId}>
   <div class="wtfi-header">
     <svg
       class="wtfi-icon"
@@ -36,7 +45,7 @@ const hasSecondaryPath = Boolean((rightClickPath && rightClickPath.length > 0) |
       <path d="M11 8v6"></path>
       <path d="M8 11h6"></path>
     </svg>
-    <h3 id="wtfi-title" class="wtfi-heading">{title}</h3>
+    <h3 id={headingId} class="wtfi-heading">{title}</h3>
   </div>
 
   <div class={`wtfi-body ${hasSecondaryPath ? "wtfi-split" : ""}`}>
@@ -82,6 +91,39 @@ const hasSecondaryPath = Boolean((rightClickPath && rightClickPath.length > 0) |
 
     {hasSecondaryPath && (
       <div class="wtfi-route wtfi-alt-route">
+        {altRibbonPath && altRibbonPath.length > 0 && (
+          <div class="alt-ribbon-group">
+            <h4 class="route-subtitle">
+              <svg
+                class="route-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                <line x1="2" x2="22" y1="10" y2="10"></line>
+              </svg>
+              Alternative Ribbon Route
+            </h4>
+
+            <ol class="breadcrumb-trail" aria-label="Alternative ribbon navigation steps">
+              {altRibbonPath.map((step, idx) => (
+                <li class="breadcrumb-step">
+                  <span class="badge badge-ribbon">{step}</span>
+                  {idx < altRibbonPath.length - 1 && (
+                    <span class="breadcrumb-separator" aria-hidden="true">→</span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
         {rightClickPath && rightClickPath.length > 0 && (
           <div class="right-click-group">
             <h4 class="route-subtitle">
@@ -251,6 +293,7 @@ const hasSecondaryPath = Boolean((rightClickPath && rightClickPath.length > 0) |
     line-height: var(--line-height-normal);
   }
 
+  .alt-ribbon-group,
   .right-click-group {
     display: flex;
     flex-direction: column;

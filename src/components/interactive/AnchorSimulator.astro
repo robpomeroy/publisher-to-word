@@ -46,6 +46,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
           data-mode="move-with-text"
           role="radio"
           aria-checked="true"
+          tabindex="0"
         >
           Move with text (Word default)
         </button>
@@ -56,6 +57,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
           data-mode="fix-position"
           role="radio"
           aria-checked="false"
+          tabindex="-1"
         >
           Fix position on page (Publisher style)
         </button>
@@ -172,16 +174,43 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     const paraCountBadge = root.querySelector<HTMLSpanElement>("#anchor-para-count");
     const liveStatus = root.querySelector<HTMLDivElement>("#anchor-live-status");
 
-    function render() {
-      // Update radio buttons
-      if (btnMove && btnFix) {
-        const isMove = state.mode === "move-with-text";
-        btnMove.classList.toggle("is-active", isMove);
-        btnMove.setAttribute("aria-checked", isMove ? "true" : "false");
-        btnFix.classList.toggle("is-active", !isMove);
-        btnFix.setAttribute("aria-checked", !isMove ? "true" : "false");
-      }
+    const modeBtns = [btnMove, btnFix].filter((b): b is HTMLButtonElement => Boolean(b));
 
+    function setMode(mode: "move-with-text" | "fix-position", focusBtn?: HTMLButtonElement) {
+      state = setAnchorMode(state, mode);
+      modeBtns.forEach((b) => {
+        const isSelected = b.getAttribute("data-mode") === mode;
+        b.classList.toggle("is-active", isSelected);
+        b.setAttribute("aria-checked", isSelected ? "true" : "false");
+        b.setAttribute("tabindex", isSelected ? "0" : "-1");
+      });
+      if (focusBtn) focusBtn.focus();
+      render();
+    }
+
+    modeBtns.forEach((btn, index) => {
+      btn.addEventListener("click", () => {
+        const m = btn.getAttribute("data-mode") as "move-with-text" | "fix-position";
+        if (m) setMode(m, btn);
+      });
+      btn.addEventListener("keydown", (e) => {
+        let nextIndex = -1;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+          e.preventDefault();
+          nextIndex = (index + 1) % modeBtns.length;
+        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+          e.preventDefault();
+          nextIndex = (index - 1 + modeBtns.length) % modeBtns.length;
+        }
+        if (nextIndex >= 0) {
+          const nextBtn = modeBtns[nextIndex];
+          const m = nextBtn.getAttribute("data-mode") as "move-with-text" | "fix-position";
+          if (m) setMode(m, nextBtn);
+        }
+      });
+    });
+
+    function render() {
       // Render added paragraphs
       if (streamContainer) {
         streamContainer.innerHTML = "";
@@ -193,9 +222,13 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
         }
       }
 
-      // Position floating photo
+      // Position floating photo based on actual measured displacement of stream container
       if (floatingPhoto) {
-        const offsetPx = calculatePhotoOffset(state, 56);
+        const paraHeight =
+          state.addedParagraphs > 0 && streamContainer
+            ? streamContainer.offsetHeight / state.addedParagraphs
+            : 0;
+        const offsetPx = calculatePhotoOffset(state, paraHeight);
         floatingPhoto.style.transform = `translateY(${offsetPx}px)`;
       }
 
@@ -224,16 +257,6 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
         liveStatus.textContent = getAnchorStatus(state);
       }
     }
-
-    btnMove?.addEventListener("click", () => {
-      state = setAnchorMode(state, "move-with-text");
-      render();
-    });
-
-    btnFix?.addEventListener("click", () => {
-      state = setAnchorMode(state, "fix-position");
-      render();
-    });
 
     btnAdd?.addEventListener("click", () => {
       state = addParagraph(state);
@@ -409,7 +432,8 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     min-block-size: 24rem;
   }
 
-  .mock-paragraph {
+  .mock-paragraph,
+  .stream-container :global(.mock-paragraph) {
     font-size: var(--font-size-sm);
     line-height: 1.5;
     color: var(--ink-primary);
@@ -449,7 +473,8 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     max-inline-size: 100%;
   }
 
-  .inserted-p {
+  .inserted-p,
+  .stream-container :global(.inserted-p) {
     background-color: #F0FDF4;
     border-inline-start: 3px solid var(--accent-success);
     border-radius: var(--radius-sm);

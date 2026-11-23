@@ -153,7 +153,7 @@ describe('Box Margin Simulator Logic', () => {
       outline: 'teal',
     };
     const customStyles = getBoxPreviewStyles(customState);
-    expect(customStyles.padding).toBe('0.25rem');
+    expect(customStyles.padding).toBe('0');
     expect(customStyles.backgroundColor).toBe('transparent');
     expect(customStyles.border).toBe('2px solid #0F766E');
 
@@ -252,6 +252,18 @@ describe('Align Simulator Logic', () => {
 
     const distributedSelected = alignObjects(testItems, 'distribute', 'selected');
     expect(distributedSelected[0].x).toBe(20);
+
+    // Overlapping distribution (span is smaller than total items width)
+    const tightItems: AlignItem[] = [
+      { id: 't1', name: 'T1', x: 260, y: 10, width: 60, height: 40 },
+      { id: 't2', name: 'T2', x: 255, y: 10, width: 65, height: 40 },
+      { id: 't3', name: 'T3', x: 265, y: 10, width: 55, height: 40 },
+    ];
+    const distributedTight = alignObjects(tightItems, 'distribute', 'selected');
+    expect(distributedTight[0].x).toBe(255);
+    expect(distributedTight[2].x + distributedTight[2].width).toBe(320);
+    // Does not overflow beyond 320
+    expect(distributedTight.every(i => i.x + i.width <= 320)).toBe(true);
 
     // Returns early when items < 3
     const twoItems = testItems.slice(0, 2);

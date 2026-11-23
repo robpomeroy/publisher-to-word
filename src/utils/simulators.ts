@@ -277,7 +277,7 @@ export const MARGIN_PRESETS: Record<MarginPresetId, MarginPreset> = {
     id: "tight",
     label: "Zero Margins",
     metricLabel: "0 cm (Publisher style)",
-    paddingRem: "0.25rem",
+    paddingRem: "0",
     description: "Text hugs the outer boundaries tightly, identical to Microsoft Publisher default frames.",
   },
   default: {
@@ -484,12 +484,15 @@ export function alignObjects(
     // Sort items by current X position
     const sorted = [...updated].sort((a, b) => a.x - b.x);
 
+    const minX = Math.min(...sorted.map((i) => i.x));
+    const maxX = Math.max(...sorted.map((i) => i.x + i.width));
+
     let startX: number;
     let endX: number;
 
     if (target === "selected") {
-      startX = sorted[0].x;
-      endX = sorted[sorted.length - 1].x + sorted[sorted.length - 1].width;
+      startX = minX;
+      endX = maxX;
     } else {
       startX = bounds.left;
       endX = bounds.right;
@@ -497,11 +500,29 @@ export function alignObjects(
 
     const totalObjectWidth = sorted.reduce((sum, item) => sum + item.width, 0);
     const availableSpace = endX - startX - totalObjectWidth;
-    const gap = Math.max(0, availableSpace / (sorted.length - 1));
+
+    if (availableSpace < 0 && target === "selected") {
+      // Overlapping selection: distribute left edges evenly within selection bounds
+      const maxLeft = Math.max(startX, endX - sorted[sorted.length - 1].width);
+      const step = (maxLeft - startX) / (sorted.length - 1);
+      return sorted.map((item, idx) => ({
+        ...item,
+        x: Math.round(startX + idx * step),
+      }));
+    }
+
+    const gap = availableSpace / (sorted.length - 1);
 
     let currentX = startX;
     return sorted.map((item, idx) => {
-      const newX = idx === 0 ? startX : Math.round(currentX);
+      if (idx === 0) {
+        currentX += item.width + gap;
+        return { ...item, x: startX };
+      }
+      if (idx === sorted.length - 1) {
+        return { ...item, x: Math.round(endX - item.width) };
+      }
+      const newX = Math.round(currentX);
       currentX += item.width + gap;
       return { ...item, x: newX };
     });
