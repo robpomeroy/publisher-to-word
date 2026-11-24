@@ -1,4 +1,6 @@
 ---
+import { generateDeterministicId } from "../../utils/id";
+
 interface Props {
   id?: string;
   title?: string;
@@ -19,7 +21,7 @@ const {
   floatingIconTip,
 } = Astro.props;
 
-const headingId = id || `wtfi-${Math.random().toString(36).slice(2, 9)}`;
+const headingId = id || generateDeterministicId("wtfi", `${title}-${ribbonPath.join("-")}`, "location");
 const hasSecondaryPath = Boolean(
   (altRibbonPath && altRibbonPath.length > 0) ||
   (rightClickPath && rightClickPath.length > 0) ||

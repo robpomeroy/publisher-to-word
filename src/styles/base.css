@@ -107,7 +107,8 @@ a:hover {
 }
 
 /* Visually Hidden Utility for Skip Links and Screen-Reader Descriptions */
-.visually-hidden:where(:not(:focus-within, :active)) {
+.visually-hidden:where(:not(:focus-within, :active)),
+.sr-only:where(:not(:focus-within, :active)) {
   position: absolute !important;
   clip-path: inset(50%) !important;
   overflow: hidden !important;

@@ -8,7 +8,7 @@ import {
 const initialStatus = getAlignStatus("reset", "margin");
 ---
 
-<div class="align-simulator card" id="align-simulator">
+<div class="align-simulator card" id="align-simulator" data-align-simulator>
   <div class="simulator-header">
     <div class="header-text">
       <h3 id="align-sim-title" class="simulator-title">
@@ -123,7 +123,7 @@ const initialStatus = getAlignStatus("reset", "margin");
       <!-- Margin Boundary Guide Box -->
       <div
         class="margin-guide-boundary"
-        style={`left: ${MARGIN_BOUNDS.left}px; top: ${MARGIN_BOUNDS.top}px; width: ${MARGIN_BOUNDS.width}px; height: ${MARGIN_BOUNDS.height}px;`}
+        style={`left: ${(MARGIN_BOUNDS.left / 320) * 100}%; top: ${(MARGIN_BOUNDS.top / 200) * 100}%; width: ${(MARGIN_BOUNDS.width / 320) * 100}%; height: ${(MARGIN_BOUNDS.height / 200) * 100}%;`}
       >
         <span class="margin-watermark">Printable Margin</span>
       </div>
@@ -136,7 +136,7 @@ const initialStatus = getAlignStatus("reset", "margin");
         <div
           class="canvas-item"
           id={`align-item-${item.id}`}
-          style={`transform: translate(${item.x}px, ${item.y}px); width: ${item.width}px; height: ${item.height}px;`}
+          style={`left: ${(item.x / 320) * 100}%; top: ${(item.y / 200) * 100}%; width: ${(item.width / 320) * 100}%; height: ${(item.height / 200) * 100}%;`}
         >
           <div class="item-inner">
             <span class="item-badge">{item.name}</span>
@@ -152,7 +152,7 @@ const initialStatus = getAlignStatus("reset", "margin");
     <span id="align-status-text">Objects are in scattered starting positions.</span>
   </div>
 
-  <div class="sr-only" role="status" aria-live="polite" id="align-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" id="align-live-status">
     {initialStatus}
   </div>
 </div>
@@ -168,8 +168,8 @@ const initialStatus = getAlignStatus("reset", "margin");
     type AlignTarget,
   } from "../../utils/simulators";
 
-  const root = document.getElementById("align-simulator");
-  if (root) {
+  const roots = document.querySelectorAll<HTMLElement>("[data-align-simulator]");
+  roots.forEach((root) => {
     let currentTarget: AlignTarget = "margin";
     let items: AlignItem[] = cloneItems(INITIAL_ALIGN_ITEMS);
 
@@ -183,7 +183,8 @@ const initialStatus = getAlignStatus("reset", "margin");
       items.forEach((item) => {
         const el = root?.querySelector<HTMLDivElement>(`#align-item-${item.id}`);
         if (el) {
-          el.style.transform = `translate(${item.x}px, ${item.y}px)`;
+          el.style.left = `${(item.x / 320) * 100}%`;
+          el.style.top = `${(item.y / 200) * 100}%`;
         }
       });
 
@@ -191,14 +192,14 @@ const initialStatus = getAlignStatus("reset", "margin");
       if (smartGuide) {
         if (action === "left") {
           smartGuide.style.display = "block";
-          smartGuide.style.left = `${items[0].x}px`;
+          smartGuide.style.left = `${(items[0].x / 320) * 100}%`;
           smartGuide.style.top = "0";
           smartGuide.style.width = "2px";
           smartGuide.style.height = "100%";
         } else if (action === "top") {
           smartGuide.style.display = "block";
           smartGuide.style.left = "0";
-          smartGuide.style.top = `${items[0].y}px`;
+          smartGuide.style.top = `${(items[0].y / 200) * 100}%`;
           smartGuide.style.width = "100%";
           smartGuide.style.height = "2px";
         } else {
@@ -251,7 +252,7 @@ const initialStatus = getAlignStatus("reset", "margin");
         }
       });
     });
-  }
+  });
 </script>
 
 <style>
@@ -411,7 +412,7 @@ const initialStatus = getAlignStatus("reset", "margin");
     justify-content: space-between;
     align-items: center;
     font-size: var(--font-size-xs);
-    color: var(--ink-muted);
+    color: var(--ink-secondary);
   }
 
   .guide-legend {
@@ -430,9 +431,9 @@ const initialStatus = getAlignStatus("reset", "margin");
 
   .align-canvas {
     position: relative;
-    inline-size: 320px;
-    max-inline-size: 100%;
-    block-size: 200px;
+    inline-size: 100%;
+    max-inline-size: 320px;
+    aspect-ratio: 320 / 200;
     margin-inline: auto;
     background-color: #FAF9F6;
   }
@@ -451,7 +452,7 @@ const initialStatus = getAlignStatus("reset", "margin");
   .margin-watermark {
     font-size: 0.65rem;
     font-weight: 600;
-    color: var(--accent-word-border);
+    color: var(--ink-secondary);
     text-transform: uppercase;
   }
 
@@ -465,9 +466,7 @@ const initialStatus = getAlignStatus("reset", "margin");
 
   .canvas-item {
     position: absolute;
-    top: 0;
-    left: 0;
-    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), top 0.3s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .item-inner {

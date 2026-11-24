@@ -7,7 +7,7 @@ import {
 const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
 ---
 
-<div class="anchor-simulator card" id="anchor-simulator">
+<div class="anchor-simulator card" id="anchor-simulator" data-anchor-simulator>
   <div class="simulator-header">
     <div class="header-text">
       <h3 id="anchor-sim-title" class="simulator-title">
@@ -100,40 +100,44 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     </div>
 
     <div class="page-content-area" id="anchor-content-area">
-      <!-- Dynamic Stream of Paragraphs Inserted Above -->
-      <div class="stream-container" id="stream-container">
-        <!-- New paragraphs injected dynamically -->
-      </div>
-
-      <!-- The Anchored Host Paragraph -->
-      <div class="host-paragraph-row" id="host-paragraph-row">
-        <!-- Anchor Flag Icon attached to this paragraph -->
-        <div class="anchor-marker" id="anchor-marker" title="Object anchor point">
-          <span class="anchor-glyph" aria-hidden="true">⚓</span>
-          <span class="sr-only">Anchor point attached to paragraph 1</span>
+      <div class="page-text-column">
+        <!-- Dynamic Stream of Paragraphs Inserted Above -->
+        <div class="stream-container" id="stream-container">
+          <!-- New paragraphs injected dynamically -->
         </div>
-        <p class="mock-paragraph host-p">
-          <strong>Paragraph 1 (Host Paragraph):</strong> This is the sentence holding the picture anchor. In Word, every floating picture attaches its anchor to a specific paragraph mark (¶).
+
+        <!-- The Anchored Host Paragraph -->
+        <div class="host-paragraph-row" id="host-paragraph-row">
+          <!-- Anchor Flag Icon attached to this paragraph -->
+          <div class="anchor-marker" id="anchor-marker" title="Object anchor point">
+            <span class="anchor-glyph" aria-hidden="true">⚓</span>
+            <span class="visually-hidden">Anchor point attached to paragraph 1</span>
+          </div>
+          <p class="mock-paragraph host-p">
+            <strong>Paragraph 1 (Host Paragraph):</strong> This is the sentence holding the picture anchor. In Word, every floating picture attaches its anchor to a specific paragraph mark (¶).
+          </p>
+        </div>
+
+        <p class="mock-paragraph trailing-p">
+          <strong>Paragraph 2:</strong> When text flows downstream, anything anchored to paragraphs above it stays in relative lockstep unless pinned to the page margin.
         </p>
       </div>
 
-      <p class="mock-paragraph trailing-p">
-        <strong>Paragraph 2:</strong> When text flows downstream, anything anchored to paragraphs above it stays in relative lockstep unless pinned to the page margin.
-      </p>
-
-      <!-- The Floating Photo -->
-      <div class="floating-photo" id="floating-photo">
-        <div class="photo-card">
-          <div class="photo-graphic" aria-hidden="true">
-            <svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect width="100" height="70" rx="3" fill="#E2E8F0" />
-              <circle cx="30" cy="25" r="10" fill="#93C5FD" />
-              <polygon points="10,60 40,30 70,55 90,35 95,60" fill="#3B82F6" />
-            </svg>
-          </div>
-          <div class="photo-info">
-            <span class="photo-title">Landscape Photo</span>
-            <span class="photo-mode-tag" id="photo-mode-tag">Moving with text</span>
+      <!-- The Floating Photo Column -->
+      <div class="page-photo-column">
+        <div class="floating-photo" id="floating-photo">
+          <div class="photo-card">
+            <div class="photo-graphic" aria-hidden="true">
+              <svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <rect width="100" height="70" rx="3" fill="#E2E8F0" />
+                <circle cx="30" cy="25" r="10" fill="#93C5FD" />
+                <polygon points="10,60 40,30 70,55 90,35 95,60" fill="#3B82F6" />
+              </svg>
+            </div>
+            <div class="photo-info">
+              <span class="photo-title">Landscape Photo</span>
+              <span class="photo-mode-tag" id="photo-mode-tag">Moving with text</span>
+            </div>
           </div>
         </div>
       </div>
@@ -141,7 +145,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
   </div>
 
   <!-- Assistive Live Region -->
-  <div class="sr-only" role="status" aria-live="polite" id="anchor-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" id="anchor-live-status">
     {initialStatus}
   </div>
 </div>
@@ -156,8 +160,8 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     type AnchorState,
   } from "../../utils/simulators";
 
-  const root = document.getElementById("anchor-simulator");
-  if (root) {
+  const roots = document.querySelectorAll<HTMLElement>("[data-anchor-simulator]");
+  roots.forEach((root) => {
     let state: AnchorState = {
       mode: "move-with-text",
       addedParagraphs: 0,
@@ -217,11 +221,16 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     function render() {
       // Render added paragraphs
       if (streamContainer) {
-        streamContainer.innerHTML = "";
+        streamContainer.replaceChildren();
         for (let i = 1; i <= state.addedParagraphs; i++) {
           const p = document.createElement("p");
           p.className = "mock-paragraph inserted-p";
-          p.innerHTML = `<strong>[Added Paragraph ${i}]:</strong> New content inserted above the host paragraph pushes the stream forward.`;
+          const pStrong = document.createElement("strong");
+          pStrong.textContent = `[Added Paragraph ${i}]: `;
+          p.replaceChildren(
+            pStrong,
+            document.createTextNode("New content inserted above the host paragraph pushes the stream forward.")
+          );
           streamContainer.appendChild(p);
         }
       }
@@ -247,10 +256,22 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
       }
 
       if (summaryText) {
-        summaryText.innerHTML =
-          state.mode === "move-with-text"
-            ? `Current mode: <strong>Move with text</strong>. Photo shifts down with paragraph stream.`
-            : `Current mode: <strong>Fix position on page</strong>. Text flows past while photo remains pinned.`;
+        const strong = document.createElement("strong");
+        if (state.mode === "move-with-text") {
+          strong.textContent = "Move with text";
+          summaryText.replaceChildren(
+            document.createTextNode("Current mode: "),
+            strong,
+            document.createTextNode(". Photo shifts down with paragraph stream.")
+          );
+        } else {
+          strong.textContent = "Fix position on page";
+          summaryText.replaceChildren(
+            document.createTextNode("Current mode: "),
+            strong,
+            document.createTextNode(". Text flows past while photo remains pinned.")
+          );
+        }
       }
 
       if (btnAdd) {
@@ -272,7 +293,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
       syncModeButtons(state.mode);
       render();
     });
-  }
+  });
 </script>
 
 <style>
@@ -428,13 +449,33 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
 
   .margin-indicator {
     font-size: var(--font-size-xs);
-    color: var(--ink-muted);
+    color: var(--ink-secondary);
   }
 
   .page-content-area {
     position: relative;
-    padding: var(--space-6);
+    display: grid;
+    grid-template-columns: 1fr minmax(5.5rem, 7.5rem);
+    gap: var(--space-3);
+    padding: var(--space-3);
     min-block-size: 24rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-content-area {
+      grid-template-columns: 1fr 12rem;
+      gap: var(--space-6);
+      padding: var(--space-6);
+    }
+  }
+
+  .page-text-column {
+    min-inline-size: 0;
+  }
+
+  .page-photo-column {
+    position: relative;
+    min-inline-size: 0;
   }
 
   .mock-paragraph,
@@ -443,7 +484,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
     line-height: 1.5;
     color: var(--ink-primary);
     margin: 0 0 var(--space-3) 0;
-    max-inline-size: 60%;
+    max-inline-size: 100%;
   }
 
   .host-paragraph-row {
@@ -502,9 +543,9 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
   /* Floating Photo */
   .floating-photo {
     position: absolute;
-    top: 5rem;
-    right: var(--space-6);
-    inline-size: 12rem;
+    top: 4.5rem;
+    inset-inline-start: 0;
+    inline-size: 100%;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 

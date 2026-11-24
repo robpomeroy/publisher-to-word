@@ -6,7 +6,7 @@ const defaultMode = getWrapMode("square");
 const initialStatus = getWrapStatus("square");
 ---
 
-<div class="wrap-simulator card" id="wrap-simulator">
+<div class="wrap-simulator card" id="wrap-simulator" data-wrap-simulator>
   <div class="simulator-header">
     <div class="header-text">
       <h3 id="wrap-sim-title" class="simulator-title">
@@ -123,7 +123,7 @@ const initialStatus = getWrapStatus("square");
   </div>
 
   <!-- Accessible Screen Reader Status Region -->
-  <div class="sr-only" role="status" aria-live="polite" id="wrap-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" id="wrap-live-status">
     {initialStatus}
   </div>
 </div>
@@ -131,17 +131,17 @@ const initialStatus = getWrapStatus("square");
 <script>
   import { getWrapMode, getWrapStatus } from "../../utils/simulators";
 
-  const container = document.getElementById("wrap-simulator");
-  if (container) {
+  const containers = document.querySelectorAll<HTMLElement>("[data-wrap-simulator]");
+  containers.forEach((container) => {
     const buttons = container.querySelectorAll<HTMLButtonElement>(".btn-wrap-mode");
-    const previewPage = document.getElementById("wrap-preview-page");
-    const wrapBadge = document.getElementById("wrap-badge");
-    const anchorDesc = document.getElementById("wrap-anchor-desc");
-    const anchorPill = document.getElementById("wrap-anchor-pill");
-    const recommendation = document.getElementById("wrap-recommendation");
-    const liveStatus = document.getElementById("wrap-live-status");
-    const inlineCallout = document.getElementById("wrap-inline-callout");
-    const simAnchor = document.getElementById("sim-object-anchor");
+    const previewPage = container.querySelector<HTMLElement>(".mock-word-page");
+    const wrapBadge = container.querySelector<HTMLElement>("#wrap-badge");
+    const anchorDesc = container.querySelector<HTMLElement>("#wrap-anchor-desc");
+    const anchorPill = container.querySelector<HTMLElement>("#wrap-anchor-pill");
+    const recommendation = container.querySelector<HTMLElement>("#wrap-recommendation");
+    const liveStatus = container.querySelector<HTMLElement>("#wrap-live-status");
+    const inlineCallout = container.querySelector<HTMLElement>("#wrap-inline-callout");
+    const simAnchor = container.querySelector<HTMLElement>("#sim-object-anchor");
 
     buttons.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -166,7 +166,9 @@ const initialStatus = getWrapStatus("square");
         if (wrapBadge) wrapBadge.textContent = config.label;
         if (anchorDesc) anchorDesc.textContent = config.anchorLabel;
         if (recommendation) {
-          recommendation.innerHTML = `<strong>Recommendation:</strong> ${config.recommendation}`;
+          const recStrong = document.createElement("strong");
+          recStrong.textContent = "Recommendation: ";
+          recommendation.replaceChildren(recStrong, document.createTextNode(config.recommendation));
         }
         if (inlineCallout) inlineCallout.textContent = config.label;
 
@@ -184,7 +186,7 @@ const initialStatus = getWrapStatus("square");
         }
       });
     });
-  }
+  });
 </script>
 
 <style>
@@ -314,7 +316,7 @@ const initialStatus = getWrapStatus("square");
     justify-content: space-between;
     align-items: center;
     font-size: var(--font-size-xs);
-    color: var(--ink-muted);
+    color: var(--ink-secondary);
   }
 
   .mock-page-canvas {

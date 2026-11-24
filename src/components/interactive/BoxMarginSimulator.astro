@@ -16,7 +16,7 @@ const initialStatus = getBoxMarginStatus(INITIAL_BOX_STATE);
 const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
 ---
 
-<div class="box-margin-simulator card" id="box-margin-simulator">
+<div class="box-margin-simulator card" id="box-margin-simulator" data-box-margin-simulator>
   <div class="simulator-header">
     <div class="header-text">
       <h3 id="box-sim-title" class="simulator-title">
@@ -130,7 +130,7 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
   </div>
 
   <!-- Status Notification for Assistive Technology -->
-  <div class="sr-only" role="status" aria-live="polite" id="box-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" id="box-live-status">
     {initialStatus}
   </div>
 </div>
@@ -146,8 +146,8 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
     type OutlinePresetId,
   } from "../../utils/simulators";
 
-  const root = document.getElementById("box-margin-simulator");
-  if (root) {
+  const roots = document.querySelectorAll<HTMLElement>("[data-box-margin-simulator]");
+  roots.forEach((root) => {
     let state: BoxMarginState = { ...INITIAL_BOX_STATE };
 
     const marginBtns = root.querySelectorAll<HTMLButtonElement>(".btn-margin");
@@ -219,7 +219,7 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
         }
       });
     });
-  }
+  });
 </script>
 
 <style>
@@ -388,7 +388,7 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: var(--ink-muted);
+    color: var(--ink-secondary);
   }
 
   .preview-heading {

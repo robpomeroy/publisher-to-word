@@ -1,4 +1,6 @@
 ---
+import { generateDeterministicId } from "../../utils/id";
+
 interface Props {
   id?: string;
   title?: string;
@@ -11,7 +13,7 @@ const {
   steps = [],
 } = Astro.props;
 
-const headingId = id || `try-it-${Math.random().toString(36).slice(2, 9)}`;
+const headingId = id || generateDeterministicId("try-it", `${title}-${steps.join("-").slice(0, 30)}`, "exercise");
 ---
 
 <aside class="callout callout-success try-it-card" aria-labelledby={headingId}>
