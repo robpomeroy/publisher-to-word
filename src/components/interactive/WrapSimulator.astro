@@ -75,14 +75,31 @@ const initialStatus = getWrapStatus("square");
         In Microsoft Word, paragraphs flow like water down a riverbed. When you introduce a picture, graphic, or pull quote, Word recalculates the boundary lines of every surrounding sentence.
       </p>
 
+      <!-- The Wrapped Object (for floating and positioned modes) -->
+      <div class="sim-object" id="sim-object" aria-hidden="true">
+        <div class="sim-object-anchor" id="sim-object-anchor" title="Anchored to this paragraph">
+          ⚓
+        </div>
+        <div class="sim-object-image">
+          <svg
+            class="object-svg"
+            viewBox="0 0 120 90"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect width="120" height="90" rx="4" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" />
+            <circle cx="35" cy="30" r="14" fill="#60A5FA" />
+            <polygon points="15,80 55,40 85,70 110,45 115,80" fill="#2563EB" opacity="0.8" />
+          </svg>
+          <span class="object-label">Photo Object</span>
+        </div>
+      </div>
+
       <p class="mock-p p-body-1">
         Publisher users
-        <!-- The Wrapped Object placed directly within paragraph text flow -->
-        <span class="sim-object" id="sim-object" aria-hidden="true">
-          <span class="sim-object-anchor" id="sim-object-anchor" title="Anchored to this paragraph">
-            ⚓
-          </span>
-          <span class="sim-object-image">
+        <!-- The Inline Object (rendered inside paragraph text only for In Line with Text) -->
+        <span class="sim-inline-object" aria-hidden="true">
+          <span class="sim-inline-image">
             <svg
               class="object-svg"
               viewBox="0 0 120 90"
@@ -93,7 +110,7 @@ const initialStatus = getWrapStatus("square");
               <circle cx="35" cy="30" r="14" fill="#60A5FA" />
               <polygon points="15,80 55,40 85,70 110,45 115,80" fill="#2563EB" opacity="0.8" />
             </svg>
-            <span class="object-label">Photo Object</span>
+            <span class="object-label">Photo</span>
           </span>
         </span>
         often expect objects to stay put on a fixed canvas. In Word, wrapping mode decides whether text carves a neat rectangular channel, hugs contour edges, halts above and below, or allows the picture to drift over and under the text.
@@ -362,6 +379,35 @@ const initialStatus = getWrapStatus("square");
     color: var(--ink-secondary);
   }
 
+  /* Inline Object inside text run (In Line with Text mode) */
+  .sim-inline-object {
+    display: none;
+  }
+
+  .wrap-inline .sim-inline-object {
+    display: inline-block;
+    vertical-align: middle;
+    margin-inline: var(--space-2);
+    margin-block: var(--space-1);
+    inline-size: 5rem;
+    border: 2px dashed var(--accent-word);
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-card);
+    padding: var(--space-1);
+    box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  }
+
+  .sim-inline-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .wrap-inline .sim-object {
+    display: none;
+  }
+
   /* Wrap Mode Rules */
   .wrap-square .sim-object {
     float: right;
@@ -371,15 +417,6 @@ const initialStatus = getWrapStatus("square");
     inline-size: 10rem;
   }
 
-  .wrap-inline .sim-object {
-    float: none;
-    display: inline-block;
-    vertical-align: middle;
-    margin-inline: var(--space-2);
-    margin-block: var(--space-1);
-    inline-size: 5rem;
-  }
-
   .wrap-tight .sim-object {
     float: right;
     display: block;
@@ -387,8 +424,18 @@ const initialStatus = getWrapStatus("square");
     margin-block-end: var(--space-2);
     inline-size: 9rem;
     shape-outside: circle(50%);
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .wrap-tight .sim-object .sim-object-image {
     clip-path: circle(50%);
     border-radius: var(--radius-pill);
+    border: 2px dashed var(--accent-word);
+    background-color: var(--surface-card);
+    padding: var(--space-2);
   }
 
   .wrap-through .sim-object {
@@ -398,7 +445,17 @@ const initialStatus = getWrapStatus("square");
     margin-block-end: var(--space-2);
     inline-size: 9rem;
     shape-outside: polygon(35% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 45%);
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .wrap-through .sim-object .sim-object-image {
     clip-path: polygon(35% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 45%);
+    border: 2px dashed var(--accent-word);
+    background-color: var(--surface-card);
+    padding: var(--space-2);
   }
 
   .wrap-top-bottom .sim-object {
@@ -413,7 +470,7 @@ const initialStatus = getWrapStatus("square");
   .wrap-behind .sim-object {
     position: absolute;
     display: block;
-    top: 3.5rem;
+    top: 4.5rem;
     right: 2rem;
     z-index: 0;
     opacity: 0.45;

@@ -176,14 +176,18 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
 
     const modeBtns = [btnMove, btnFix].filter((b): b is HTMLButtonElement => Boolean(b));
 
-    function setMode(mode: "move-with-text" | "fix-position", focusBtn?: HTMLButtonElement) {
-      state = setAnchorMode(state, mode);
+    function syncModeButtons(mode: "move-with-text" | "fix-position") {
       modeBtns.forEach((b) => {
         const isSelected = b.getAttribute("data-mode") === mode;
         b.classList.toggle("is-active", isSelected);
         b.setAttribute("aria-checked", isSelected ? "true" : "false");
         b.setAttribute("tabindex", isSelected ? "0" : "-1");
       });
+    }
+
+    function setMode(mode: "move-with-text" | "fix-position", focusBtn?: HTMLButtonElement) {
+      state = setAnchorMode(state, mode);
+      syncModeButtons(mode);
       if (focusBtn) focusBtn.focus();
       render();
     }
@@ -265,6 +269,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
 
     btnReset?.addEventListener("click", () => {
       state = resetAnchorState();
+      syncModeButtons(state.mode);
       render();
     });
   }
