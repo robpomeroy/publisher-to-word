@@ -47,7 +47,7 @@ const curriculum = getCurriculum(authored);
           </p>
         </div>
         <div class="banner-action">
-          <a href="/sandboxes" class="btn btn-secondary banner-btn">
+          <a href="/sandboxes" class="btn btn-secondary">
             <span>Open All 4 Sandboxes</span>
             <span aria-hidden="true">→</span>
           </a>
@@ -97,14 +97,6 @@ const curriculum = getCurriculum(authored);
 </BaseLayout>
 
 <style>
-  .lessons-main {
-    width: 100%;
-    max-width: 72rem;
-    margin-inline: auto;
-    padding-inline: var(--space-4);
-    padding-block: var(--space-8);
-  }
-
   .page-header {
     margin-block-end: var(--space-8);
     padding-block-end: var(--space-6);
@@ -220,11 +212,6 @@ const curriculum = getCurriculum(authored);
     color: var(--ink-secondary);
     margin: 0;
     max-inline-size: var(--max-prose-width);
-  }
-
-  .banner-btn {
-    white-space: nowrap;
-    background-color: #FFFFFF;
   }
 
   /* Modules Stack */

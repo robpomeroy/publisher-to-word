@@ -120,7 +120,7 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
             </p>
           </div>
           <div class="next-step-action">
-            <a href="/lessons/01-how-text-flows" class="btn btn-primary next-step-btn">
+            <a href="/lessons/01-how-text-flows" class="btn btn-primary">
               <span>Go to Lesson 1</span>
               <span aria-hidden="true">→</span>
             </a>
@@ -132,14 +132,6 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
 </BaseLayout>
 
 <style>
-  .start-here-main {
-    width: 100%;
-    max-width: 72rem;
-    margin-inline: auto;
-    padding-inline: var(--space-4);
-    padding-block: var(--space-8);
-  }
-
   .page-header {
     margin-block-end: var(--space-8);
     padding-block-end: var(--space-6);
@@ -150,6 +142,7 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     font-size: var(--font-size-lg);
     line-height: var(--line-height-normal);
     color: var(--ink-secondary);
+    max-inline-size: var(--max-prose-width);
   }
 
   .start-here-content {
@@ -172,7 +165,7 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     font-size: var(--font-size-base);
     color: var(--ink-primary);
     line-height: var(--line-height-normal);
-    max-inline-size: 72ch;
+    max-inline-size: var(--max-prose-width);
     margin-block-end: var(--space-4);
   }
 
@@ -229,7 +222,7 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     font-size: var(--font-size-base);
     line-height: var(--line-height-normal);
     color: var(--ink-primary);
-    max-inline-size: 72ch;
+    max-inline-size: var(--max-prose-width);
     margin-block-end: var(--space-3);
   }
 
@@ -267,10 +260,6 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     font-size: var(--font-size-base);
     color: var(--ink-secondary);
     margin: 0;
-    max-inline-size: 65ch;
-  }
-
-  .next-step-btn {
-    white-space: nowrap;
+    max-inline-size: var(--max-prose-width);
   }
 </style>
