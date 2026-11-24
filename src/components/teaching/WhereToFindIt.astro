@@ -1,0 +1,347 @@
+---
+import { generateDeterministicId } from "../../utils/id";
+
+interface Props {
+  id?: string;
+  title?: string;
+  ribbonPath: string[];
+  altRibbonPath?: string[];
+  contextualTab?: string;
+  rightClickPath?: string[];
+  floatingIconTip?: string;
+}
+
+const {
+  id,
+  title = "Where to Find It in Word",
+  ribbonPath,
+  altRibbonPath,
+  contextualTab,
+  rightClickPath,
+  floatingIconTip,
+} = Astro.props;
+
+const headingId = id || generateDeterministicId("wtfi", `${title}-${ribbonPath.join("-")}`, "location");
+const hasSecondaryPath = Boolean(
+  (altRibbonPath && altRibbonPath.length > 0) ||
+  (rightClickPath && rightClickPath.length > 0) ||
+  floatingIconTip
+);
+---
+
+<section class="card where-to-find-it" aria-labelledby={headingId}>
+  <div class="wtfi-header">
+    <svg
+      class="wtfi-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+      <path d="M11 8v6"></path>
+      <path d="M8 11h6"></path>
+    </svg>
+    <h3 id={headingId} class="wtfi-heading">{title}</h3>
+  </div>
+
+  <div class={`wtfi-body ${hasSecondaryPath ? "wtfi-split" : ""}`}>
+    <div class="wtfi-route wtfi-ribbon-route">
+      <h4 class="route-subtitle">
+        <svg
+          class="route-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+          <line x1="2" x2="22" y1="10" y2="10"></line>
+        </svg>
+        Ribbon Path
+      </h4>
+
+      <ol class="breadcrumb-trail" aria-label="Ribbon navigation steps">
+        {ribbonPath.map((step, idx) => (
+          <li class="breadcrumb-step">
+            <span class="badge badge-ribbon">{step}</span>
+            {idx < ribbonPath.length - 1 && (
+              <span class="breadcrumb-separator" aria-hidden="true">→</span>
+            )}
+          </li>
+        ))}
+      </ol>
+
+      {contextualTab && (
+        <div class="contextual-note">
+          <span class="badge badge-contextual">{contextualTab}</span>
+          <p class="contextual-text">
+            <strong>Contextual tab:</strong> Only appears on the Ribbon when the object is actively selected.
+          </p>
+        </div>
+      )}
+    </div>
+
+    {hasSecondaryPath && (
+      <div class="wtfi-route wtfi-alt-route">
+        {altRibbonPath && altRibbonPath.length > 0 && (
+          <div class="alt-ribbon-group">
+            <h4 class="route-subtitle">
+              <svg
+                class="route-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                <line x1="2" x2="22" y1="10" y2="10"></line>
+              </svg>
+              Alternative Ribbon Route
+            </h4>
+
+            <ol class="breadcrumb-trail" aria-label="Alternative ribbon navigation steps">
+              {altRibbonPath.map((step, idx) => (
+                <li class="breadcrumb-step">
+                  <span class="badge badge-ribbon">{step}</span>
+                  {idx < altRibbonPath.length - 1 && (
+                    <span class="breadcrumb-separator" aria-hidden="true">→</span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {rightClickPath && rightClickPath.length > 0 && (
+          <div class="right-click-group">
+            <h4 class="route-subtitle">
+              <svg
+                class="route-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="5" y="2" width="14" height="20" rx="7"></rect>
+                <line x1="12" y1="6" x2="12" y2="10"></line>
+                <line x1="12" y1="2" x2="12" y2="10"></line>
+              </svg>
+              Right-Click / Context Menu
+            </h4>
+
+            <ol class="breadcrumb-trail" aria-label="Right-click navigation steps">
+              {rightClickPath.map((step, idx) => (
+                <li class="breadcrumb-step">
+                  <span class="badge">{step}</span>
+                  {idx < rightClickPath.length - 1 && (
+                    <span class="breadcrumb-separator" aria-hidden="true">→</span>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {floatingIconTip && (
+          <div class="floating-icon-tip">
+            <div class="tip-icon-box" aria-hidden="true">
+              <svg
+                class="arch-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                <path d="M7 17a5 5 0 0 1 10 0"></path>
+              </svg>
+            </div>
+            <p class="floating-tip-text">
+              <strong>Layout Options arch:</strong> {floatingIconTip}
+            </p>
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+  .where-to-find-it {
+    margin-block: var(--space-6);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+  }
+
+  .wtfi-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-block-end: var(--space-4);
+    padding-block-end: var(--space-3);
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .wtfi-icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    color: var(--accent-word);
+    flex-shrink: 0;
+  }
+
+  .wtfi-heading {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--ink-primary);
+    line-height: var(--line-height-tight);
+  }
+
+  .wtfi-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 640px) {
+    .wtfi-split {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .wtfi-route {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .route-subtitle {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-secondary);
+  }
+
+  .route-icon {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    color: var(--ink-secondary);
+  }
+
+  .breadcrumb-trail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb-step {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .breadcrumb-separator {
+    color: var(--ink-muted);
+    font-weight: 700;
+  }
+
+  .contextual-note {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background-color: var(--surface-subtle);
+    border-radius: var(--radius-sm);
+    border-inline-start: 3px solid var(--accent-tip);
+  }
+
+  .contextual-text {
+    margin: 0;
+    font-size: var(--font-size-xs);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  .alt-ribbon-group,
+  .right-click-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .floating-icon-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background-color: var(--accent-word-bg);
+    border: 1px dashed var(--accent-word-border);
+    border-radius: var(--radius-md);
+  }
+
+  .tip-icon-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    background-color: var(--surface-card);
+    border: 1px solid var(--accent-word-border);
+    border-radius: var(--radius-sm);
+    color: var(--accent-word);
+    flex-shrink: 0;
+  }
+
+  .arch-icon {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  .floating-tip-text {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+    line-height: var(--line-height-normal);
+  }
+
+  @media (forced-colors: active) {
+    .where-to-find-it,
+    .floating-icon-tip,
+    .contextual-note {
+      border: 1px solid ButtonText;
+    }
+  }
+</style>

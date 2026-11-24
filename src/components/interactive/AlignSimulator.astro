@@ -1,0 +1,450 @@
+---
+import {
+  INITIAL_ALIGN_ITEMS,
+  getAlignStatus,
+  MARGIN_BOUNDS,
+} from "../../utils/simulators";
+import { generateDeterministicId } from "../../utils/id";
+
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+const simId = id || generateDeterministicId("align-sim", "simulator");
+const initialStatus = getAlignStatus("reset", "margin");
+---
+
+<div class="align-simulator card" id={id} data-align-simulator>
+  <div class="simulator-header">
+    <div class="header-text">
+      <h3 class="simulator-title">
+        <svg
+          class="sim-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="21" y1="10" x2="3" y2="10"></line>
+          <line x1="21" y1="6" x2="3" y2="6"></line>
+          <line x1="21" y1="14" x2="3" y2="14"></line>
+          <line x1="21" y1="18" x2="3" y2="18"></line>
+        </svg>
+        Word Alignment & Distribution Simulator
+      </h3>
+      <p class="simulator-subtitle">
+        Publisher let you drag objects anywhere. In Word, the Align menu lines up multiple items perfectly relative to the page, the margins, or each other.
+      </p>
+    </div>
+  </div>
+
+  <!-- Reference Target Selector -->
+  <div class="target-selector-row">
+    <span class="target-label" id={`${simId}-target-label`}>Alignment Reference:</span>
+    <div class="btn-group" role="radiogroup" aria-labelledby={`${simId}-target-label`}>
+      <button
+        type="button"
+        class="btn-target is-active"
+        data-target="margin"
+        role="radio"
+        aria-checked="true"
+        tabindex="0"
+      >
+        Align to Margin (Default)
+      </button>
+      <button
+        type="button"
+        class="btn-target"
+        data-target="page"
+        role="radio"
+        aria-checked="false"
+        tabindex="-1"
+      >
+        Align to Page
+      </button>
+      <button
+        type="button"
+        class="btn-target"
+        data-target="selected"
+        role="radio"
+        aria-checked="false"
+        tabindex="-1"
+      >
+        Align Selected Objects
+      </button>
+    </div>
+  </div>
+
+  <!-- Action Toolstrip -->
+  <div class="action-toolstrip" role="toolbar" aria-label="Alignment actions">
+    <button type="button" class="btn-align-action" data-action="left">
+      <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M3 3h2v14H3V3zm4 3h10v3H7V6zm0 5h7v3H7v-3z" />
+      </svg>
+      Align Left
+    </button>
+    <button type="button" class="btn-align-action" data-action="center">
+      <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M9 3h2v14H9V3zM4 6h12v3H4V6zm2 5h8v3H6v-3z" />
+      </svg>
+      Align Centre
+    </button>
+    <button type="button" class="btn-align-action" data-action="right">
+      <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M15 3h2v14h-2V3zM3 6h10v3H3V6zm3 5h7v3H6v-3z" />
+      </svg>
+      Align Right
+    </button>
+    <button type="button" class="btn-align-action" data-action="top">
+      <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M3 3h14v2H3V3zm3 4v10h3V7H6zm5 0v7h3V7h-3z" />
+      </svg>
+      Align Top
+    </button>
+    <button type="button" class="btn-align-action" data-action="distribute">
+      <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M2 3h2v14H2V3zm14 0h2v14h-2V3zM7 6h6v8H7V6z" />
+      </svg>
+      Distribute Horizontally
+    </button>
+    <button type="button" class="btn-align-action btn-reset" data-action="reset">
+      Scatter (Reset)
+    </button>
+  </div>
+
+  <!-- Interactive Mock Document Canvas -->
+  <div class="align-canvas-wrapper">
+    <div class="canvas-ruler-bar">
+      <span class="ruler-info">Word Page Canvas (320 × 200 pt)</span>
+      <span class="guide-legend">
+        <span class="legend-swatch margin-swatch" aria-hidden="true"></span> Margin Boundary (40 pt)
+      </span>
+    </div>
+
+    <div class="align-canvas">
+      <!-- Margin Boundary Guide Box -->
+      <div
+        class="margin-guide-boundary"
+        style={`left: ${(MARGIN_BOUNDS.left / 320) * 100}%; top: ${(MARGIN_BOUNDS.top / 200) * 100}%; width: ${(MARGIN_BOUNDS.width / 320) * 100}%; height: ${(MARGIN_BOUNDS.height / 200) * 100}%;`}
+      >
+        <span class="margin-watermark">Printable Margin</span>
+      </div>
+
+      <!-- Smart Alignment Guide Line (Lights up on alignment) -->
+      <div class="smart-guide-line" data-smart-guide aria-hidden="true"></div>
+
+      <!-- 3 Distinct Layout Objects -->
+      {INITIAL_ALIGN_ITEMS.map((item) => (
+        <div
+          class="canvas-item"
+          data-align-item={item.id}
+          style={`left: ${(item.x / 320) * 100}%; top: ${(item.y / 200) * 100}%; width: ${(item.width / 320) * 100}%; height: ${(item.height / 200) * 100}%;`}
+        >
+          <div class="item-inner">
+            <span class="item-badge">{item.name}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Active Status Announcement -->
+  <div class="status-callout">
+    <strong class="status-prefix">Active Status:</strong>
+    <span data-align-status-text>Objects are in scattered starting positions.</span>
+  </div>
+
+  <div class="visually-hidden" role="status" aria-live="polite" data-align-live-status>
+    {initialStatus}
+  </div>
+</div>
+
+<script>
+  import { initAlignSimulator } from "../../utils/simulator-controllers";
+
+  document.querySelectorAll<HTMLElement>("[data-align-simulator]").forEach(initAlignSimulator);
+</script>
+
+<style>
+  .align-simulator {
+    margin-block: var(--space-8);
+    padding: var(--space-6);
+  }
+
+  .simulator-header {
+    margin-block-end: var(--space-5);
+  }
+
+  .simulator-title {
+    margin: 0 0 var(--space-2) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  .sim-icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    color: var(--accent-word);
+    flex-shrink: 0;
+  }
+
+  .simulator-subtitle {
+    margin: 0;
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  /* Target Selector */
+  .target-selector-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-block-end: var(--space-4);
+  }
+
+  @media (min-width: 640px) {
+    .target-selector-row {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  .target-label {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--ink-secondary);
+    min-inline-size: 10rem;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn-target {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--target-min-size);
+    min-inline-size: var(--target-min-size);
+    padding-inline: var(--space-4);
+    font-family: inherit;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--ink-primary);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-target:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--accent-word);
+  }
+
+  .btn-target.is-active {
+    background-color: var(--accent-word);
+    color: #FFFFFF;
+    border-color: var(--accent-word);
+  }
+
+  /* Toolstrip */
+  .action-toolstrip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-end: var(--space-5);
+  }
+
+  .btn-align-action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-block-size: var(--target-min-size);
+    min-inline-size: var(--target-min-size);
+    padding-inline: var(--space-3);
+    font-family: inherit;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--ink-primary);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-align-action:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--ink-primary);
+  }
+
+  .btn-icon {
+    inline-size: 1rem;
+    block-size: 1rem;
+    color: var(--ink-secondary);
+  }
+
+  .btn-reset {
+    margin-inline-start: auto;
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border-color: #FCA5A5;
+  }
+
+  .btn-reset:hover {
+    background-color: #FECDCD;
+  }
+
+  /* Mock Canvas Area */
+  .align-canvas-wrapper {
+    background-color: #FFFFFF;
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
+    overflow: hidden;
+    margin-block-end: var(--space-4);
+  }
+
+  .canvas-ruler-bar {
+    background-color: var(--surface-subtle);
+    border-block-end: 1px solid var(--border-subtle);
+    padding: var(--space-2) var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: var(--font-size-xs);
+    color: var(--ink-secondary);
+  }
+
+  .guide-legend {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .margin-swatch {
+    display: inline-block;
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    border: 1px dashed var(--accent-word);
+    background-color: #EFF6FF;
+  }
+
+  .align-canvas {
+    position: relative;
+    inline-size: 100%;
+    max-inline-size: 320px;
+    aspect-ratio: 320 / 200;
+    margin-inline: auto;
+    background-color: #FAF9F6;
+  }
+
+  .margin-guide-boundary {
+    position: absolute;
+    border: 1px dashed var(--accent-word-border);
+    background-color: rgb(239 246 255 / 40%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0.25rem;
+    pointer-events: none;
+  }
+
+  .margin-watermark {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    text-transform: uppercase;
+  }
+
+  .smart-guide-line {
+    position: absolute;
+    background-color: #16A34A;
+    box-shadow: 0 0 4px #22C55E;
+    z-index: 10;
+    display: none;
+  }
+
+  .canvas-item {
+    position: absolute;
+    transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1), top 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .item-inner {
+    inline-size: 100%;
+    block-size: 100%;
+    background-color: var(--surface-card);
+    border: 1.5px solid var(--ink-primary);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    text-align: center;
+  }
+
+  .item-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--ink-primary);
+    line-height: 1.1;
+  }
+
+  [data-align-item="box-1"] .item-inner {
+    border-color: var(--accent-word);
+    background-color: #EFF6FF;
+  }
+
+  [data-align-item="box-2"] .item-inner {
+    border-color: var(--accent-publisher);
+    background-color: #F0FDFA;
+  }
+
+  [data-align-item="box-3"] .item-inner {
+    border-color: var(--accent-tip);
+    background-color: #FFFBEB;
+  }
+
+  .status-callout {
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    padding: var(--space-2) var(--space-3);
+    background-color: var(--surface-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  .status-prefix {
+    color: var(--ink-primary);
+  }
+
+  @media (forced-colors: active) {
+    .btn-target,
+    .btn-align-action {
+      border: 1px solid ButtonText !important;
+    }
+
+    .btn-target.is-active {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .item-inner {
+      border: 1.5px solid ButtonText !important;
+    }
+  }
+</style>

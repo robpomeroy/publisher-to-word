@@ -1,0 +1,121 @@
+---
+import { generateDeterministicId } from "../../utils/id";
+
+interface Props {
+  id?: string;
+  title?: string;
+  collapsible?: boolean;
+}
+
+const {
+  id,
+  title = "Common Snag — Watch Out!",
+  collapsible = false,
+} = Astro.props;
+
+const headingId = id || generateDeterministicId("gotcha", title, "snag");
+---
+
+{collapsible ? (
+  <details class="disclosure gotcha-disclosure">
+    <summary class="gotcha-summary">
+      <span class="gotcha-summary-badge" aria-hidden="true">⚠️</span>
+      <span class="gotcha-summary-title">{title}</span>
+    </summary>
+    <div class="gotcha-content">
+      <slot />
+    </div>
+  </details>
+) : (
+  <aside class="callout callout-tip gotcha-box" aria-labelledby={headingId}>
+    <div class="callout-header">
+      <svg
+        class="gotcha-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+        <line x1="12" y1="9" x2="12" y2="13"></line>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+      <h3 id={headingId} class="gotcha-heading">{title}</h3>
+    </div>
+    <div class="gotcha-content">
+      <slot />
+    </div>
+  </aside>
+)}
+
+<style>
+  .gotcha-box {
+    margin-block: var(--space-6);
+  }
+
+  .gotcha-icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .gotcha-heading {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--accent-tip);
+    line-height: var(--line-height-tight);
+  }
+
+  .gotcha-content {
+    font-size: var(--font-size-base);
+    color: var(--ink-primary);
+    line-height: var(--line-height-normal);
+  }
+
+  .gotcha-content :global(p:last-child) {
+    margin-block-end: 0;
+  }
+
+  .gotcha-disclosure {
+    border-color: var(--accent-tip-border);
+    background-color: var(--accent-tip-bg);
+  }
+
+  .gotcha-disclosure summary {
+    color: var(--accent-tip);
+  }
+
+  .gotcha-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .gotcha-summary-badge {
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  .gotcha-summary-title {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  @media (forced-colors: active) {
+    .gotcha-disclosure,
+    .gotcha-box {
+      border: 1px solid ButtonText;
+    }
+
+    .gotcha-heading,
+    .gotcha-summary-title {
+      color: Highlight;
+    }
+  }
+</style>

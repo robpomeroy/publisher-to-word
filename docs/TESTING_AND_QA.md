@@ -17,17 +17,18 @@ Our QA pipeline consists of two tiers:
 
 ## 2. Automated Quality Gate (`npm run quality`)
 
-Running `npm run quality` executes five distinct verification engines in sequence (~3 seconds total):
+Running `npm run quality` executes six distinct verification engines in sequence (~4 seconds total):
 
 ```mermaid
 flowchart LR
   Step1["1. astro check<br/>(Types & Schemas)"]
   Step2["2. eslint & stylelint<br/>(Code & CSS Standards)"]
-  Step3["3. astro build<br/>(Static Compilation)"]
-  Step4["4. verify:dist<br/>(Rendered HTML & A11y Audit)"]
-  Step5["5. verify:mwg<br/>(Modern Web Guidance Scan)"]
+  Step3["3. vitest<br/>(Unit & DOM Tests)"]
+  Step4["4. astro build<br/>(Static Compilation)"]
+  Step5["5. verify:dist<br/>(Rendered HTML & A11y Audit)"]
+  Step6["6. verify:mwg<br/>(Modern Web Guidance Scan)"]
 
-  Step1 --> Step2 --> Step3 --> Step4 --> Step5
+  Step1 --> Step2 --> Step3 --> Step4 --> Step5 --> Step6
 ```
 
 ### Stage 1: Astro & TypeScript Type Checking (`npm run check`)
@@ -41,17 +42,24 @@ flowchart LR
 - **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}" --max-warnings 0`):** Uses `stylelint-config-standard` and `stylelint-config-html` to lint global CSS and inline `<style>` tags in Astro components. Enforces modern CSS syntax (e.g. space-separated `rgb(0 0 0 / 10%)`), logical properties (`margin-block`), and property validation, failing on any warning.
 - **Passing condition:** `0 errors, 0 warnings`.
 
-### Stage 3: Static Compilation (`npm run build`)
+### Stage 3: Unit & DOM Controller Testing (`npm run test`)
+- Runs `vitest run --coverage`.
+- Executes unit tests for utility functions (e.g. `src/utils/id.ts`) and DOM controller tests for interactive simulators (`src/utils/simulator-controllers.ts`) using `linkedom`.
+- Verifies state transitions, live region announcements, keyboard arrow cycling, and graceful degradation on partial DOM elements.
+- Enforces strict coverage gates (minimum 85% lines, statements, and functions, 80% branches).
+- **Passing condition:** All test suites pass and meet or exceed coverage thresholds.
+
+### Stage 4: Static Compilation (`npm run build`)
 - Runs `astro build`.
 - Generates pre-rendered HTML files and static assets into `dist/`.
 - Generates `sitemap-index.xml` and `sitemap-0.xml`.
 - **Passing condition:** Successful exit code with all expected routes generated.
 
-### Stage 4: Rendered Static HTML & Link Audit (`npm run verify:dist`)
+### Stage 5: Rendered Static HTML & Link Audit (`npm run verify:dist`)
 - Runs `node scripts/verify-dist.mjs`.
 - Inspects every compiled `.html` file in `dist/` directly to catch runtime defects that linters cannot see.
 
-### Stage 5: Modern Web Platform Scanner (`npm run verify:mwg`)
+### Stage 6: Modern Web Platform Scanner (`npm run verify:mwg`)
 - Runs `node scripts/verify-mwg.mjs` (wrapping `modern-web-guidance legacy-scan src --json`).
 - Scans `src/` against 35 deterministic rules across 33 guides from Google's `modern-web-guidance` knowledge base to ensure no deprecated or legacy web patterns are introduced.
 - **Passing condition:** `totalFindings: 0` (the script exits non-zero if any legacy patterns are discovered).
@@ -138,3 +146,22 @@ If any check fails:
 1. The commit is rejected immediately with a descriptive error log.
 2. The developer fixes the reported issue.
 3. Once `npm run quality` passes with 0 errors and 0 warnings, the commit succeeds.
+
+---
+
+## 6. End-to-End (E2E) Browser Testing Recommendations (Future Phase)
+
+### Current Architecture & Boundary
+Unit tests in Vitest with `linkedom` (`tests/simulators-dom.test.ts`) exercise client controllers extracted into TypeScript modules (`src/utils/simulator-controllers.ts`). This provides fast, zero-dependency CI validation for:
+- Simulator state transitions and radio interactions.
+- ARIA live region status messaging and attribute synchronization.
+- Keyboard arrow cycling (<kbd>ArrowDown</kbd>, <kbd>ArrowUp</kbd>, <kbd>ArrowRight</kbd>, <kbd>ArrowLeft</kbd>).
+- Graceful degradation when optional DOM nodes are absent.
+
+### Recommended Playwright E2E Suite
+To complement LinkeDOM unit tests and catch regressions that only emerge in actual browser rendering engines, future project phases should introduce a lightweight Playwright E2E suite:
+
+1. **Astro Client Script Bundling:** Verify that client `<script>` bundles produced by Vite/Astro execute and bind events correctly in real Chromium, Firefox, and WebKit instances.
+2. **CSS Anchor Positioning (`UiHotspotMap.astro`):** Smoke-test native CSS anchor positioning (`anchor-name`, `position-anchor`, `@position-try`) in Chromium alongside fallback popover behaviour in Firefox and WebKit.
+3. **Multi-Instance Isolation:** Verify that multiple simulator instances on a single page maintain independent state without DOM query collisions.
+4. **Visual Regression & Layout Invariants:** Automated screenshot diffs for 320 CSS px reflow, high-contrast mode, and print media emulation.

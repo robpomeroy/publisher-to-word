@@ -1,0 +1,123 @@
+---
+interface Step {
+  title: string;
+  detail?: string;
+  ribbonBadge?: string;
+}
+
+interface Props {
+  steps?: Step[];
+}
+
+const { steps = [] } = Astro.props;
+---
+
+<div class="step-list-wrapper">
+  {steps.length > 0 && (
+    <ol class="step-list">
+      {steps.map((step, idx) => (
+        <li class="step-item">
+          <span class="step-badge" aria-hidden="true">{idx + 1}</span>
+          <div class="step-content">
+            <div class="step-header">
+              <strong class="step-title">{step.title}</strong>
+              {step.ribbonBadge && (
+                <span class="badge badge-ribbon">{step.ribbonBadge}</span>
+              )}
+            </div>
+            {step.detail && <p class="step-detail">{step.detail}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  )}
+
+  <div class="step-list-custom">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .step-list-wrapper {
+    margin-block: var(--space-6);
+  }
+
+  .step-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 4%);
+    position: relative;
+  }
+
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--accent-word);
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: var(--font-size-base);
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .step-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .step-title {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--ink-primary);
+    line-height: var(--line-height-tight);
+  }
+
+  .step-detail {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  .step-list-custom:empty {
+    display: none;
+  }
+
+  @media (forced-colors: active) {
+    .step-item {
+      border: 1px solid ButtonText;
+    }
+
+    .step-badge {
+      background-color: Highlight;
+      color: HighlightText;
+      border: 1px solid ButtonText;
+    }
+  }
+</style>

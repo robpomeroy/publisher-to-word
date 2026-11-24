@@ -1,0 +1,355 @@
+---
+import {
+  MARGIN_PRESETS,
+  FILL_PRESETS,
+  OUTLINE_PRESETS,
+  INITIAL_BOX_STATE,
+  getBoxMarginStatus,
+  getBoxPreviewStyles,
+} from "../../utils/simulators";
+import { generateDeterministicId } from "../../utils/id";
+
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+const simId = id || generateDeterministicId("box-sim", "simulator");
+const marginList = Object.values(MARGIN_PRESETS);
+const fillList = Object.values(FILL_PRESETS);
+const outlineList = Object.values(OUTLINE_PRESETS);
+
+const initialStatus = getBoxMarginStatus(INITIAL_BOX_STATE);
+const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
+---
+
+<div class="box-margin-simulator card" id={id} data-box-margin-simulator>
+  <div class="simulator-header">
+    <div class="header-text">
+      <h3 class="simulator-title">
+        <svg
+          class="sim-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+          <path d="M3 9h18"></path>
+          <path d="M9 21V9"></path>
+        </svg>
+        Text Box Margins & Borders Simulator
+      </h3>
+      <p class="simulator-subtitle">
+        Publisher frames had zero internal margin by default. In Word, text boxes include default 0.25 cm padding and a border outline. Adjust them below to master transparent, borderless styling.
+      </p>
+    </div>
+  </div>
+
+  <!-- Multi-Option Controls Section -->
+  <div class="simulator-controls-grid">
+    <!-- 1. Internal Margins (Padding) -->
+    <div class="control-section">
+      <span class="section-label" id={`${simId}-label-margin`}>1. Internal Margins (Padding)</span>
+      <div class="button-strip" role="group" aria-labelledby={`${simId}-label-margin`}>
+        {marginList.map((m) => (
+          <button
+            type="button"
+            class={`btn-box-opt btn-margin ${m.id === INITIAL_BOX_STATE.margin ? "is-active" : ""}`}
+            data-margin={m.id}
+            aria-pressed={m.id === INITIAL_BOX_STATE.margin ? "true" : "false"}
+          >
+            {m.metricLabel}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- 2. Shape Fill -->
+    <div class="control-section">
+      <span class="section-label" id={`${simId}-label-fill`}>2. Shape Fill</span>
+      <div class="button-strip" role="group" aria-labelledby={`${simId}-label-fill`}>
+        {fillList.map((f) => (
+          <button
+            type="button"
+            class={`btn-box-opt btn-fill ${f.id === INITIAL_BOX_STATE.fill ? "is-active" : ""}`}
+            data-fill={f.id}
+            aria-pressed={f.id === INITIAL_BOX_STATE.fill ? "true" : "false"}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- 3. Shape Outline -->
+    <div class="control-section">
+      <span class="section-label" id={`${simId}-label-outline`}>3. Shape Outline</span>
+      <div class="button-strip" role="group" aria-labelledby={`${simId}-label-outline`}>
+        {outlineList.map((o) => (
+          <button
+            type="button"
+            class={`btn-box-opt btn-outline ${o.id === INITIAL_BOX_STATE.outline ? "is-active" : ""}`}
+            data-outline={o.id}
+            aria-pressed={o.id === INITIAL_BOX_STATE.outline ? "true" : "false"}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Route Guidance Card -->
+  <div class="box-path-card">
+    <span class="path-title">Where to find these in Word:</span>
+    <p class="path-details">
+      Select the box → <strong>Shape Format</strong> tab → <strong>Shape Fill</strong> / <strong>Shape Outline</strong>. For zero margins: Right-click box → <strong>Format Shape</strong> → <strong>Text Options</strong> → <strong>Layout & Properties</strong> (the square icon) → set <em>Left, Right, Top, Bottom</em> margins to <code>0 cm</code>.
+    </p>
+  </div>
+
+  <!-- Live Visual Sandbox Canvas -->
+  <div class="preview-stage">
+    <div class="stage-background-pattern" aria-hidden="true">
+      <div class="pattern-watermark">PAGE BACKGROUND PATTERN</div>
+    </div>
+
+    <div
+      class="preview-text-box"
+      data-preview-text-box
+      style={`padding: ${initialStyles.padding}; background-color: ${initialStyles.backgroundColor}; border: ${initialStyles.border};`}
+    >
+      <div class="preview-box-header">
+        <span class="box-type-tag">Word Text Box Frame</span>
+      </div>
+      <h4 class="preview-heading">Annual Community Summer Fair</h4>
+      <p class="preview-body">
+        Saturday 14 June, 10:00 am – 4:00 pm. Join us on the village green for traditional games, artisan food stalls, brass band performances, and children's activities.
+      </p>
+      <div class="preview-footer">
+        <span class="preview-note">Admission is free for everyone.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Notification for Assistive Technology -->
+  <div class="visually-hidden" role="status" aria-live="polite" data-box-live-status>
+    {initialStatus}
+  </div>
+</div>
+
+<script>
+  import { initBoxMarginSimulator } from "../../utils/simulator-controllers";
+
+  document.querySelectorAll<HTMLElement>("[data-box-margin-simulator]").forEach(initBoxMarginSimulator);
+</script>
+
+<style>
+  .box-margin-simulator {
+    margin-block: var(--space-8);
+    padding: var(--space-6);
+  }
+
+  .simulator-header {
+    margin-block-end: var(--space-5);
+  }
+
+  .simulator-title {
+    margin: 0 0 var(--space-2) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--ink-primary);
+  }
+
+  .sim-icon {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    color: var(--accent-publisher);
+    flex-shrink: 0;
+  }
+
+  .simulator-subtitle {
+    margin: 0;
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  .simulator-controls-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    margin-block-end: var(--space-5);
+  }
+
+  @media (min-width: 640px) {
+    .simulator-controls-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .control-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .section-label {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--ink-secondary);
+  }
+
+  .button-strip {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .btn-box-opt {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-block-size: var(--target-min-size);
+    min-inline-size: var(--target-min-size);
+    padding-inline: var(--space-3);
+    font-family: inherit;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--ink-primary);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-box-opt:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--accent-publisher);
+  }
+
+  .btn-box-opt.is-active {
+    background-color: var(--accent-publisher);
+    color: #FFFFFF;
+    border-color: var(--accent-publisher);
+  }
+
+  .box-path-card {
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--accent-publisher-bg);
+    border: 1px solid var(--accent-publisher-border);
+    border-radius: var(--radius-md);
+    margin-block-end: var(--space-5);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+  }
+
+  .path-title {
+    font-weight: 700;
+    color: var(--accent-publisher);
+    display: block;
+    margin-block-end: 0.15rem;
+  }
+
+  .path-details {
+    margin: 0;
+    color: var(--ink-primary);
+  }
+
+  /* Stage Canvas */
+  .preview-stage {
+    position: relative;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-8) var(--space-6);
+    background-color: #F8FAFC;
+    overflow: hidden;
+    min-block-size: 16rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stage-background-pattern {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.08;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .pattern-watermark {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: #1E293B;
+    transform: rotate(-15deg);
+  }
+
+  .preview-text-box {
+    position: relative;
+    z-index: 2;
+    inline-size: min(32rem, 100%);
+    border-radius: var(--radius-sm);
+    transition: padding 0.25s ease, background-color 0.25s ease, border 0.25s ease;
+  }
+
+  .preview-box-header {
+    margin-block-end: var(--space-1);
+  }
+
+  .box-type-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-secondary);
+  }
+
+  .preview-heading {
+    margin: 0 0 var(--space-2) 0;
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--ink-primary);
+    line-height: var(--line-height-tight);
+  }
+
+  .preview-body {
+    margin: 0 0 var(--space-2) 0;
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+    color: var(--ink-primary);
+  }
+
+  .preview-footer {
+    font-size: var(--font-size-xs);
+    font-style: italic;
+    color: var(--ink-secondary);
+  }
+
+  @media (forced-colors: active) {
+    .btn-box-opt {
+      border: 1px solid ButtonText !important;
+    }
+
+    .btn-box-opt.is-active {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .preview-text-box {
+      border: 1px solid ButtonText !important;
+    }
+  }
+</style>

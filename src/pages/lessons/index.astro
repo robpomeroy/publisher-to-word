@@ -2,6 +2,10 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { getCurriculum } from "../../data/curriculum";
+import WrapSimulator from "../../components/interactive/WrapSimulator.astro";
+import AnchorSimulator from "../../components/interactive/AnchorSimulator.astro";
+import BoxMarginSimulator from "../../components/interactive/BoxMarginSimulator.astro";
+import AlignSimulator from "../../components/interactive/AlignSimulator.astro";
 
 const authored = await getCollection("lessons");
 const curriculum = getCurriculum(authored);
@@ -17,6 +21,25 @@ const curriculum = getCurriculum(authored);
       </p>
     </div>
 
+    <!-- Interactive Sandboxes Preview -->
+    <section class="sandboxes-section" aria-labelledby="sandboxes-title">
+      <div class="sandboxes-header">
+        <span class="badge badge-contextual">Hands-On Visual Sandboxes</span>
+        <h2 id="sandboxes-title" class="sandboxes-title">Interactive Layout Sandboxes</h2>
+        <p class="sandboxes-intro">
+          Practise with Word's core positioning mechanics in real time. Experiment with wrapping, object anchors, zero margins, and precision alignment.
+        </p>
+      </div>
+
+      <div class="sandboxes-stack">
+        <WrapSimulator />
+        <AnchorSimulator />
+        <BoxMarginSimulator />
+        <AlignSimulator />
+      </div>
+    </section>
+
+    <!-- Curriculum Modules -->
     <div class="modules-stack">
       {curriculum.map(mod => (
         <section class="card module-section">
@@ -76,6 +99,32 @@ const curriculum = getCurriculum(authored);
     color: var(--ink-secondary);
   }
 
+  .sandboxes-section {
+    margin-block-end: var(--space-10);
+  }
+
+  .sandboxes-header {
+    margin-block-end: var(--space-4);
+  }
+
+  .sandboxes-title {
+    font-size: var(--font-size-2xl);
+    margin-block: var(--space-2) var(--space-1);
+    color: var(--ink-primary);
+  }
+
+  .sandboxes-intro {
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    margin: 0;
+  }
+
+  .sandboxes-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
   .modules-stack {
     display: flex;
     flex-direction: column;
@@ -98,8 +147,8 @@ const curriculum = getCurriculum(authored);
   }
 
   .module-summary {
-    color: var(--ink-secondary);
     font-size: var(--font-size-base);
+    color: var(--ink-secondary);
     margin: 0;
   }
 
@@ -108,32 +157,34 @@ const curriculum = getCurriculum(authored);
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
     gap: var(--space-4);
+  }
+
+  .lesson-item {
+    display: flex;
   }
 
   .lesson-card-link,
   .lesson-card-upcoming {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    width: 100%;
     padding: var(--space-4);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-subtle);
-    text-decoration: none;
-  }
-
-  .lesson-card-link {
     background-color: var(--surface-card);
-    transition: border-color 0.15s ease, transform 0.15s ease;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
   .lesson-card-link:hover {
     border-color: var(--accent-word);
-    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);
   }
 
   .lesson-card-upcoming {
+    opacity: 0.85;
     background-color: var(--surface-subtle);
   }
 

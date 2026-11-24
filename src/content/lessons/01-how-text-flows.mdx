@@ -8,11 +8,24 @@ wordTabs: ["Home", "Insert", "Layout"]
 hasMacNotes: true
 ---
 
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
 ## The Mental Shift: Pinboard vs. River
 
 If you loved Microsoft Publisher, you are used to a **Pinboard (or Canvas)** model. You drew a text box here, dropped a photo there, and they stayed exactly where you pinned them. One box didn't care at all what another box was doing.
 
 Microsoft Word does not think like a pinboard. **Word thinks like a River of Text.**
+
+<PublisherCompare
+  title="Pinboard vs. River of Text"
+  publisherWay="Every text box and picture was an independent island pinned to a static canvas, completely unaware of other objects."
+  wordWay="All text flows continuously from top to bottom. Pictures and text boxes anchor into the river and move with the stream."
+/>
 
 ```text
 Publisher: Pinboard                      Word: River of Text
@@ -32,24 +45,58 @@ When you press <kbd>Enter</kbd> at the top of a page to make some room, **the en
 
 ## The Three Keys That Control the Flow
 
-In Publisher, if you wanted something on the next page, you just clicked onto page 2. In Word, beginners often press <kbd>Enter</kbd> 15 times until the cursor reaches the next page. **Never do this!** The moment you change a sentence on page 1, your entire document gets thrown into chaos.
+In Publisher, if you wanted something on the next page, you just clicked onto page 2. In Word, beginners often press <kbd>Enter</kbd> 15 times until the cursor reaches the next page.
+
+<GotchaBox title="Common Snag — The 15 Enters Trap" collapsible={false}>
+  <p>
+    Never press <kbd>Enter</kbd> multiple times to push content onto the next page! The moment you add or delete a single sentence on page 1, your entire document gets thrown into chaos because all those blank paragraphs push downstream.
+  </p>
+</GotchaBox>
 
 Here are the three keys to master:
 
-### 1. Normal Paragraph Break: <kbd>Enter</kbd>
-Pressing <kbd>Enter</kbd> creates a brand new paragraph mark (<samp>¶</samp>). Word adds whatever paragraph spacing (space before/after) your style specifies.
+<StepList
+  steps={[
+    {
+      title: "Normal Paragraph Break: Enter",
+      detail: "Pressing Enter creates a brand new paragraph mark (¶). Word adds whatever paragraph spacing (space before and after) your current style specifies.",
+      ribbonBadge: "Enter",
+    },
+    {
+      title: "Gentle Line Break: Shift + Enter",
+      detail: "Drops to the next line without starting a new paragraph. Ideal for postal addresses, poetry lines, or recipe ingredients so extra paragraph spacing is avoided.",
+      ribbonBadge: "Shift + Enter",
+    },
+    {
+      title: "Clean Page Break: Ctrl + Enter",
+      detail: "Tells Word: 'Jump cleanly to the top of the next page, no matter how much text gets added or deleted here later.'",
+      ribbonBadge: "Ctrl + Enter",
+    },
+  ]}
+/>
 
-### 2. Gentle Line Break: <kbd>Shift</kbd> + <kbd>Enter</kbd>
-Want to drop to the next line without starting a new paragraph (for example, in a postal address, poem, or recipe ingredient)? Press <kbd>Shift</kbd> + <kbd>Enter</kbd>. This keeps the text in the same paragraph so extra spacing is not added.
+<WhereToFindIt
+  title="Where to Find Page Break in Word"
+  ribbonPath={["Insert", "Pages", "Page Break"]}
+  altRibbonPath={["Layout", "Page Setup", "Breaks", "Page"]}
+/>
 
-### 3. Page Break: <kbd>Ctrl</kbd> + <kbd>Enter</kbd>
-Whenever you want to start a fresh page, press <kbd>Ctrl</kbd> + <kbd>Enter</kbd> (or go to <span class="badge badge-ribbon">Insert</span> → **Page Break**). This tells Word: *"Jump cleanly to the top of the next page, no matter how much text gets added or deleted here later."*
+<MacNote summary="Using Word on a Mac? Shortcut & menu differences">
+  <p>
+    On macOS, press <kbd>Cmd ⌘</kbd> + <kbd>Return</kbd> for a clean Page Break instead of <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. Line breaks use <kbd>Shift</kbd> + <kbd>Return</kbd>. You can also find Page Break under the <strong>Insert</strong> menu on the Mac menu bar.
+  </p>
+</MacNote>
 
 ---
 
-## Try It in Word (60 Seconds)
+## Hands-On Practice
 
-1. Open a blank document in Microsoft Word.
-2. Type a short heading and press <kbd>Enter</kbd>.
-3. Type three lines of an address, pressing <kbd>Shift</kbd> + <kbd>Enter</kbd> after each line instead of <kbd>Enter</kbd>. Notice how close and tidy the lines stay.
-4. Press <kbd>Ctrl</kbd> + <kbd>Enter</kbd>. Notice your cursor is instantly at the top of page 2 without any messy blank lines!
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Open a blank document in Microsoft Word.",
+    "Type a short heading and press Enter.",
+    "Type three lines of an address, pressing Shift + Enter after each line instead of Enter. Notice how close and tidy the lines stay.",
+    "Press Ctrl + Enter. Notice your cursor is instantly at the top of page 2 without any messy blank lines!",
+  ]}
+/>
