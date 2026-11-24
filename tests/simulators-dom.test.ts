@@ -54,7 +54,7 @@ describe('Simulator Production Controllers DOM Tests', () => {
             </span>
             <p data-wrap-recommendation><strong>Recommendation: </strong>Default recommendation</p>
           </div>
-          <div class="mock-word-page wrap-square" data-wrap-preview-page>
+          <div class="mock-word-page wrap-square astro-test123" data-wrap-preview-page>
             <div class="sim-object-anchor" data-sim-object-anchor></div>
             <strong data-wrap-inline-callout>Square</strong>
           </div>
@@ -91,7 +91,10 @@ describe('Simulator Production Controllers DOM Tests', () => {
       expect(buttons[0].classList.contains('is-active')).toBe(false);
       expect(buttons[0].getAttribute('aria-pressed')).toBe('false');
 
-      expect(previewPage.className).toBe('mock-word-page wrap-tight');
+      expect(previewPage.classList.contains('wrap-tight')).toBe(true);
+      expect(previewPage.classList.contains('wrap-square')).toBe(false);
+      expect(previewPage.classList.contains('mock-word-page')).toBe(true);
+      expect(previewPage.classList.contains('astro-test123')).toBe(true);
       expect(wrapBadge.textContent).toBe('Tight');
       expect(inlineCallout.textContent).toBe('Tight');
       expect(recommendation.textContent).toContain('Ideal for transparent PNGs');
@@ -103,9 +106,19 @@ describe('Simulator Production Controllers DOM Tests', () => {
       const inlineBtn = buttons[3];
       inlineBtn.click();
       expect(inlineBtn.classList.contains('is-active')).toBe(true);
-      expect(previewPage.className).toBe('mock-word-page wrap-inline');
+      expect(previewPage.classList.contains('wrap-inline')).toBe(true);
+      expect(previewPage.classList.contains('wrap-tight')).toBe(false);
+      expect(previewPage.classList.contains('astro-test123')).toBe(true);
       expect(anchorPill.style.opacity).toBe('0.5');
       expect(simAnchor.style.display).toBe('none');
+
+      // Click back to Square (preserves host/astro classes and restores wrap-square)
+      const squareBtn = buttons[0];
+      squareBtn.click();
+      expect(squareBtn.classList.contains('is-active')).toBe(true);
+      expect(previewPage.classList.contains('wrap-square')).toBe(true);
+      expect(previewPage.classList.contains('wrap-inline')).toBe(false);
+      expect(previewPage.classList.contains('astro-test123')).toBe(true);
     });
   });
 

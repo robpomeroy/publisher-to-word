@@ -46,7 +46,7 @@ const RESCUE_ITEMS = [
 ---
 
 <BaseLayout title="Rescue Guide: Why Did That Happen?">
-  <main id="content" class="rescue-main" tabindex="-1">
+  <main id="content" class="page-main rescue-main" tabindex="-1">
     <div class="page-header">
       <span class="badge badge-ribbon">Troubleshooting</span>
       <h1>"Why Did That Happen?" Rescue Guide</h1>
@@ -78,13 +78,6 @@ const RESCUE_ITEMS = [
 </BaseLayout>
 
 <style>
-  .rescue-main {
-    max-width: 72rem;
-    margin-inline: auto;
-    padding-inline: var(--space-4);
-    padding-block: var(--space-8);
-  }
-
   .page-header {
     margin-block-end: var(--space-8);
     padding-block-end: var(--space-6);
@@ -94,6 +87,7 @@ const RESCUE_ITEMS = [
   .lead {
     font-size: var(--font-size-lg);
     color: var(--ink-secondary);
+    max-inline-size: var(--max-prose-width);
   }
 
   .rescue-stack {
@@ -127,6 +121,10 @@ const RESCUE_ITEMS = [
 
   .rescue-section {
     margin-block-end: var(--space-4);
+  }
+
+  .rescue-section p {
+    max-inline-size: var(--max-prose-width);
   }
 
   .section-label {
