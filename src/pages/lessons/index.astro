@@ -2,47 +2,63 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 import { getCurriculum } from "../../data/curriculum";
-import WrapSimulator from "../../components/interactive/WrapSimulator.astro";
-import AnchorSimulator from "../../components/interactive/AnchorSimulator.astro";
-import BoxMarginSimulator from "../../components/interactive/BoxMarginSimulator.astro";
-import AlignSimulator from "../../components/interactive/AlignSimulator.astro";
 
 const authored = await getCollection("lessons");
 const curriculum = getCurriculum(authored);
 ---
 
 <BaseLayout title="All Lessons">
-  <main id="content" class="lessons-main" tabindex="-1">
+  <main id="content" class="page-main lessons-main" tabindex="-1">
     <div class="page-header">
-      <span class="badge badge-ribbon">Full Curriculum</span>
-      <h1>All 14 Lessons</h1>
-      <p class="lead">
-        Browse the complete step-by-step curriculum designed to guide you comfortably through Microsoft Word's layout concepts.
-      </p>
-    </div>
-
-    <!-- Interactive Sandboxes Preview -->
-    <section class="sandboxes-section" aria-labelledby="sandboxes-title">
-      <div class="sandboxes-header">
-        <span class="badge badge-contextual">Hands-On Visual Sandboxes</span>
-        <h2 id="sandboxes-title" class="sandboxes-title">Interactive Layout Sandboxes</h2>
-        <p class="sandboxes-intro">
-          Practise with Word's core positioning mechanics in real time. Experiment with wrapping, object anchors, zero margins, and precision alignment.
+      <div class="header-content">
+        <span class="badge badge-ribbon">Full Curriculum</span>
+        <h1>All 14 Lessons</h1>
+        <p class="lead">
+          Browse the complete step-by-step curriculum designed to guide you comfortably through Microsoft Word's layout concepts.
         </p>
       </div>
 
-      <div class="sandboxes-stack">
-        <WrapSimulator />
-        <AnchorSimulator />
-        <BoxMarginSimulator />
-        <AlignSimulator />
+      <!-- Quick Module & Sandboxes Navigation -->
+      <nav class="module-jump-nav" aria-label="Jump to module">
+        <span class="jump-nav-label">Jump to module:</span>
+        <div class="jump-pills">
+          {curriculum.map(mod => (
+            <a href={`#module-${mod.number}`} class="jump-pill">
+              <span class="pill-badge">Module {mod.number}</span>
+              <span class="pill-title">{mod.title}</span>
+            </a>
+          ))}
+          <a href="/sandboxes" class="jump-pill jump-sandboxes">
+            <span aria-hidden="true">🎮</span>
+            <span>Visual Sandboxes</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+
+    <!-- Interactive Sandboxes Invitation Banner -->
+    <section class="card sandboxes-banner" aria-labelledby="sandboxes-banner-title">
+      <div class="banner-inner">
+        <div class="banner-text">
+          <span class="badge badge-contextual">Hands-On Practice</span>
+          <h2 id="sandboxes-banner-title" class="sandboxes-banner-title">Interactive Layout Sandboxes</h2>
+          <p class="sandboxes-banner-desc">
+            Prefer learning by doing? Practise with Word's core positioning mechanics in real time. Experiment with wrapping, object anchors, text box margins, and precision alignment.
+          </p>
+        </div>
+        <div class="banner-action">
+          <a href="/sandboxes" class="btn btn-secondary banner-btn">
+            <span>Open All 4 Sandboxes</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
     </section>
 
     <!-- Curriculum Modules -->
     <div class="modules-stack">
       {curriculum.map(mod => (
-        <section class="card module-section">
+        <section class="card module-section" id={`module-${mod.number}`}>
           <div class="module-header">
             <span class="badge badge-ribbon">Module {mod.number}</span>
             <h2 class="module-title">{mod.title}</h2>
@@ -82,6 +98,7 @@ const curriculum = getCurriculum(authored);
 
 <style>
   .lessons-main {
+    width: 100%;
     max-width: 72rem;
     margin-inline: auto;
     padding-inline: var(--space-4);
@@ -97,34 +114,120 @@ const curriculum = getCurriculum(authored);
   .lead {
     font-size: var(--font-size-lg);
     color: var(--ink-secondary);
+    max-inline-size: var(--max-prose-width);
   }
 
-  .sandboxes-section {
-    margin-block-end: var(--space-10);
+  .module-jump-nav {
+    margin-block-start: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
-  .sandboxes-header {
-    margin-block-end: var(--space-4);
+  .jump-nav-label {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-secondary);
   }
 
-  .sandboxes-title {
-    font-size: var(--font-size-2xl);
+  .jump-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .jump-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--target-min-size);
+    min-inline-size: var(--target-min-size);
+    padding-inline: var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--ink-primary);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .jump-pill:hover {
+    background-color: var(--accent-word-bg);
+    border-color: var(--accent-word);
+    color: var(--accent-word);
+  }
+
+  .pill-badge {
+    font-size: var(--font-size-xs);
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-subtle);
+    color: var(--ink-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .jump-pill.jump-sandboxes {
+    background-color: var(--surface-subtle);
+    border-color: var(--border-subtle);
+    margin-inline-start: auto;
+  }
+
+  .jump-pill.jump-sandboxes:hover {
+    background-color: var(--accent-word-bg);
+    border-color: var(--accent-word);
+    color: var(--accent-word);
+  }
+
+  @media (max-width: 640px) {
+    .jump-pill.jump-sandboxes {
+      margin-inline-start: 0;
+    }
+  }
+
+  /* Sandboxes Invitation Banner */
+  .sandboxes-banner {
+    margin-block-end: var(--space-8);
+    background-color: var(--accent-word-bg);
+    border: 1px solid var(--accent-word-border);
+  }
+
+  .banner-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .banner-inner {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .sandboxes-banner-title {
+    font-size: var(--font-size-xl);
     margin-block: var(--space-2) var(--space-1);
     color: var(--ink-primary);
   }
 
-  .sandboxes-intro {
+  .sandboxes-banner-desc {
     font-size: var(--font-size-base);
     color: var(--ink-secondary);
     margin: 0;
+    max-inline-size: var(--max-prose-width);
   }
 
-  .sandboxes-stack {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-6);
+  .banner-btn {
+    white-space: nowrap;
+    background-color: #FFFFFF;
   }
 
+  /* Modules Stack */
   .modules-stack {
     display: flex;
     flex-direction: column;
@@ -133,6 +236,7 @@ const curriculum = getCurriculum(authored);
 
   .module-section {
     padding: var(--space-6);
+    scroll-margin-top: 5rem;
   }
 
   .module-header {
@@ -150,6 +254,7 @@ const curriculum = getCurriculum(authored);
     font-size: var(--font-size-base);
     color: var(--ink-secondary);
     margin: 0;
+    max-inline-size: var(--max-prose-width);
   }
 
   .lesson-cards-list {
@@ -237,5 +342,11 @@ const curriculum = getCurriculum(authored);
     color: var(--ink-secondary);
     margin: 0;
     flex-grow: 1;
+  }
+
+  @media (forced-colors: active) {
+    .jump-pill {
+      border: 1px solid ButtonText !important;
+    }
   }
 </style>

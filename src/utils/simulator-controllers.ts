@@ -63,9 +63,11 @@ export function initWrapSimulator(container: HTMLElement): void {
         b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
       });
 
-      // Update preview container class
+      // Update preview container class while preserving scoped Astro/host classes
       if (previewPage) {
-        previewPage.className = `mock-word-page wrap-${config.id}`;
+        const toRemove = Array.from(previewPage.classList).filter((c) => c.startsWith('wrap-'));
+        previewPage.classList.remove(...toRemove);
+        previewPage.classList.add(`wrap-${config.id}`);
       }
 
       // Update feedback

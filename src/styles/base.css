@@ -70,8 +70,18 @@ p {
   text-wrap: pretty;
 }
 
+/* Standard Page Main Container (consistent 72rem boundary across all pages) */
+.page-main {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: var(--space-4);
+  padding-block: var(--space-8);
+}
+
 /* Prose Line Length Cap (max 60ch ~ 80 characters for readability) */
 .prose,
+.prose-block,
 article > p,
 article > ul,
 article > ol {

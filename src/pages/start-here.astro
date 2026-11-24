@@ -4,19 +4,19 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
 ---
 
 <BaseLayout title="Start Here (Orientation)">
-  <main id="content" class="start-here-main" tabindex="-1">
-    <article class="prose">
-      <header class="page-header">
-        <span class="badge badge-ribbon">Quick Orientation</span>
-        <h1>Welcome to Publisher → Word</h1>
-        <p class="lead">
-          If you are transitioning from Microsoft Publisher, you are probably feeling frustrated.
-          Things jump across the page, buttons seem to disappear, and nothing stays where you put it.
-          <strong>This guide is here to help.</strong>
-        </p>
-      </header>
+  <main id="content" class="page-main start-here-main" tabindex="-1">
+    <header class="page-header">
+      <span class="badge badge-ribbon">Quick Orientation</span>
+      <h1>Welcome to Publisher → Word</h1>
+      <p class="lead">
+        If you are transitioning from Microsoft Publisher, you are probably feeling frustrated.
+        Things jump across the page, buttons seem to disappear, and nothing stays where you put it.
+        <strong>This guide is here to help.</strong>
+      </p>
+    </header>
 
-      <section class="section">
+    <div class="start-here-content">
+      <section class="section prose-block">
         <h2>Why Does Word Feel So Tricky?</h2>
         <p>
           In Publisher, every piece of text was inside an independent box. You could drag it around the page or even park it in the grey "scratch area" on the side.
@@ -36,11 +36,11 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
         </div>
       </section>
 
-      <section class="section">
+      <section class="section prose-block">
         <h2>Three Switches to Turn On Right Now</h2>
         <p>Before doing any layout work in Word, turn on these three visual clues:</p>
 
-        <ol>
+        <ol class="clues-list">
           <li>
             <strong>Show/Hide Formatting Marks (<samp>¶</samp>):</strong> Located on the <span class="badge badge-ribbon">Home</span> tab. This reveals paragraph marks, spaces, and object anchors so you can see why things are moving.
           </li>
@@ -63,12 +63,12 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
         </div>
       </section>
 
-      <section class="section">
+      <section class="section tour-section">
         <h2>Interactive Interface Tour</h2>
         <UiHotspotMap />
       </section>
 
-      <section class="section">
+      <section class="section prose-block">
         <h2>Who Made This Guide?</h2>
         <p>
           This guide is an independent project created by Rob Pomeroy to help individuals, schools, charities, and small organisations transition smoothly after Microsoft announced the retirement of Microsoft Publisher.
@@ -78,7 +78,7 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
         </p>
       </section>
 
-      <section class="section next-step-section">
+      <section class="section next-step-section prose-block">
         <h2>Ready to Begin?</h2>
         <p>Start with Lesson 1 to master how Word flows text and learn why you should never press Enter 15 times to reach the next page.</p>
         <a href="/lessons/01-how-text-flows" class="btn btn-primary">
@@ -86,12 +86,13 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
           <span aria-hidden="true">→</span>
         </a>
       </section>
-    </article>
+    </div>
   </main>
 </BaseLayout>
 
 <style>
   .start-here-main {
+    width: 100%;
     max-width: 72rem;
     margin-inline: auto;
     padding-inline: var(--space-4);
@@ -108,10 +109,24 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     font-size: var(--font-size-lg);
     line-height: var(--line-height-normal);
     color: var(--ink-secondary);
+    max-inline-size: var(--max-prose-width);
+  }
+
+  .clues-list {
+    margin-block-end: var(--space-4);
+    padding-inline-start: var(--space-6);
+  }
+
+  .clues-list li {
+    margin-block-end: var(--space-2);
   }
 
   .section {
     margin-block-end: var(--space-8);
+  }
+
+  .tour-section {
+    margin-block: var(--space-10);
   }
 
   .next-step-section {
