@@ -81,7 +81,6 @@ p {
 
 /* Prose Line Length Cap (max 60ch ~ 80 characters for readability) */
 .prose,
-.prose-block,
 article > p,
 article > ul,
 article > ol {

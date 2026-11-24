@@ -16,12 +16,13 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     </header>
 
     <div class="start-here-content">
-      <section class="section prose-block">
-        <h2>Why Does Word Feel So Tricky?</h2>
-        <p>
+      <!-- Section 1: The Core Mental Model Shift -->
+      <section class="section">
+        <h2 class="section-title">Why Does Word Feel So Tricky?</h2>
+        <p class="section-desc">
           In Publisher, every piece of text was inside an independent box. You could drag it around the page or even park it in the grey "scratch area" on the side.
         </p>
-        <p>
+        <p class="section-desc">
           In Word, text flows like water in a river. When you drop a photo in, Word treats it like a giant typed character by default. When you press Enter, everything downstream moves forward.
         </p>
 
@@ -36,21 +37,47 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
         </div>
       </section>
 
-      <section class="section prose-block">
-        <h2>Three Switches to Turn On Right Now</h2>
-        <p>Before doing any layout work in Word, turn on these three visual clues:</p>
+      <!-- Section 2: Three Visual Switches (Presented as a balanced 3-card grid) -->
+      <section class="section">
+        <h2 class="section-title">Three Switches to Turn On Right Now</h2>
+        <p class="section-desc">
+          Before doing any layout work in Word, turn on these three visual clues to see exactly why objects behave the way they do:
+        </p>
 
-        <ol class="clues-list">
-          <li>
-            <strong>Show/Hide Formatting Marks (<samp>¶</samp>):</strong> Located on the <span class="badge badge-ribbon">Home</span> tab. This reveals paragraph marks, spaces, and object anchors so you can see why things are moving.
-          </li>
-          <li>
-            <strong>The Ruler:</strong> Go to the <span class="badge badge-ribbon">View</span> tab and tick <strong>Ruler</strong>. This shows your page margins and lets you drag indents visually.
-          </li>
-          <li>
-            <strong>Alignment Guides:</strong> Under the <span class="badge badge-ribbon">Layout</span> tab → <strong>Align</strong>, tick <strong>Use Alignment Guides</strong>. Word will now show green guidelines when objects line up with margins or each other.
-          </li>
-        </ol>
+        <div class="switches-grid">
+          <div class="card switch-card">
+            <div class="switch-badge-row">
+              <span class="badge badge-ribbon">Switch 1</span>
+              <span class="badge badge-contextual">Home Tab</span>
+            </div>
+            <h3 class="switch-title">Show/Hide Formatting (<samp>¶</samp>)</h3>
+            <p class="switch-desc">
+              Reveals paragraph marks, spaces, tab stops, and the crucial <strong>Object Anchor (⚓)</strong> icon so you can see what is anchoring your pictures.
+            </p>
+          </div>
+
+          <div class="card switch-card">
+            <div class="switch-badge-row">
+              <span class="badge badge-ribbon">Switch 2</span>
+              <span class="badge badge-contextual">View Tab</span>
+            </div>
+            <h3 class="switch-title">The Page Ruler</h3>
+            <p class="switch-desc">
+              Displays your exact printable margins and lets you drag paragraph indents and tab positions visually instead of typing centimetre values.
+            </p>
+          </div>
+
+          <div class="card switch-card">
+            <div class="switch-badge-row">
+              <span class="badge badge-ribbon">Switch 3</span>
+              <span class="badge badge-contextual">Layout Tab → Align</span>
+            </div>
+            <h3 class="switch-title">Alignment Guides</h3>
+            <p class="switch-desc">
+              Tick <strong>Use Alignment Guides</strong>. Word will automatically display green guidelines when objects line up neatly with page margins or each other.
+            </p>
+          </div>
+        </div>
 
         <div class="callout callout-tip">
           <div class="callout-header">
@@ -63,28 +90,42 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
         </div>
       </section>
 
+      <!-- Section 3: Interactive Interface Tour -->
       <section class="section tour-section">
-        <h2>Interactive Interface Tour</h2>
+        <h2 class="section-title">Interactive Interface Tour</h2>
         <UiHotspotMap />
       </section>
 
-      <section class="section prose-block">
-        <h2>Who Made This Guide?</h2>
-        <p>
-          This guide is an independent project created by Rob Pomeroy to help individuals, schools, charities, and small organisations transition smoothly after Microsoft announced the retirement of Microsoft Publisher.
-        </p>
-        <p>
-          It is completely free, carries no ads or sponsored content, and is maintained as a public educational service. To learn more about the author, background, and other open resources, visit <a href="https://pomeroy.me/about/" rel="author">About Rob Pomeroy</a>.
-        </p>
+      <!-- Section 4: Provenance & Background -->
+      <section class="section about-section">
+        <div class="card about-card">
+          <h2 class="section-title">Who Made This Guide?</h2>
+          <p class="about-text">
+            This guide is an independent project created by Rob Pomeroy to help individuals, schools, charities, and small organisations transition smoothly after Microsoft announced the retirement of Microsoft Publisher.
+          </p>
+          <p class="about-text">
+            It is completely free, carries no ads or sponsored content, and is maintained as a public educational service. To learn more about the author, background, and other open resources, visit <a href="https://pomeroy.me/about/" rel="author">About Rob Pomeroy</a>.
+          </p>
+        </div>
       </section>
 
-      <section class="section next-step-section prose-block">
-        <h2>Ready to Begin?</h2>
-        <p>Start with Lesson 1 to master how Word flows text and learn why you should never press Enter 15 times to reach the next page.</p>
-        <a href="/lessons/01-how-text-flows" class="btn btn-primary">
-          <span>Go to Lesson 1: How Text Flows</span>
-          <span aria-hidden="true">→</span>
-        </a>
+      <!-- Section 5: Next Steps CTA -->
+      <section class="section">
+        <div class="card next-step-card">
+          <div class="next-step-content">
+            <span class="badge badge-ribbon">Ready to Begin?</span>
+            <h2 class="next-step-title">Start with Lesson 1: How Text Flows</h2>
+            <p class="next-step-desc">
+              Master how Word flows text and learn why you should never press Enter 15 times to reach the next page.
+            </p>
+          </div>
+          <div class="next-step-action">
+            <a href="/lessons/01-how-text-flows" class="btn btn-primary next-step-btn">
+              <span>Go to Lesson 1</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -109,30 +150,128 @@ import UiHotspotMap from "../components/interactive/UiHotspotMap.astro";
     font-size: var(--font-size-lg);
     line-height: var(--line-height-normal);
     color: var(--ink-secondary);
-    max-inline-size: var(--max-prose-width);
+    max-inline-size: 72ch;
   }
 
-  .clues-list {
-    margin-block-end: var(--space-4);
-    padding-inline-start: var(--space-6);
-  }
-
-  .clues-list li {
-    margin-block-end: var(--space-2);
+  .start-here-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
   }
 
   .section {
-    margin-block-end: var(--space-8);
+    width: 100%;
   }
 
-  .tour-section {
-    margin-block: var(--space-10);
+  .section-title {
+    font-size: var(--font-size-2xl);
+    margin-block-end: var(--space-3);
+    color: var(--ink-primary);
   }
 
-  .next-step-section {
+  .section-desc {
+    font-size: var(--font-size-base);
+    color: var(--ink-primary);
+    line-height: var(--line-height-normal);
+    max-inline-size: 72ch;
+    margin-block-end: var(--space-4);
+  }
+
+  /* 3-Card Grid for Visual Switches */
+  .switches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+    gap: var(--space-4);
+    margin-block: var(--space-5);
+  }
+
+  .switch-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-5);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+  }
+
+  .switch-badge-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+    margin-block-end: var(--space-3);
+  }
+
+  .switch-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin: 0 0 var(--space-2) 0;
+    color: var(--ink-primary);
+  }
+
+  .switch-desc {
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  /* About Card */
+  .about-card {
+    padding: var(--space-6);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .about-text {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: var(--ink-primary);
+    max-inline-size: 72ch;
+    margin-block-end: var(--space-3);
+  }
+
+  .about-text:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Next Step Banner Card */
+  .next-step-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-6);
     background-color: var(--surface-card);
     border: 1px solid var(--border-ui);
     border-radius: var(--radius-lg);
-    padding: var(--space-6);
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
+  }
+
+  @media (max-width: 768px) {
+    .next-step-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .next-step-title {
+    font-size: var(--font-size-2xl);
+    margin: var(--space-2) 0 var(--space-2) 0;
+    color: var(--ink-primary);
+  }
+
+  .next-step-desc {
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    margin: 0;
+    max-inline-size: 65ch;
+  }
+
+  .next-step-btn {
+    white-space: nowrap;
   }
 </style>
