@@ -1,0 +1,96 @@
+---
+title: "Where Did the Buttons Go?"
+module: 1
+moduleTitle: "The Big Shift: How Word Thinks"
+order: 3
+summary: "Contextual Ribbon tabs, the floating Layout arch icon, and the Right-Click format pane."
+wordTabs: ["Picture Format", "Shape Format", "Home"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+import UiHotspotMap from '../../components/interactive/UiHotspotMap.astro';
+
+## The Case of the Disappearing Tabs
+
+In Microsoft Publisher, all your layout tools stayed in predictable toolbars or side panels, regardless of what was clicked on the screen.
+
+In Microsoft Word, tools play hide-and-seek. When you click on a picture, a brand-new tab appears on the Ribbon labelled <span class="badge badge-contextual">Picture Format</span>. When you click on a text box, it says <span class="badge badge-contextual">Shape Format</span>. But the moment you click away into a blank paragraph, **that tab vanishes instantly!**
+
+This dynamic behaviour causes endless frustration for beginners. In Word, layout tools live in three distinct places.
+
+<PublisherCompare
+  title="Persistent Toolbars vs. Contextual Ribbons"
+  publisherWay="Toolbars and palettes were always visible on screen, ready to use at any moment."
+  wordWay="Formatting tabs only appear on the top Ribbon while the object is actively clicked and selected."
+/>
+
+---
+
+## Interactive Interface Tour
+
+Explore the three locations below by selecting the numbered pins on the schematic:
+
+<UiHotspotMap />
+
+---
+
+## The Three Places Layout Controls Live
+
+<StepList
+  steps={[
+    {
+      title: "Place 1: The Contextual Ribbon Tab",
+      detail: "Click directly on any photo or shape border. Look at the very top right of Word's Ribbon: a coloured 'Picture Format' or 'Shape Format' tab appears with Wrap Text, Align, and Size tools.",
+      ribbonBadge: "Object Selected → Format Tab",
+    },
+    {
+      title: "Place 2: The Floating Layout Options Arch",
+      detail: "When an image or frame is selected, look just outside its top-right corner. A small horseshoe arch button appears. Click it for 1-click access to all 7 wrapping modes.",
+      ribbonBadge: "Top-Right Object Corner",
+    },
+    {
+      title: "Place 3: Right-Click & the Deep Format Pane",
+      detail: "Right-click the border of any object and choose 'Format Picture' or 'Format Shape'. A deep docked pane opens down the right side of your screen for millimetre-precision margins and fills.",
+      ribbonBadge: "Right-Click → Format Shape",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Layout Tools in Word"
+  ribbonPath={["Click Object", "Picture Format or Shape Format", "Arrange Group"]}
+  rightClickPath={["Right-Click Border", "Wrap Text", "More Layout Options"]}
+  floatingIconTip="Click the small arch icon floating at the top-right of any selected picture."
+/>
+
+<GotchaBox title="Common Snag — 'I clicked Format Shape, but where are text box margins?'" collapsible={false}>
+  <p>
+    When the Format Shape side pane opens, it defaults to <strong>Shape Options</strong> (which controls the box background colour and line borders). To find internal text margins, you must click <strong>Text Options</strong> at the top of that pane, then click the third little icon (<strong>Text Box</strong>). We will practise this step in Lesson 6!
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Contextual tabs and floating arch differences">
+  <p>
+    On Word for Mac, contextual tabs appear highlighted in colour at the end of the ribbon just like on Windows. However, the floating Layout arch icon is occasionally omitted in older Mac Word versions; on Mac, right-clicking the picture and selecting <strong>Wrap Text</strong> is the most dependable shortcut.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "In Microsoft Word, go to Insert → Shapes and draw any simple rectangle on the page.",
+    "Look at the top Ribbon: notice the new Shape Format tab at the far right.",
+    "Click anywhere on the blank page outside the shape. Notice how the Shape Format tab vanishes!",
+    "Click back onto the shape to make the tab reappear, then look for the small arch button floating at its top-right corner.",
+  ]}
+/>

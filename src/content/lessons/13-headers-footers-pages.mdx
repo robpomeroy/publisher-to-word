@@ -1,0 +1,153 @@
+---
+title: "Replacing Master Pages (Headers, Footers & Sections)"
+module: 4
+moduleTitle: "Publisher-Style Layouts Made Easy"
+order: 13
+summary: "Repeating logos, running headers, and section breaks for mixing columns and page orientations without master pages."
+wordTabs:
+  - "Insert"
+  - "Layout"
+  - "Header & Footer"
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Background Layers Instead of Master Pages
+
+In Microsoft Publisher, repeating elements like letterhead logos, running titles, or page numbers were managed on dedicated **Master Pages** (such as *Master Page A* and *Master Page B*). You could create background templates and assign them to specific pages in your publication.
+
+Microsoft Word does not have master pages. Instead, Word uses a background layer called the **Header and Footer**, combined with **Section Breaks** to control where layouts and repeating content change.
+
+<PublisherCompare
+  title="Master Pages vs. Headers, Footers & Sections"
+  publisherWay="Assigning Master Page A or B to individual pages across a publication."
+  wordWay="Using the Header/Footer layer with Section Breaks and 'Link to Previous' controls."
+/>
+
+## How Sections Control Page Geometry
+
+A section break acts as a firewall between different parts of your document. Everything before the break can have its own margins, header logos, and orientation; everything after the break can have completely different formatting.
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 250"
+    role="img"
+    aria-labelledby="svg-sections-title svg-sections-desc"
+    class="lesson-svg"
+  >
+    <title id="svg-sections-title">Document Architecture: Header Layers and Section Breaks in Word</title>
+    <desc id="svg-sections-desc">
+      A diagram illustrating three pages. Page 1 has 'Different First Page' enabled with no header. Page 2 is portrait in Section 1. Between Page 2 and Page 3 is a Section Break (Next Page), allowing Page 3 to be landscape with unlinked headers.
+    </desc>
+
+    {/* Page 1 (Cover / First Page) */}
+    <rect x="25" y="20" width="170" height="210" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2" />
+    <rect x="25" y="20" width="170" height="30" fill="#F8FAFC" />
+    <text x="35" y="40" font-size="11" font-weight="700" fill="#64748B">Page 1: First Page</text>
+    <rect x="40" y="60" width="140" height="12" rx="2" fill="#0284C7" />
+    <rect x="40" y="80" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="40" y="92" width="130" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="40" y="104" width="90" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="35" y="170" width="150" height="45" rx="3" fill="#F0FDF4" stroke="#86EFAC" />
+    <text x="45" y="190" font-size="10" font-weight="700" fill="#166534">Different First Page</text>
+    <text x="45" y="205" font-size="9" fill="#15803D">Header is suppressed</text>
+
+    {/* Page 2 (Section 1 Portrait) */}
+    <rect x="240" y="20" width="170" height="210" rx="4" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2" />
+    {/* Header Layer */}
+    <rect x="240" y="20" width="170" height="30" fill="#E0F2FE" />
+    <text x="250" y="38" font-size="10" font-weight="700" fill="#0369A1">Header - Section 1</text>
+    <circle cx="390" cy="34" r="6" fill="#0284C7" />
+    {/* Body */}
+    <rect x="255" y="65" width="140" height="6" rx="2" fill="#94A3B8" />
+    <rect x="255" y="77" width="130" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="255" y="89" width="140" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="255" y="101" width="110" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Section Break Divider */}
+    <line x1="250" y1="135" x2="400" y2="135" stroke="#EF4444" stroke-dasharray="4,3" stroke-width="2" />
+    <rect x="260" y="145" width="130" height="18" rx="3" fill="#FEE2E2" />
+    <text x="268" y="158" font-size="9" font-weight="700" fill="#991B1B">Section Break (Next Page)</text>
+
+    {/* Page 3 (Section 2 Landscape) */}
+    <rect x="455" y="45" width="200" height="160" rx="4" fill="#FFFFFF" stroke="#0284C7" stroke-width="2" />
+    <rect x="455" y="45" width="200" height="28" fill="#FEF3C7" stroke="#FDE68A" />
+    <text x="465" y="63" font-size="10" font-weight="700" fill="#92400E">Header - Section 2</text>
+    <text x="575" y="63" font-size="9" font-weight="700" fill="#DC2626">[Unlinked]</text>
+    {/* Landscape content */}
+    <text x="465" y="95" font-size="10" font-weight="600" fill="#1E293B">Landscape Orientation</text>
+    <rect x="465" y="110" width="85" height="40" rx="2" fill="#E2E8F0" />
+    <rect x="560" y="110" width="85" height="40" rx="2" fill="#E2E8F0" />
+    <text x="490" y="135" font-size="9" fill="#475569">Table</text>
+    <text x="585" y="135" font-size="9" fill="#475569">Chart</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    Section Breaks create independent formatting zones. In Section 2, the page switches to landscape orientation and unlinks its header from Section 1.
+  </figcaption>
+</figure>
+
+## Managing Common Publisher Layout Patterns
+
+<StepList
+  steps={[
+    {
+      title: "1. Activate the Header / Footer layer",
+      detail: "Double-click anywhere within the top or bottom 2.5 cm margin of your page. The Header & Footer contextual tab will appear in the ribbon, and document body text will fade slightly.",
+      ribbonBadge: "Double-click top margin",
+    },
+    {
+      title: "2. Suppress headers on the cover page",
+      detail: "On the Header & Footer tab, tick the 'Different First Page' checkbox in the Options group. This creates a distinct, blank header space exclusive to page 1.",
+      ribbonBadge: "Header & Footer tab → Different First Page",
+    },
+    {
+      title: "3. Insert a Section Break for layout changes",
+      detail: "When you need a page in landscape (e.g. for a wide budget table) or want different headers, go to Layout → Breaks → Section Breaks → Next Page.",
+      ribbonBadge: "Layout tab → Breaks → Next Page",
+    },
+    {
+      title: "4. Break the 'Link to Previous' connection",
+      detail: "Click into the header of your new section. On the Header & Footer ribbon tab, click 'Link to Previous' to turn it OFF. You can now edit this header without modifying earlier pages.",
+      ribbonBadge: "Header & Footer tab → Link to Previous",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Section Breaks and Headers"
+  ribbonPath={["Layout tab", "Page Setup group", "Breaks dropdown", "Section Breaks: Next Page"]}
+  altRibbonPath={["Insert tab", "Header & Footer group", "Header dropdown", "Edit Header"]}
+  contextualTab="Header & Footer"
+/>
+
+<GotchaBox title="Common Snag — 'Editing one header changes every page!'" collapsible={false}>
+  <p>
+    By default, every new section maintains <strong>Link to Previous</strong> enabled, mirroring content from the previous section. If you type a new title in Section 2, Section 1 changes too. To sever this link, click in Section 2&apos;s header and toggle <strong>Link to Previous</strong> OFF on the ribbon before making edits.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Section breaks and unlinking">
+  <p>
+    On Word for Mac, section breaks are found under <strong>Layout</strong> → <strong>Breaks</strong>. When editing a header, look for the <strong>Link to Previous</strong> toggle button on the <strong>Header & Footer</strong> tab of the ribbon.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Create a blank document and type a paragraph on page 1.",
+    "Go to Layout → Breaks → Section Breaks: Next Page to create page 2.",
+    "On page 2, change the orientation to Landscape (Layout → Orientation → Landscape).",
+    "Notice how page 1 stays upright while page 2 expands sideways!",
+  ]}
+/>

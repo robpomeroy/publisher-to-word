@@ -1,0 +1,156 @@
+---
+title: "Text Boxes & Internal Margins"
+module: 2
+moduleTitle: "Placing Pictures & Text Boxes"
+order: 6
+summary: "Draw simple text boxes, adjust internal padding so text doesn't hit borders, and link overflowing boxes."
+wordTabs: ["Insert", "Shape Format"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+import BoxMarginSimulator from '../../components/interactive/BoxMarginSimulator.astro';
+
+## Text Boxes: Publisher's Best Friend in Word
+
+In Microsoft Publisher, every piece of text was inside a box. When former Publisher users come to Word, their natural instinct is to draw text boxes everywhere.
+
+Word allows this, but it adds several annoying defaults:
+1. Every newly drawn text box has a **solid white background** and a **1pt black border outline**.
+2. By default, Word gives text boxes internal margins (padding) that can cause your text to look squished or overflow unexpectedly.
+
+Once you know how to draw a clean text box, adjust its internal margins, and link overflowing boxes together, you can design multi-column newsletters and flyers with complete confidence.
+
+<PublisherCompare
+  title="Default Text Boxes in Publisher vs. Word"
+  publisherWay="Text boxes were borderless and transparent by default. You could link overflowing text from one box to another seamlessly."
+  wordWay="Word defaults to an opaque white fill with a black outline. Setting 'No Fill' and 'No Outline' gives you the familiar Publisher feel."
+/>
+
+---
+
+## Interactive Text Box Margins & Styling Simulator
+
+Practise adjusting internal padding, background fill, and outline borders in real time below:
+
+<BoxMarginSimulator />
+
+---
+
+## Linking Overflowing Text Boxes
+
+Just like in Publisher, you can link two or more text boxes in Word so that when Box 1 fills up with text, the excess story automatically flows into Box 2!
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 200"
+    role="img"
+    aria-labelledby="svg-linking-title svg-linking-desc"
+  >
+    <title id="svg-linking-title">Linking Text Boxes in Microsoft Word</title>
+    <desc id="svg-linking-desc">
+      Diagram showing Text Box 1 on the left linked to Text Box 2 on the right with an arrow and the Create Link watering can pouring text into the second box.
+    </desc>
+
+    {/**/}
+    <rect x="20" y="20" width="280" height="150" rx="6" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2" />
+    <rect x="20" y="20" width="280" height="26" rx="6" fill="#EFF6FF" />
+    <text x="32" y="38" fill="#1D4ED8" font-size="11" font-weight="700" font-family="system-ui">Text Box 1 (Source)</text>
+
+    {/**/}
+    <line x1="35" y1="60" x2="280" y2="60" stroke="#475569" stroke-width="2.5" />
+    <line x1="35" y1="75" x2="275" y2="75" stroke="#475569" stroke-width="2.5" />
+    <line x1="35" y1="90" x2="280" y2="90" stroke="#475569" stroke-width="2.5" />
+    <line x1="35" y1="105" x2="260" y2="105" stroke="#475569" stroke-width="2.5" />
+    <line x1="35" y1="120" x2="270" y2="120" stroke="#475569" stroke-width="2.5" />
+    <text x="35" y="148" fill="#B45309" font-size="9" font-weight="700" font-family="system-ui">⚠️ Box 1 is full → Excess text flows forward</text>
+
+    {/**/}
+    <path d="M 305 95 L 365 95" stroke="#1D4ED8" stroke-width="3" stroke-dasharray="4 2" />
+    <polygon points="370,95 360,90 360,100" fill="#1D4ED8" />
+    <circle cx="335" cy="75" r="16" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="1.5" />
+    <text x="326" y="81" font-size="14">🫗</text>
+    <text x="315" y="118" fill="#1D4ED8" font-size="9" font-weight="700" font-family="system-ui">Create Link</text>
+
+    {/**/}
+    <rect x="380" y="20" width="280" height="150" rx="6" fill="#FFFFFF" stroke="#0F766E" stroke-width="2" />
+    <rect x="380" y="20" width="280" height="26" rx="6" fill="#F0FDFA" />
+    <text x="392" y="38" fill="#0F766E" font-size="11" font-weight="700" font-family="system-ui">Text Box 2 (Target / Continuation)</text>
+
+    {/**/}
+    <line x1="395" y1="60" x2="640" y2="60" stroke="#0F766E" stroke-width="2.5" />
+    <line x1="395" y1="75" x2="630" y2="75" stroke="#0F766E" stroke-width="2.5" />
+    <line x1="395" y1="90" x2="580" y2="90" stroke="#0F766E" stroke-width="2.5" />
+    <text x="395" y="130" fill="#64748B" font-size="9" font-family="system-ui">Story continues automatically in Box 2</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    Using Shape Format → Create Link, your cursor turns into an upright pitcher icon (🫗). Clicking an empty second text box links them together for multi-column stories.
+  </figcaption>
+</figure>
+
+---
+
+## Step-by-Step Setup
+
+<StepList
+  steps={[
+    {
+      title: "1. Draw a Clean Text Box",
+      detail: "Go to Insert → Text Box → Draw Text Box. Avoid the cluttered pre-built templates. Click and drag your crosshair cursor across the page to sketch the box.",
+      ribbonBadge: "Insert → Text Box → Draw Text Box",
+    },
+    {
+      title: "2. Make it Borderless and Transparent",
+      detail: "With the box selected, go to the Shape Format tab. Click Shape Outline → No Outline (removes black line) and Shape Fill → No Fill (removes white block).",
+      ribbonBadge: "Shape Format → No Outline & No Fill",
+    },
+    {
+      title: "3. Adjust Internal Margins",
+      detail: "Right-click the box border → Format Shape. Click Text Options (top of pane) → click the 3rd icon (Text Box). Adjust Left, Right, Top, and Bottom margins down to 0.2 cm or 0 cm.",
+      ribbonBadge: "Format Shape → Text Options → Text Box",
+    },
+    {
+      title: "4. Link to Another Box (Optional)",
+      detail: "Draw a second empty text box. Click Box 1, go to Shape Format → Create Link. Your cursor turns into a pouring pitcher. Click inside Box 2 to link them!",
+      ribbonBadge: "Shape Format → Text group → Create Link",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Text Box Tools in Word"
+  ribbonPath={["Insert tab", "Text group", "Text Box", "Draw Text Box"]}
+  altRibbonPath={["Select Box", "Shape Format tab", "Text group", "Create Link"]}
+  rightClickPath={["Right-Click Border", "Format Shape", "Text Options", "Text Box icon"]}
+/>
+
+<GotchaBox title="Common Snag — 'Create Link is greyed out!'" collapsible={false}>
+  <p>
+    Word will only let you link into a target text box that is <strong>completely empty</strong>. If Box 2 has even a single space or blank paragraph mark (<samp>¶</samp>) inside it, Word will refuse to pour text into it. Click inside Box 2, press <kbd>Backspace</kbd> to delete everything, and try again.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Drawing text boxes and linking">
+  <p>
+    On macOS, draw a text box via <strong>Insert</strong> → <strong>Text Box</strong> → <strong>Draw Text Box</strong>. To link boxes, click the source box, open the <strong>Shape Format</strong> tab, and click <strong>Create Link</strong>. Word for Mac supports full text box chaining across pages.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "In Microsoft Word, go to Insert → Text Box → Draw Text Box and draw a box on your page.",
+    "Type a sentence inside it. Go to Shape Format → Shape Outline → No Outline.",
+    "Notice how cleanly your text now sits on the page, just like a freeform Publisher block!",
+    "Draw a second empty box beside it, select Box 1, click Shape Format → Create Link, and click Box 2.",
+  ]}
+/>

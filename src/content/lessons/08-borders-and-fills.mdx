@@ -1,0 +1,138 @@
+---
+title: "Borders (Lines) & Fills"
+module: 3
+moduleTitle: "Styling, Aligning & Organising"
+order: 8
+summary: "Shape Fill (No Fill for transparent boxes), Shape Outline, line thickness, and paragraph borders."
+wordTabs: ["Shape Format", "Home"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Taming Word's Default Black Lines
+
+In Microsoft Publisher, styling lines, borders, and colours was immediate. You selected a box, picked a border style, and gave it an optional background tint.
+
+In Microsoft Word, confusion often arises because Word has **two completely different border tools**:
+1. **Shape Outline & Shape Fill:** Controls the external border and background of text boxes, pictures, and shapes (found on the <span class="badge badge-contextual">Shape Format</span> tab).
+2. **Paragraph Borders & Shading:** Controls borders drawn directly onto sentences and headings inside the running text stream (found on the <span class="badge badge-ribbon">Home</span> tab).
+
+Understanding this difference allows you to turn Word's clumsy default black-box text boxes into clean transparent overlays or stylish callout cards.
+
+<PublisherCompare
+  title="Shape Borders vs. Paragraph Borders"
+  publisherWay="All borders were applied to independent object frames. There was no concept of a border tied to a paragraph mark."
+  wordWay="Word separates Shape Outline (the box itself) from Paragraph Borders (the text inside). Knowing which to click prevents accidental double-borders."
+/>
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 200"
+    role="img"
+    aria-labelledby="svg-borders-title svg-borders-desc"
+  >
+    <title id="svg-borders-title">Three Stages of Text Box Styling in Word</title>
+    <desc id="svg-borders-desc">
+      Three comparison boxes showing Word's default black line and white fill on the left, a completely transparent borderless overlay in the middle, and a stylish modern callout card on the right.
+    </desc>
+
+    {/**/}
+    <rect x="20" y="20" width="195" height="150" rx="4" fill="#FFFFFF" stroke="#000000" stroke-width="1.5" />
+    <rect x="20" y="20" width="195" height="24" rx="4" fill="#F1F5F9" />
+    <text x="30" y="36" fill="#1E293B" font-size="10" font-weight="700" font-family="system-ui">1. Word Clumsy Default</text>
+    <text x="32" y="65" fill="#1E293B" font-size="11" font-weight="700" font-family="system-ui">Default Notice</text>
+    <text x="32" y="85" fill="#64748B" font-size="9" font-family="system-ui">Solid white background</text>
+    <text x="32" y="100" fill="#64748B" font-size="9" font-family="system-ui">Harsh 1pt black outline</text>
+    <text x="32" y="145" fill="#DC2626" font-size="9" font-weight="700" font-family="system-ui">❌ Blocks background</text>
+
+    {/**/}
+    <rect x="242" y="20" width="195" height="150" rx="4" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="3 3" />
+    <rect x="242" y="20" width="195" height="24" rx="4" fill="#F0FDFA" />
+    <text x="252" y="36" fill="#0F766E" font-size="10" font-weight="700" font-family="system-ui">2. Transparent Overlay</text>
+    <text x="254" y="65" fill="#0F766E" font-size="11" font-weight="700" font-family="system-ui">Publisher-Style Text</text>
+    <text x="254" y="85" fill="#475569" font-size="9" font-family="system-ui">Shape Fill: No Fill</text>
+    <text x="254" y="100" fill="#475569" font-size="9" font-family="system-ui">Shape Outline: No Outline</text>
+    <text x="254" y="145" fill="#0F766E" font-size="9" font-weight="700" font-family="system-ui">✅ Seamless text block</text>
+
+    {/**/}
+    <rect x="465" y="20" width="195" height="150" rx="6" fill="#EFF6FF" stroke="#93C5FD" stroke-width="2" />
+    <rect x="465" y="20" width="6" height="150" rx="2" fill="#1D4ED8" />
+    <rect x="475" y="20" width="185" height="24" rx="4" fill="#DBEAFE" />
+    <text x="485" y="36" fill="#1D4ED8" font-size="10" font-weight="700" font-family="system-ui">3. Modern Styled Card</text>
+    <text x="485" y="65" fill="#1E40AF" font-size="11" font-weight="700" font-family="system-ui">Executive Summary</text>
+    <text x="485" y="85" fill="#475569" font-size="9" font-family="system-ui">Soft blue tint fill</text>
+    <text x="485" y="100" fill="#475569" font-size="9" font-family="system-ui">Left accent border (4pt)</text>
+    <text x="485" y="145" fill="#1D4ED8" font-size="9" font-weight="700" font-family="system-ui">⭐ Polished publication</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    By combining Shape Fill and Shape Outline, you can transform Word's default text box into a borderless text layer or an executive callout card.
+  </figcaption>
+</figure>
+
+---
+
+## Styling Tools & Options
+
+<StepList
+  steps={[
+    {
+      title: "1. Making Boxes Transparent (No Fill)",
+      detail: "Click the text box border. On the Shape Format tab, click Shape Fill → No Fill. The opaque white background disappears, allowing graphics or page textures behind it to show through.",
+      ribbonBadge: "Shape Format → Shape Fill → No Fill",
+    },
+    {
+      title: "2. Removing Black Lines (No Outline)",
+      detail: "On the Shape Format tab, click Shape Outline → No Outline. The black border line vanishes completely.",
+      ribbonBadge: "Shape Format → Shape Outline → No Outline",
+    },
+    {
+      title: "3. Line Weight and Dashes",
+      detail: "Need a subtle border? Click Shape Outline → Weight → 0.5 pt, or choose Dashes for a stylish ticket-stub or coupon border.",
+      ribbonBadge: "Shape Outline → Weight / Dashes",
+    },
+    {
+      title: "4. The Eyedropper Colour Matcher",
+      detail: "Want your box border to match an exact colour in your photo? Click Shape Outline (or Shape Fill) → Eyedropper, then click any colour on your image to sample it!",
+      ribbonBadge: "Shape Outline → Eyedropper",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Shape Outline and Shape Fill"
+  ribbonPath={["Select Object", "Shape Format tab", "Shape Styles group", "Shape Fill or Shape Outline"]}
+  altRibbonPath={["Select Text", "Home tab", "Paragraph group", "Borders icon (for text-stream borders)"]}
+  rightClickPath={["Right-Click Border", "Fill or Outline popup menu"]}
+/>
+
+<GotchaBox title="Common Snag — 'I removed the outline, but there's still a grey box around my text!'" collapsible={false}>
+  <p>
+    If you see a faint dotted grey line when your text box is selected, don't worry: that is Word's non-printing selection boundary. Click anywhere else on the page; the grey line will disappear. If it still doesn't disappear, you may have accidentally applied a <strong>Paragraph Border</strong> on the Home tab. Highlight the text and choose <em>Home → Borders icon → No Border</em>.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Eyedropper and Shape Format">
+  <p>
+    On macOS, the Eyedropper tool is available inside Word's native colour palette. Click <strong>Shape Fill</strong> → <strong>More Fill Colours</strong>, and click the magnifying glass icon at the bottom of the Mac colour picker window.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Draw a simple text box and type 'Volunteer Notice'.",
+    "Go to Shape Format → Shape Fill and select a soft pastel colour (like light teal or soft yellow).",
+    "Click Shape Outline → Weight → 2.25 pt to give it a solid boundary.",
+    "Click Shape Outline → Dashes and select Round Dot for a cheerful flyer frame!",
+  ]}
+/>

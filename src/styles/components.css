@@ -214,3 +214,34 @@ details.disclosure:not([open])::details-content {
     transition-behavior: allow-discrete;
   }
 }
+
+/* Lesson Visual Diagrams & Figures */
+.lesson-figure {
+  margin-block: var(--space-6);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-ui);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 5%);
+}
+
+.lesson-figure svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.lesson-figcaption {
+  font-size: var(--font-size-sm);
+  color: var(--ink-secondary);
+  text-align: center;
+  margin-block-start: var(--space-3);
+  line-height: var(--line-height-normal);
+}
+
+@media (forced-colors: active) {
+  .lesson-figure {
+    border: 1px solid ButtonText !important;
+  }
+}
+

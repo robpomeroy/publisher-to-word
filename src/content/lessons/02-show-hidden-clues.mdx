@@ -1,0 +1,140 @@
+---
+title: "Turn On Your X-Ray Vision"
+module: 1
+moduleTitle: "The Big Shift: How Word Thinks"
+order: 2
+summary: "The 3 stress-saving switches: Show/Hide ¶, Rulers, and Alignment Guides."
+wordTabs: ["Home", "View", "Layout"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## The Mystery of the Shifting Page
+
+In Microsoft Publisher, what you saw on the screen was what you got. If there was a blank space, it was simply empty canvas.
+
+In Microsoft Word, blank space is almost never empty. Every gap on the page is caused by an invisible character: a paragraph mark (<samp>¶</samp>), a line break (<samp>↵</samp>), a page break, or space before/after a paragraph style.
+
+Working in Word with formatting marks turned off is like driving in heavy fog without headlights. Turning on Word's three visual clues gives you instant "X-ray vision" so you know exactly why things move.
+
+<PublisherCompare
+  title="Empty Canvas vs. Invisible Formatting Marks"
+  publisherWay="Blank space was just empty pasteboard. You didn't need to know what was in the gap because nothing was there."
+  wordWay="Blank space is filled with invisible formatting codes. Turning on Show/Hide ¶ reveals the exact cause of every gap."
+/>
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 250"
+    role="img"
+    aria-labelledby="svg-clues-title svg-clues-desc"
+  >
+    <title id="svg-clues-title">Show/Hide Formatting Marks: OFF versus ON</title>
+    <desc id="svg-clues-desc">
+      Comparison showing a plain Word document with formatting marks hidden on the left, and formatting marks revealed on the right showing paragraph pilcrows, dots for spaces, and an object anchor.
+    </desc>
+
+    {/**/}
+    <rect x="10" y="10" width="315" height="230" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2" />
+    <rect x="25" y="20" width="285" height="24" rx="4" fill="#F1F5F9" />
+    <text x="35" y="37" fill="#64748B" font-size="11" font-weight="700" font-family="system-ui">Show/Hide ¶ OFF (Blind Editing)</text>
+
+    <text x="35" y="70" fill="#1E293B" font-size="12" font-weight="700" font-family="system-ui">Spring Event Notice</text>
+    <text x="35" y="95" fill="#475569" font-size="10" font-family="system-ui">Join us for our annual community picnic.</text>
+    <text x="35" y="115" fill="#475569" font-size="10" font-family="system-ui">Bring blankets and refreshments.</text>
+
+    {/**/}
+    <rect x="35" y="130" width="265" height="40" rx="4" fill="#FEF2F2" stroke="#FCA5A5" stroke-dasharray="3 3" />
+    <text x="45" y="154" fill="#DC2626" font-size="9" font-family="system-ui">❓ Why is there a huge gap here?</text>
+
+    <text x="35" y="195" fill="#1E293B" font-size="10" font-weight="700" font-family="system-ui">Location: Mill Green</text>
+
+    {/**/}
+    <rect x="355" y="10" width="315" height="230" rx="8" fill="#F8FAFC" stroke="#1D4ED8" stroke-width="2" />
+    <rect x="370" y="20" width="285" height="24" rx="4" fill="#EFF6FF" />
+    <text x="380" y="37" fill="#1D4ED8" font-size="11" font-weight="700" font-family="system-ui">Show/Hide ¶ ON (X-Ray Vision)</text>
+
+    <text x="380" y="70" fill="#1E293B" font-size="12" font-weight="700" font-family="system-ui">Spring·Event·Notice <tspan fill="#1D4ED8">¶</tspan></text>
+    <text x="380" y="95" fill="#475569" font-size="10" font-family="system-ui">Join·us·for·our·annual·community·picnic.<tspan fill="#1D4ED8">¶</tspan></text>
+    <text x="380" y="115" fill="#475569" font-size="10" font-family="system-ui">Bring·blankets·and·refreshments.<tspan fill="#1D4ED8">¶</tspan></text>
+
+    {/**/}
+    <text x="380" y="140" fill="#1D4ED8" font-size="12" font-weight="700" font-family="system-ui">¶</text>
+    <text x="380" y="160" fill="#1D4ED8" font-size="12" font-weight="700" font-family="system-ui">¶ <tspan fill="#64748B" font-size="9" font-weight="400">(2 accidental blank Enters revealed!)</tspan></text>
+
+    <text x="380" y="195" fill="#1E293B" font-size="10" font-weight="700" font-family="system-ui">Location:·Mill·Green <tspan fill="#1D4ED8">¶</tspan></text>
+
+    {/**/}
+    <rect x="580" y="65" width="70" height="45" rx="4" fill="#EFF6FF" stroke="#1D4ED8" />
+    <text x="590" y="85" fill="#1D4ED8" font-size="8" font-weight="700" font-family="system-ui">Photo</text>
+    <circle cx="372" cy="92" r="7" fill="#DBEAFE" stroke="#1D4ED8" stroke-width="1" />
+    <text x="368" y="96" fill="#1D4ED8" font-size="9">⚓</text>
+    <line x1="379" y1="92" x2="580" y2="85" stroke="#1D4ED8" stroke-dasharray="2 2" />
+  </svg>
+  <figcaption class="lesson-figcaption">
+    With Show/Hide ¶ turned on, spaces appear as middle dots, paragraph breaks as pilcrows (¶), and anchored floating photos reveal their blue anchor (⚓).
+  </figcaption>
+</figure>
+
+---
+
+## The Three Switches to Turn On Right Now
+
+<StepList
+  steps={[
+    {
+      title: "Switch 1: Show/Hide Formatting Marks (¶)",
+      detail: "Click the pilcrow icon (¶) on the Home tab. It displays hidden paragraph marks, space dots, and the anchor icon attached to floating pictures.",
+      ribbonBadge: "Home → ¶",
+    },
+    {
+      title: "Switch 2: The Page Ruler",
+      detail: "Go to the View tab and tick Ruler. This displays the horizontal and vertical rulers, showing exact margin boundaries and indent markers.",
+      ribbonBadge: "View → Ruler",
+    },
+    {
+      title: "Switch 3: Alignment Guides",
+      detail: "Go to the Layout tab → Align → tick Use Alignment Guides. When dragging photos or text boxes, Word will display green guidelines that snap into alignment.",
+      ribbonBadge: "Layout → Align → Use Alignment Guides",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Show/Hide ¶ and Rulers"
+  ribbonPath={["Home", "Paragraph", "Show/Hide ¶ (Ctrl + *)"]}
+  altRibbonPath={["View", "Show", "Ruler"]}
+  floatingIconTip="Alignment Guides: Under Layout tab → Align (in Arrange group) → tick 'Use Alignment Guides'."
+/>
+
+<GotchaBox title="Common Snag — 'Will these strange symbols print out?'" collapsible={false}>
+  <p>
+    No! Formatting marks (<samp>¶</samp>, space dots, and anchor icons) are completely invisible to your printer and will never appear on a printed page or in an exported PDF file. They are visual guides solely for your screen.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Shortcuts for formatting marks">
+  <p>
+    On macOS, toggle formatting marks with <kbd>Cmd ⌘</kbd> + <kbd>8</kbd>. You can also go to the <strong>Word</strong> menu → <strong>Preferences</strong> → <strong>View</strong> to customise which non-printing characters are permanently visible.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Open Word and press the Show/Hide ¶ button on the Home tab (or press Ctrl + Shift + 8).",
+    "Type a word, press the spacebar three times, and press Enter. Notice the tidy middle dots and the pilcrow mark.",
+    "Switch to the View tab and tick Ruler. Notice the grey margin indicators on either side of the page.",
+    "Switch to the Layout tab, click Align, and confirm 'Use Alignment Guides' is ticked.",
+  ]}
+/>

@@ -1,0 +1,160 @@
+---
+title: "Grouping, Layering & the Selection Pane"
+module: 3
+moduleTitle: "Styling, Aligning & Organising"
+order: 10
+summary: "Lock objects together, fix the 'Group is greyed out' trap, and find objects hidden behind text."
+wordTabs: ["Shape Format", "Picture Format", "Home"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## When Two Objects Need to Move as One
+
+In Microsoft Publisher, grouping was second nature: you selected a photo and its caption text box, pressed <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>, and they became a single movable unit forever.
+
+In Microsoft Word, grouping works beautifully — but it contains a notorious trap that leaves beginners tearing their hair out: **the Group button is often greyed out!**
+
+Once you know why Word disables the Group button and how to use the lifesaver known as the **Selection Pane**, you will never lose track of a layered element again.
+
+<PublisherCompare
+  title="Grouping Items in Publisher vs. Word"
+  publisherWay="You could group any two items on the canvas instantly with zero restrictions."
+  wordWay="Word refuses to group items if even one object is set to 'In Line with Text'. Once both are set to Square or In Front, grouping works instantly."
+/>
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 230"
+    role="img"
+    aria-labelledby="svg-group-title svg-group-desc"
+  >
+    <title id="svg-group-title">The Selection Pane and Grouping in Microsoft Word</title>
+    <desc id="svg-group-desc">
+      On the left, a photo and caption box grouped together with Bring Forward and Send Backward controls. On the right, the Selection Pane showing the object layer hierarchy and visibility eye icons.
+    </desc>
+
+    {/**/}
+    <rect x="20" y="20" width="360" height="190" rx="6" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5" />
+    <rect x="35" y="32" width="330" height="24" rx="4" fill="#E2E8F0" />
+    <text x="45" y="48" fill="#1E293B" font-size="11" font-weight="700" font-family="system-ui">Grouped Unit: Photo + Caption Text Box</text>
+
+    {/**/}
+    <rect x="40" y="65" width="220" height="130" rx="4" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-dasharray="4 2" />
+
+    {/**/}
+    <rect x="50" y="75" width="200" height="75" rx="3" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5" />
+    <text x="125" y="118" fill="#1D4ED8" font-size="11" font-weight="700" font-family="system-ui">📷 Photo</text>
+
+    {/**/}
+    <rect x="50" y="155" width="200" height="30" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="58" y="174" fill="#475569" font-size="9" font-style="italic" font-family="system-ui">Figure 1. Summer Festival Opening</text>
+
+    {/**/}
+    <circle cx="260" cy="65" r="12" fill="#1D4ED8" />
+    <text x="254" y="70" fill="#FFFFFF" font-size="12">🔗</text>
+
+    {/**/}
+    <rect x="275" y="110" width="95" height="75" rx="4" fill="#FFFFFF" stroke="#CBD5E1" />
+    <text x="282" y="128" fill="#1E293B" font-size="9" font-weight="700" font-family="system-ui">Layer Order:</text>
+    <text x="282" y="146" fill="#1D4ED8" font-size="9" font-family="system-ui">▲ Bring Forward</text>
+    <text x="282" y="166" fill="#64748B" font-size="9" font-family="system-ui">▼ Send Backward</text>
+
+    {/**/}
+    <rect x="400" y="20" width="260" height="190" rx="6" fill="#FFFFFF" stroke="#1D4ED8" stroke-width="2" />
+    <rect x="400" y="20" width="260" height="28" rx="6" fill="#EFF6FF" />
+    <text x="415" y="38" fill="#1D4ED8" font-size="11" font-weight="700" font-family="system-ui">Selection Pane (Home → Select)</text>
+
+    {/**/}
+    <rect x="410" y="58" width="240" height="30" rx="4" fill="#DBEAFE" stroke="#93C5FD" />
+    <text x="420" y="77" fill="#1E40AF" font-size="10" font-weight="700" font-family="system-ui">Group 4 (Selected)</text>
+    <text x="630" y="77" fill="#1E40AF" font-size="11">👁️</text>
+
+    <rect x="410" y="94" width="240" height="28" rx="4" fill="#F8FAFC" stroke="#E2E8F0" />
+    <text x="430" y="112" fill="#475569" font-size="9" font-family="system-ui">└ Photo 1</text>
+    <text x="630" y="112" fill="#64748B" font-size="11">👁️</text>
+
+    <rect x="410" y="126" width="240" height="28" rx="4" fill="#F8FAFC" stroke="#E2E8F0" />
+    <text x="430" y="144" fill="#475569" font-size="9" font-family="system-ui">└ Text Box 2 (Caption)</text>
+    <text x="630" y="144" fill="#64748B" font-size="11">👁️</text>
+
+    <rect x="410" y="158" width="240" height="28" rx="4" fill="#FEF2F2" stroke="#FCA5A5" />
+    <text x="420" y="176" fill="#DC2626" font-size="9" font-weight="700" font-family="system-ui">Watermark (Behind Text)</text>
+    <text x="630" y="176" fill="#DC2626" font-size="11">👁️</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    The Selection Pane lists every object on the page. Clicking an object name in the list selects it immediately on screen — even if it is trapped behind text or hidden underneath other pictures!
+  </figcaption>
+</figure>
+
+---
+
+## Step-by-Step Grouping & Layering
+
+<StepList
+  steps={[
+    {
+      title: "1. Check Text Wrapping First",
+      detail: "Click Item 1 and check its wrap setting. Click Item 2 and check its wrap setting. BOTH must be set to Square, Tight, or In Front of Text (NEVER 'In Line with Text').",
+      ribbonBadge: "Wrap Text → Square or In Front",
+    },
+    {
+      title: "2. Multi-Select Both Items",
+      detail: "Click Item 1, hold Shift or Ctrl, and click Item 2. Both items will now display selection circles simultaneously.",
+      ribbonBadge: "Shift + Click Both Objects",
+    },
+    {
+      title: "3. Group Them",
+      detail: "Go to Shape Format → Group → Group (or Right-click → Group). A single bounding box now surrounds both items, and dragging moves both together.",
+      ribbonBadge: "Shape Format → Group → Group",
+    },
+    {
+      title: "4. Open the Selection Pane for Trapped Objects",
+      detail: "If an object is stuck behind text and impossible to click, go to Home tab → Select (far right) → Selection Pane. Click the object's name in the list to select it instantly!",
+      ribbonBadge: "Home → Select → Selection Pane",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Grouping and Selection Tools"
+  ribbonPath={["Select Multiple Items", "Shape Format or Picture Format tab", "Arrange group", "Group"]}
+  altRibbonPath={["Home tab", "Editing group (far right)", "Select", "Selection Pane"]}
+  rightClickPath={["Select Multiple Items", "Right-Click any selected object", "Group → Group"]}
+/>
+
+<GotchaBox title="Common Snag — 'Why is the Group button greyed out?'" collapsible={false}>
+  <p>
+    In 99% of cases, the Group button is disabled because <strong>one of your objects is set to 'In Line with Text'</strong>.
+  </p>
+  <p>
+    Word considers inline objects to be characters inside the text stream. Word cannot glue a free-floating box to a typed letter! Select each item one by one, click its floating arch icon, and change it to <strong>Square</strong>. Once neither object is inline, select both and Group will become active.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Grouping and the Selection Pane">
+  <p>
+    On macOS, group objects with the keyboard shortcut <kbd>Option ⌥</kbd> + <kbd>Cmd ⌘</kbd> + <kbd>G</kbd>. To open the Selection Pane on Mac, go to the <strong>Shape Format</strong> tab and click <strong>Selection Pane</strong> in the Arrange group.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Insert a photo and change its text wrap to Square.",
+    "Draw a small text box underneath it for a caption and remove its black outline.",
+    "Hold Shift and click both the photo and the caption box.",
+    "Right-click either item and select Group → Group.",
+    "Drag the photo across the page: notice how the caption travels with it automatically as one single element!",
+  ]}
+/>

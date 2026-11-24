@@ -1,0 +1,111 @@
+---
+title: "Text Wrapping Options"
+module: 2
+moduleTitle: "Placing Pictures & Text Boxes"
+order: 4
+summary: "Tour all 7 wrap styles: In Line with Text, Square, Tight, Top & Bottom, and In Front of Text."
+wordTabs: ["Picture Format", "Wrap Text"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+import WrapSimulator from '../../components/interactive/WrapSimulator.astro';
+
+## Why Word's Default Wrapping Breaks Your Heart
+
+When you insert a photo into Microsoft Publisher, it sits freely on the page. You can drag it anywhere, and text boxes politely ignore it until you choose otherwise.
+
+When you insert a photo into Microsoft Word, Word sets its text wrapping to **In Line with Text** by default. Word treats the photo as if it were a single, gigantic typed letter in the middle of a sentence! If you try to drag it, Word refuses to let you drop it anywhere except between existing words.
+
+Changing this single setting to **Square** or **In Front of Text** immediately unlocks the drag-and-drop freedom you enjoyed in Publisher.
+
+<PublisherCompare
+  title="Freely Placed Photos vs. Inline Characters"
+  publisherWay="Photos dropped onto the page floated freely. You could move them anywhere without disturbing paragraph text."
+  wordWay="Word defaults to 'In Line with Text', treating photos like giant letters. Switching to Square or In Front gives you Publisher freedom."
+/>
+
+---
+
+## Interactive Text Wrap Simulator
+
+Experiment with all seven Word wrapping modes below to see how paragraph text and the object anchor (<samp>⚓</samp>) react in real time:
+
+<WrapSimulator />
+
+---
+
+## The 7 Wrapping Modes Explained
+
+<StepList
+  steps={[
+    {
+      title: "1. Square (Recommended for 90% of layouts)",
+      detail: "Text flows in a neat, crisp rectangular box around all four sides of the photo. You can drag the photo anywhere on the page and surrounding text steps aside.",
+      ribbonBadge: "Wrap Text → Square",
+    },
+    {
+      title: "2. In Front of Text (Publisher-Style Absolute Freedom)",
+      detail: "The photo floats completely above the text layer like a badge or sticker. Text will not wrap around it, but you can drag it anywhere with zero resistance.",
+      ribbonBadge: "Wrap Text → In Front of Text",
+    },
+    {
+      title: "3. Tight & Through",
+      detail: "Designed for transparent PNG images or silhouettes. Instead of a rectangular box, text hugs the actual contour edges of the picture.",
+      ribbonBadge: "Wrap Text → Tight",
+    },
+    {
+      title: "4. Top and Bottom",
+      detail: "Text stops above the picture and resumes cleanly below it. No text is permitted at the left or right sides. Ideal for wide banners and full-width figures.",
+      ribbonBadge: "Wrap Text → Top and Bottom",
+    },
+    {
+      title: "5. Behind Text (Caution!)",
+      detail: "The photo sits underneath the text like a watermark. Warning: clicking the photo again to select it can be difficult because Word clicks the text above it instead!",
+      ribbonBadge: "Wrap Text → Behind Text",
+    },
+    {
+      title: "6. In Line with Text (Word's Default)",
+      detail: "The photo stays locked inside a text line. Moving it requires cutting and pasting.",
+      ribbonBadge: "Wrap Text → In Line with Text",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Change Text Wrapping in Word"
+  ribbonPath={["Select Picture", "Picture Format tab", "Wrap Text", "Choose Square or In Front of Text"]}
+  rightClickPath={["Right-Click Picture", "Wrap Text", "Square"]}
+  floatingIconTip="Click the horseshoe arch icon floating at the top-right corner of the picture for instant 1-click access."
+/>
+
+<GotchaBox title="Common Snag — 'Text is touching the edge of my picture!'" collapsible={false}>
+  <p>
+    If text wraps too close to your photo, select the picture, go to <strong>Picture Format → Wrap Text → More Layout Options</strong>, and adjust the <strong>Distance from text</strong> settings (Top, Bottom, Left, Right). Setting Left and Right to <strong>0.3 cm</strong> adds breathing room around your image.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Text wrapping options">
+  <p>
+    On Word for Mac, all seven wrapping options are available under the <strong>Picture Format</strong> tab → <strong>Wrap Text</strong>, or by right-clicking the image and choosing <strong>Wrap Text</strong>. The keyboard shortcut to open Layout Options on Mac is <kbd>Ctrl</kbd> + click the photo → <strong>Format Picture</strong>.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Open a blank Word document and type three paragraphs of text.",
+    "Go to Insert → Pictures → Placeholders (or insert any photo from your computer).",
+    "Notice how clumsy it feels when you try to drag it: Word won't let you place it between lines freely.",
+    "Click the floating arch icon beside the picture and choose Square. Now drag the photo into the middle of your second paragraph and watch the text flow neatly around it!",
+  ]}
+/>

@@ -1,0 +1,148 @@
+---
+title: "Resizing & Cropping Photos Cleanly"
+module: 2
+moduleTitle: "Placing Pictures & Text Boxes"
+order: 7
+summary: "Corner handles, aspect ratios, Crop to Shape, and Crop Fill/Fit."
+wordTabs: ["Picture Format", "Crop"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Avoiding the "Squished Photo" Trap
+
+In Microsoft Publisher, image frames were rigid boxes. You placed a photo inside a frame, and Publisher offered easy zoom and pan controls to position the image inside its boundary without warping its proportions.
+
+In Microsoft Word, beginners frequently make the mistake of dragging the **middle side handles** to make an image fit into a space. This squashes people's faces or distorts logos!
+
+To keep your layout looking professional, you must master two tools: **Corner handle resizing** and Word's powerful **Crop → Fill / Fit** feature.
+
+<PublisherCompare
+  title="Publisher Picture Frames vs. Word Cropping"
+  publisherWay="Publisher let you crop and zoom photos by fitting them inside a container frame."
+  wordWay="Word lets you crop to any ratio, crop to geometric shapes, and use 'Crop → Fill' to fill an area without distorting proportions."
+/>
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 240"
+    role="img"
+    aria-labelledby="svg-crop-title svg-crop-desc"
+  >
+    <title id="svg-crop-title">Resizing Handles: Do versus Don't</title>
+    <desc id="svg-crop-desc">
+      Diagram comparing correct corner handle resizing on the left which preserves aspect ratio, versus incorrect side handle resizing on the right which squashes the image.
+    </desc>
+
+    {/**/}
+    <rect x="20" y="20" width="300" height="200" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="2" />
+    <rect x="35" y="30" width="270" height="24" rx="4" fill="#DCFCE7" />
+    <text x="45" y="47" fill="#15803D" font-size="11" font-weight="700" font-family="system-ui">✅ DO: Drag Corner Handles (Locks Ratio)</text>
+
+    {/**/}
+    <rect x="80" y="70" width="160" height="120" rx="4" fill="#FFFFFF" stroke="#15803D" stroke-width="2" />
+    <circle cx="160" cy="115" r="30" fill="#BBF7D0" stroke="#15803D" stroke-width="1.5" />
+    <text x="135" y="120" fill="#15803D" font-size="10" font-weight="700" font-family="system-ui">Proportions</text>
+    <text x="145" y="135" fill="#15803D" font-size="10" font-weight="700" font-family="system-ui">Intact</text>
+
+    {/**/}
+    <circle cx="80" cy="70" r="5" fill="#15803D" />
+    <circle cx="240" cy="70" r="5" fill="#15803D" />
+    <circle cx="80" cy="190" r="5" fill="#15803D" />
+    <circle cx="240" cy="190" r="7" fill="#15803D" stroke="#FFFFFF" stroke-width="2" />
+    {/**/}
+    <line x1="240" y1="190" x2="265" y2="210" stroke="#15803D" stroke-width="2.5" />
+    <polygon points="268,212 258,212 265,203" fill="#15803D" />
+
+    {/**/}
+    <rect x="360" y="20" width="300" height="200" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="2" />
+    <rect x="375" y="30" width="270" height="24" rx="4" fill="#FEE2E2" />
+    <text x="385" y="47" fill="#B91C1C" font-size="11" font-weight="700" font-family="system-ui">❌ DON'T: Drag Middle Side Handles</text>
+
+    {/**/}
+    <rect x="440" y="70" width="130" height="120" rx="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2" />
+    {/**/}
+    <ellipse cx="505" cy="115" rx="20" ry="32" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.5" />
+    <text x="480" y="118" fill="#DC2626" font-size="10" font-weight="700" font-family="system-ui">Distorted &</text>
+    <text x="485" y="132" fill="#DC2626" font-size="10" font-weight="700" font-family="system-ui">Squashed!</text>
+
+    {/**/}
+    <circle cx="570" cy="130" r="7" fill="#DC2626" stroke="#FFFFFF" stroke-width="2" />
+    <line x1="570" y1="130" x2="540" y2="130" stroke="#DC2626" stroke-width="2.5" />
+    <polygon points="536,130 544,125 544,135" fill="#DC2626" />
+  </svg>
+  <figcaption class="lesson-figcaption">
+    Always drag the circular corner handles to scale pictures proportionally. Dragging the square middle handles squashes or stretches your image.
+  </figcaption>
+</figure>
+
+---
+
+## The Cropping Toolkit
+
+<StepList
+  steps={[
+    {
+      title: "1. Basic Crop (Black Angle Bars)",
+      detail: "Select the photo and click Picture Format → Crop. Black cropping handles appear on the corners and edges. Drag them inward to trim away unwanted background, then press Enter.",
+      ribbonBadge: "Picture Format → Crop",
+    },
+    {
+      title: "2. Crop to Shape (Circles & Rounded Rectangles)",
+      detail: "Click the little arrow underneath the Crop button → Crop to Shape. Pick an Oval or Rounded Rectangle. Word immediately masks your photo into that geometric shape!",
+      ribbonBadge: "Crop ▾ → Crop to Shape",
+    },
+    {
+      title: "3. Crop to Fill (Publisher Picture Frame Secret)",
+      detail: "After cropping to a shape, click the Crop arrow → Fill. You can now drag the photo around inside the frame or scale it independently, exactly like Publisher's Picture Frame tool.",
+      ribbonBadge: "Crop ▾ → Fill",
+    },
+    {
+      title: "4. Emergency Reset",
+      detail: "If an image ever looks squished, stretched, or accidentally cropped, click Picture Format → Reset Picture (or Reset Picture & Size) to restore the original proportions instantly.",
+      ribbonBadge: "Picture Format → Reset Picture",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Cropping & Aspect Ratio Tools"
+  ribbonPath={["Select Picture", "Picture Format tab", "Size group", "Crop (or dropdown arrow)"]}
+  altRibbonPath={["Select Picture", "Picture Format tab", "Adjust group", "Reset Picture"]}
+  rightClickPath={["Right-Click Picture", "Crop"]}
+/>
+
+<GotchaBox title="Common Snag — 'I cropped too much by accident!'" collapsible={false}>
+  <p>
+    Don't panic! Word's cropping is <strong>non-destructive</strong>. Word never permanently discards the trimmed areas unless you explicitly click <em>Compress Pictures → Delete cropped areas of pictures</em>.
+  </p>
+  <p>
+    To recover trimmed areas, simply click the <strong>Crop</strong> tool again and drag the black handles back outward. Your full original photo is still there!
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Cropping tools">
+  <p>
+    On macOS, click the picture to reveal the <strong>Picture Format</strong> tab. The <strong>Crop</strong> button features the exact same dropdown arrow with <strong>Crop to Shape</strong>, <strong>Aspect Ratio</strong>, <strong>Fill</strong>, and <strong>Fit</strong>. The keyboard shortcut to cancel a crop on Mac is <kbd>Esc</kbd>.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Insert any photo into Word.",
+    "Click the photo, go to Picture Format, click the arrow underneath Crop, and choose Crop to Shape → Oval.",
+    "Click the Crop arrow again and choose Aspect Ratio → 1:1 (Square) to turn it into a perfect circle avatar!",
+    "Click the Crop arrow one more time and select Fill. Notice how you can drag the image around to centre the subject's face inside the circle.",
+  ]}
+/>

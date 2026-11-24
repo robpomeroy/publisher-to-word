@@ -1,0 +1,163 @@
+---
+title: "The Secret Weapon: Invisible Tables"
+module: 4
+moduleTitle: "Publisher-Style Layouts Made Easy"
+order: 12
+summary: "Why borderless tables are often the calmest, most reliable way to arrange text and photos side-by-side in Word."
+wordTabs:
+  - "Insert"
+  - "Table Design"
+  - "Table Layout"
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## The Calm Approach: Tables Over Floating Boxes
+
+When former Publisher users attempt complex multi-column layouts in Word—such as side-by-side callout boxes, photo captions alongside testimonials, or structured price lists—their instinct is often to drop multiple floating text boxes onto the canvas.
+
+In Word, managing three or four floating text boxes on the same horizontal plane can quickly turn frustrating: an extra paragraph typed above can displace one anchor while leaving the other behind, causing overlapping frames.
+
+Word's secret weapon for rock-solid side-by-side layouts is the **borderless table**.
+
+<PublisherCompare
+  title="Floating Boxes vs. Borderless Tables"
+  publisherWay="Placing multiple floating frames side-by-side on the page coordinates."
+  wordWay="Inserting a multi-column table with borders turned off and fixed column widths."
+/>
+
+## Editing View vs Print View
+
+When you remove borders from a table, you might worry that it becomes difficult to edit. Word solves this with **View Gridlines**—subtle, non-printing dashed guidelines that show you cell boundaries on screen without ever appearing on paper or in a PDF.
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 240"
+    role="img"
+    aria-labelledby="svg-tables-title svg-tables-desc"
+    class="lesson-svg"
+  >
+    <title id="svg-tables-title">Invisible Tables: Editing View with Gridlines versus Print View</title>
+    <desc id="svg-tables-desc">
+      A comparison showing a two-column layout. On the left, in editing view, dashed grey gridlines reveal table cells. On the right, in print view, the gridlines vanish leaving perfectly aligned side-by-side text and imagery.
+    </desc>
+
+    {/* Editing View (Left) */}
+    <rect x="20" y="20" width="300" height="200" rx="6" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2" />
+    <rect x="20" y="20" width="300" height="32" rx="6" fill="#F1F5F9" />
+    <text x="35" y="42" font-size="13" font-weight="700" fill="#1E293B">Editing View (Gridlines On)</text>
+    <text x="210" y="42" font-size="11" fill="#64748B">Non-printing</text>
+
+    {/* Dashed Table Gridlines */}
+    <rect x="35" y="65" width="270" height="140" fill="#FFFFFF" stroke="#94A3B8" stroke-dasharray="4,4" stroke-width="1.5" />
+    <line x1="170" y1="65" x2="170" y2="205" stroke="#94A3B8" stroke-dasharray="4,4" stroke-width="1.5" />
+
+    {/* Cell 1 content */}
+    <rect x="45" y="78" width="115" height="55" rx="3" fill="#E2E8F0" stroke="#CBD5E1" />
+    <text x="75" y="110" font-size="11" font-weight="600" fill="#475569">Photo / Image</text>
+    <rect x="45" y="143" width="115" height="6" rx="2" fill="#94A3B8" />
+    <rect x="45" y="155" width="85" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Cell 2 content */}
+    <rect x="180" y="78" width="115" height="8" rx="2" fill="#0284C7" />
+    <rect x="180" y="93" width="115" height="6" rx="2" fill="#94A3B8" />
+    <rect x="180" y="105" width="105" height="6" rx="2" fill="#94A3B8" />
+    <rect x="180" y="117" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="180" y="129" width="90" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="180" y="145" width="65" height="16" rx="3" fill="#0284C7" />
+    <text x="188" y="157" font-size="9" font-weight="700" fill="#FFFFFF">Call to Action</text>
+
+    {/* Print / Output View (Right) */}
+    <rect x="360" y="20" width="300" height="200" rx="6" fill="#FAF9F6" stroke="#0284C7" stroke-width="2" />
+    <rect x="360" y="20" width="300" height="32" rx="6" fill="#E0F2FE" />
+    <text x="375" y="42" font-size="13" font-weight="700" fill="#0369A1">Printed / PDF View</text>
+    <text x="565" y="42" font-size="11" font-weight="600" fill="#0284C7">Clean Layout</text>
+
+    {/* Clean Table (No visible lines) */}
+    <rect x="375" y="65" width="270" height="140" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1" />
+
+    {/* Cell 1 content */}
+    <rect x="385" y="78" width="115" height="55" rx="3" fill="#E2E8F0" stroke="#CBD5E1" />
+    <text x="415" y="110" font-size="11" font-weight="600" fill="#475569">Photo / Image</text>
+    <rect x="385" y="143" width="115" height="6" rx="2" fill="#94A3B8" />
+    <rect x="385" y="155" width="85" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Cell 2 content */}
+    <rect x="520" y="78" width="115" height="8" rx="2" fill="#0284C7" />
+    <rect x="520" y="93" width="115" height="6" rx="2" fill="#94A3B8" />
+    <rect x="520" y="105" width="105" height="6" rx="2" fill="#94A3B8" />
+    <rect x="520" y="117" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="520" y="129" width="90" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="520" y="145" width="65" height="16" rx="3" fill="#0284C7" />
+    <text x="528" y="157" font-size="9" font-weight="700" fill="#FFFFFF">Call to Action</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    With gridlines enabled, Word displays non-printing dashed borders so you can easily type and format content without borders appearing on your final document.
+  </figcaption>
+</figure>
+
+## Building a Borderless Layout in Four Steps
+
+<StepList
+  steps={[
+    {
+      title: "1. Insert a simple grid",
+      detail: "Go to Insert → Table and select the dimensions you need (for example, a 2×1 grid for side-by-side columns, or a 3×2 grid for a product showcase).",
+      ribbonBadge: "Insert tab → Table",
+    },
+    {
+      title: "2. Turn on View Gridlines",
+      detail: "Click inside your table. On the Table Layout tab (or Table tab on Mac), look on the far left and verify that View Gridlines is toggled ON. This keeps the cell walls visible to you while editing.",
+      ribbonBadge: "Table Layout tab → View Gridlines",
+    },
+    {
+      title: "3. Remove table borders",
+      detail: "Select the entire table using the 4-way arrow handle at its top-left corner. On the Table Design tab, open the Borders dropdown and select No Border.",
+      ribbonBadge: "Table Design tab → Borders → No Border",
+    },
+    {
+      title: "4. Lock column widths",
+      detail: "On the Table Layout tab, click AutoFit and select Fixed Column Width. This ensures that typing long sentences does not cause columns to expand or distort unexpectedly.",
+      ribbonBadge: "Table Layout tab → AutoFit → Fixed Column Width",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Table Tools and Gridlines"
+  ribbonPath={["Table Design tab", "Borders group", "Borders dropdown", "No Border"]}
+  altRibbonPath={["Table Layout tab", "Table group", "View Gridlines"]}
+  contextualTab="Table Design & Table Layout"
+/>
+
+<GotchaBox title="Common Snag — 'Why do my column widths keep moving?'" collapsible={false}>
+  <p>
+    By default, Word tables use &apos;AutoFit to Contents&apos;, expanding cells horizontally as you enter text. To prevent this behaviour, highlight your table, go to <strong>Table Layout</strong> → <strong>AutoFit</strong>, and select <strong>Fixed Column Width</strong>. Your columns will remain stable and text will wrap cleanly down the page.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Table ribbon tabs">
+  <p>
+    On Word for Mac, the two contextual tabs are named <strong>Table Design</strong> and <strong>Table</strong>. The <strong>View Gridlines</strong> button is located on the <strong>Table</strong> contextual tab near the left edge.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Insert a 2×1 table on a fresh page (Insert → Table).",
+    "Place a small shape or photo in the left cell, and type three lines of text in the right cell.",
+    "Click the table handle, go to Table Design → Borders, and choose No Border.",
+    "Notice the dashed gridlines remain visible on screen so you can keep working calmly!",
+  ]}
+/>

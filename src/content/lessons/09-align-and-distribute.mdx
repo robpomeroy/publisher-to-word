@@ -1,0 +1,107 @@
+---
+title: "Align, Distribute & Smart Guides"
+module: 3
+moduleTitle: "Styling, Aligning & Organising"
+order: 9
+summary: "Line objects up neatly without eyeballing it: Align to Page vs. Margin vs. Selected Objects."
+wordTabs: ["Layout", "Shape Format"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+import AlignSimulator from '../../components/interactive/AlignSimulator.astro';
+
+## Stop Eyeballing Your Layout
+
+In Microsoft Publisher, snapping to ruler guides was effortless. You pulled a guide down from the top ruler, pushed two cards against it, and they were instantly aligned to the exact pixel.
+
+In Microsoft Word, people often spend 20 minutes nudging boxes with the mouse, trying to make three photos line up horizontally by eye.
+
+You don't need to guess! Word has an automated **Align & Distribute** engine that aligns any number of items with mathematical precision in a single click.
+
+<PublisherCompare
+  title="Manual Dragging vs. Precision Alignment Tools"
+  publisherWay="You relied on ruler guides and visual snapping to position boxes side-by-side."
+  wordWay="Word provides instant 1-click tools: Align Top, Align Centre, and Distribute Horizontally across margins or pages."
+/>
+
+---
+
+## Interactive Precision Alignment Playground
+
+Select targets (Align to Margin vs. Selected Objects) and test automated alignment actions in real time below:
+
+<AlignSimulator />
+
+---
+
+## The Three Alignment Targets
+
+Before you click any Align button in Word, always check which **target** is selected under the Align dropdown:
+
+<StepList
+  steps={[
+    {
+      title: "1. Align to Margin (Most Common)",
+      detail: "Aligns the objects relative to the page's printable text margins (e.g. Align Left pushes the leftmost item flush against the 1-inch left margin).",
+      ribbonBadge: "Align ▾ → Align to Margin",
+    },
+    {
+      title: "2. Align to Page",
+      detail: "Aligns objects relative to the absolute physical edge of the paper (e.g. Align Centre centres the group across the exact physical width of the sheet).",
+      ribbonBadge: "Align ▾ → Align to Page",
+    },
+    {
+      title: "3. Align Selected Objects",
+      detail: "Does not touch the page margins. Aligns the selected shapes to each other based on whichever item is already highest, lowest, or furthest left.",
+      ribbonBadge: "Align ▾ → Align Selected Objects",
+    },
+    {
+      title: "4. Distribute Horizontally / Vertically",
+      detail: "Got three photos or buttons? Select all three and click Distribute Horizontally. Word automatically calculates the space between them and makes all gaps identical!",
+      ribbonBadge: "Align ▾ → Distribute Horizontally",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Alignment and Distribution Tools"
+  ribbonPath={["Select Objects (Shift+Click)", "Shape Format or Layout tab", "Arrange group", "Align dropdown"]}
+  rightClickPath={["Select Multiple Objects", "Right-Click any selected object border", "Align"]}
+  floatingIconTip="Keyboard Nudging: Select any object and use your keyboard Arrow keys. Hold Ctrl while pressing an Arrow key for sub-millimetre micro-nudges!"
+/>
+
+<GotchaBox title="Common Snag — 'The Align buttons are greyed out!'" collapsible={false}>
+  <p>
+    If the Align options are inactive, you have either selected only one object, or one of your selected objects is still set to <strong>In Line with Text</strong>.
+  </p>
+  <p>
+    Word cannot align an inline character against a floating box! Ensure every object you wish to align has its text wrapping set to <strong>Square</strong>, <strong>Tight</strong>, or <strong>In Front of Text</strong>.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Multi-select and Alignment Guides">
+  <p>
+    On macOS, hold <kbd>Shift ⇧</kbd> or <kbd>Cmd ⌘</kbd> while clicking objects to select multiple items. The <strong>Align</strong> dropdown is located on the <strong>Shape Format</strong> tab. Green alignment guides function identically on modern Word for Mac.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Insert three shapes (e.g. three rectangles) at haphazard positions across your page.",
+    "Hold Shift and click each of the three rectangles so all three are selected simultaneously.",
+    "Go to Shape Format → Align → make sure 'Align Selected Objects' is ticked.",
+    "Click Align → Align Top. Notice how all three immediately snap to the exact same top horizontal line!",
+    "Click Align → Distribute Horizontally. Notice how the gaps between them become perfectly equal!",
+  ]}
+/>

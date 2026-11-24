@@ -31,7 +31,7 @@ const {
       <LessonSidebar currentSlug={slug} />
 
       <main id="content" class="lesson-main" tabindex="-1">
-        <article class="prose">
+        <article class="lesson-article">
           <header class="lesson-header">
             <div class="module-badge">
               <span class="badge badge-ribbon">Module {module}</span>
@@ -91,6 +91,10 @@ const {
     min-width: 0;
   }
 
+  .lesson-article {
+    width: 100%;
+  }
+
   .lesson-header {
     margin-block-end: var(--space-6);
     padding-block-end: var(--space-6);
@@ -121,6 +125,7 @@ const {
     color: var(--ink-secondary);
     line-height: var(--line-height-normal);
     margin-block-end: var(--space-4);
+    max-inline-size: var(--max-prose-width);
   }
 
   .ribbon-tabs-used {
@@ -144,5 +149,11 @@ const {
 
   .lesson-body {
     margin-block-start: var(--space-6);
+  }
+
+  .lesson-body :global(p),
+  .lesson-body :global(ul),
+  .lesson-body :global(ol) {
+    max-inline-size: var(--max-prose-width);
   }
 </style>

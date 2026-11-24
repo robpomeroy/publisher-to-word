@@ -1,0 +1,101 @@
+---
+title: "Move with Text vs. Fix Position on Page"
+module: 2
+moduleTitle: "Placing Pictures & Text Boxes"
+order: 5
+summary: "Demystifying the little anchor icon: how to keep an object pinned exactly where you placed it."
+wordTabs: ["Picture Format", "Layout"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+import AnchorSimulator from '../../components/interactive/AnchorSimulator.astro';
+
+## The Mystery of the Blue Anchor (⚓)
+
+Have you ever positioned a photo carefully at the top of page 2 in Word, only to type a few extra sentences on page 1 and find that your photo has suddenly leaped halfway down page 2 or vanished onto page 3?
+
+This happens because of Word's **Object Anchor (<samp>⚓</samp>)**.
+
+In Publisher, objects are anchored to fixed page coordinates. In Word, every floating picture, shape, and text box must be anchored to a specific **host paragraph** in the text stream. When that host paragraph moves, the picture travels with it!
+
+Understanding the difference between **Move with text** and **Fix position on page** gives you complete control over your layout.
+
+<PublisherCompare
+  title="Fixed Page Coordinates vs. Paragraph Anchors"
+  publisherWay="Objects lived at fixed X/Y coordinates on a specific page number. Typing never moved an unrelated picture."
+  wordWay="Floating objects are tethered to an anchor paragraph (⚓). If editing pushes that paragraph onto another page, the picture follows."
+/>
+
+---
+
+## Interactive Object Anchor Simulator
+
+Toggle between **Move with text** and **Fix position on page** below, then press **"Add Paragraph Above"** to see how the photo responds when text shifts:
+
+<AnchorSimulator />
+
+---
+
+## The Two Positioning Modes
+
+<StepList
+  steps={[
+    {
+      title: "Mode 1: Move with Text (Relative to Paragraph)",
+      detail: "The photo maintains a fixed vertical distance from its host paragraph. If you insert new paragraphs or sentences above, the photo shifts downward with the story. Ideal for figures and photos that must accompany specific explanations.",
+      ribbonBadge: "Layout Options → Move with text",
+    },
+    {
+      title: "Mode 2: Fix Position on Page (Publisher-Style)",
+      detail: "The photo stays pinned to its exact physical coordinates on the page (e.g. 3 cm from the top margin). New text flows past the photo smoothly without pushing it downward.",
+      ribbonBadge: "Layout Options → Fix position on page",
+    },
+    {
+      title: "The Golden Catch: When Anchors Cross Page Breaks",
+      detail: "Even with 'Fix position on page' selected, if your editing pushes the photo's anchor paragraph completely across a Page Break onto the next page, the photo will jump to the next page! Turn on Show/Hide ¶ to see the anchor (⚓) in the left margin.",
+      ribbonBadge: "Home → Show/Hide ¶",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Toggle 'Fix Position on Page'"
+  ribbonPath={["Select Picture", "Picture Format tab", "Position", "More Layout Options", "Position tab"]}
+  rightClickPath={["Right-Click Picture", "Wrap Text", "Fix Position on Page"]}
+  floatingIconTip="Click the floating arch icon beside the picture, then select the radio button for 'Fix position on page'."
+/>
+
+<GotchaBox title="Common Snag — 'My picture jumped pages even though it was set to Fix Position!'" collapsible={false}>
+  <p>
+    Turn on <strong>Show/Hide ¶</strong> on the Home tab. Look at the left margin near your picture: you will see a small blue anchor icon (<samp>⚓</samp>). That anchor shows which paragraph the picture belongs to. If you inserted text above and pushed that specific paragraph mark across a page break, the anchor moved to page 2, dragging the picture with it!
+  </p>
+  <p>
+    <strong>The Fix:</strong> Simply click and drag the little blue anchor icon (<samp>⚓</samp>) back up to a paragraph mark on the original page.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Locking anchors and layout options">
+  <p>
+    On Word for Mac, open the Layout dialogue by right-clicking the photo → <strong>Format Picture</strong> → <strong>Layout</strong> tab → <strong>Advanced</strong>. Tick <strong>Lock anchor</strong> to prevent the anchor from inadvertently jumping between paragraphs while you drag other elements around the page.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "In Microsoft Word, insert a photo and change its text wrap to Square.",
+    "Click the floating arch icon beside it and select 'Fix position on page'.",
+    "Click at the very top of your document and press Enter several times.",
+    "Notice how your text pushes downward, but the photo stays firmly pinned in place on the page!",
+  ]}
+/>

@@ -1,0 +1,152 @@
+---
+title: "Printing & Saving Safely as PDF"
+module: 4
+moduleTitle: "Publisher-Style Layouts Made Easy"
+order: 14
+summary: "Freeze your layout so it renders identically on any computer or printer without unwanted font shifts or line wraps."
+wordTabs:
+  - "File"
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Document Distribution and Layout Locking
+
+In Publisher, saving a publication as a `.pub` file felt relatively safe because Publisher embedded its exact layout and geometry onto fixed page coordinates.
+
+In Microsoft Word, a `.docx` file is a fluid, living document. When someone opens your `.docx` file on a different computer, Word recalculates line breaks, pagination, and margins based on that computer's installed fonts and active printer driver. If the recipient doesn't have your exact fonts installed, text can expand, pushing a heading or image onto an unwanted extra page.
+
+The golden rule for sharing finished documents is: **keep your `.docx` file as your editable master, but always share and print a PDF**.
+
+<PublisherCompare
+  title="Sharing Master Files vs. Exporting Locked PDFs"
+  publisherWay="Distributing editable .pub files or commercial print packages directly."
+  wordWay="Saving the working master as .docx, but exporting a locked PDF for distribution."
+/>
+
+## The Two-File Publishing Workflow
+
+Always think of your Word documents in two distinct stages: the editable working copy, and the frozen distribution copy.
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 230"
+    role="img"
+    aria-labelledby="svg-pdf-title svg-pdf-desc"
+    class="lesson-svg"
+  >
+    <title id="svg-pdf-title">The Two-File Publishing Workflow: Word Document to Frozen PDF</title>
+    <desc id="svg-pdf-desc">
+      A flowchart illustrating the document lifecycle: 1. Editable Word document with live text, 2. File Export to PDF with Print Preview check, 3. Locked PDF file ready for distribution and commercial printing.
+    </desc>
+
+    {/* Stage 1: Word Document */}
+    <rect x="25" y="30" width="180" height="170" rx="6" fill="#F8FAFC" stroke="#0284C7" stroke-width="2" />
+    <rect x="25" y="30" width="180" height="32" rx="6" fill="#0284C7" />
+    <text x="40" y="51" font-size="12" font-weight="700" fill="#FFFFFF">1. Working Master (.docx)</text>
+    <rect x="40" y="78" width="100" height="8" rx="2" fill="#0284C7" />
+    <rect x="40" y="94" width="150" height="6" rx="2" fill="#94A3B8" />
+    <rect x="40" y="106" width="140" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="40" y="118" width="150" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="40" y="130" width="90" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="40" y="152" width="150" height="26" rx="3" fill="#E0F2FE" />
+    <text x="50" y="169" font-size="10" font-weight="600" fill="#0369A1">Fully Editable in Word</text>
+
+    {/* Arrow 1 -> 2 */}
+    <line x1="215" y1="115" x2="255" y2="115" stroke="#64748B" stroke-width="2" stroke-dasharray="4,3" />
+    <polygon points="255,111 263,115 255,119" fill="#64748B" />
+
+    {/* Stage 2: Export & Preview */}
+    <rect x="265" y="45" width="150" height="140" rx="6" fill="#FFFFFF" stroke="#94A3B8" stroke-width="2" />
+    <text x="280" y="72" font-size="11" font-weight="700" fill="#1E293B">File &gt; Export</text>
+    <rect x="280" y="85" width="120" height="24" rx="4" fill="#0284C7" />
+    <text x="290" y="101" font-size="10" font-weight="700" fill="#FFFFFF">Create PDF/XPS</text>
+    <rect x="280" y="120" width="120" height="20" rx="3" fill="#F1F5F9" />
+    <text x="288" y="134" font-size="9" fill="#475569">Check Print Preview</text>
+    <text x="280" y="162" font-size="9" fill="#64748B">Standard (publishing)</text>
+
+    {/* Arrow 2 -> 3 */}
+    <line x1="425" y1="115" x2="465" y2="115" stroke="#16A34A" stroke-width="2" stroke-dasharray="4,3" />
+    <polygon points="465,111 473,115 465,119" fill="#16A34A" />
+
+    {/* Stage 3: Frozen PDF */}
+    <rect x="475" y="30" width="180" height="170" rx="6" fill="#F0FDF4" stroke="#16A34A" stroke-width="2" />
+    <rect x="475" y="30" width="180" height="32" rx="6" fill="#16A34A" />
+    <text x="490" y="51" font-size="12" font-weight="700" fill="#FFFFFF">2. Frozen PDF (.pdf)</text>
+    <rect x="490" y="78" width="100" height="8" rx="2" fill="#16A34A" />
+    <rect x="490" y="94" width="150" height="6" rx="2" fill="#86EFAC" />
+    <rect x="490" y="106" width="140" height="6" rx="2" fill="#BBF7D0" />
+    <rect x="490" y="118" width="150" height="6" rx="2" fill="#BBF7D0" />
+    <rect x="490" y="130" width="90" height="6" rx="2" fill="#BBF7D0" />
+    <rect x="490" y="152" width="150" height="26" rx="3" fill="#DCFCE7" />
+    <text x="500" y="169" font-size="10" font-weight="700" fill="#15803D">Immune to Layout Shift</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    Always archive your editable .docx file for future updates, and distribute the exported PDF so nobody experiences unexpected text reflow.
+  </figcaption>
+</figure>
+
+## How to Export a Perfect PDF
+
+<StepList
+  steps={[
+    {
+      title: "1. Inspect Print Preview first",
+      detail: "Press Ctrl+P (or Cmd+P on Mac) to open Print Preview. Check page counts and verify that no stray headings or empty paragraphs have created an accidental blank page at the end of the document.",
+      ribbonBadge: "Ctrl + P",
+    },
+    {
+      title: "2. Export via the backstage menu",
+      detail: "Go to File → Export → Create PDF/XPS Document, then click the 'Create PDF/XPS' button. (Alternatively, use File → Save As and select PDF (*.pdf) from the file type dropdown).",
+      ribbonBadge: "File tab → Export → Create PDF/XPS",
+    },
+    {
+      title: "3. Choose the appropriate quality setting",
+      detail: "Select 'Standard (publishing online and printing)' if you are printing physical flyers or brochures. Choose 'Minimum size' only if you are emailing a quick draft where image sharpness is secondary.",
+      ribbonBadge: "Standard (publishing)",
+    },
+    {
+      title: "4. Verify the exported PDF in a reader",
+      detail: "Open the resulting PDF in a dedicated PDF viewer (such as Adobe Acrobat Reader or your web browser) and perform a final visual check before emailing or printing.",
+      ribbonBadge: "Open in viewer",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Export to PDF and Print Preview"
+  ribbonPath={["File tab (Backstage)", "Export", "Create PDF/XPS Document"]}
+  altRibbonPath={["File tab (Backstage)", "Print (Ctrl+P)", "Print Preview"]}
+/>
+
+<GotchaBox title="Common Snag — 'Can I edit the PDF in Word?'" collapsible={false}>
+  <p>
+    Word features a built-in &apos;PDF Reflow&apos; capability that allows it to convert PDFs back into editable Word documents. However, complex multi-column layouts and custom graphics will often be reconstructed imperfectly. Never treat the exported PDF as your primary file: always keep the original <code>.docx</code> file safe as your master document.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Saving as PDF">
+  <p>
+    On Word for Mac, choose <strong>File</strong> → <strong>Save As...</strong> and select <strong>PDF</strong> from the File Format dropdown. Alternatively, choose <strong>File</strong> → <strong>Print...</strong> and click the <strong>PDF</strong> dropdown button in the bottom-left corner of the macOS print dialogue.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "Take any multi-page document you have created during these lessons.",
+    "Press Ctrl + P to inspect the layout in Print Preview and check that no accidental blank page exists.",
+    "Go to File → Export → Create PDF/XPS Document and save a PDF copy to your Desktop.",
+    "Open the PDF in your web browser: notice how perfectly frozen and crisp every element looks!",
+  ]}
+/>
