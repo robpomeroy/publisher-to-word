@@ -4,14 +4,21 @@ import {
   getAlignStatus,
   MARGIN_BOUNDS,
 } from "../../utils/simulators";
+import { generateDeterministicId } from "../../utils/id";
 
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+const simId = id || generateDeterministicId("align-sim", "simulator");
 const initialStatus = getAlignStatus("reset", "margin");
 ---
 
-<div class="align-simulator card" id="align-simulator" data-align-simulator>
+<div class="align-simulator card" id={id} data-align-simulator>
   <div class="simulator-header">
     <div class="header-text">
-      <h3 id="align-sim-title" class="simulator-title">
+      <h3 class="simulator-title">
         <svg
           class="sim-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -38,8 +45,8 @@ const initialStatus = getAlignStatus("reset", "margin");
 
   <!-- Reference Target Selector -->
   <div class="target-selector-row">
-    <span class="target-label" id="align-target-label">Alignment Reference:</span>
-    <div class="btn-group" role="radiogroup" aria-labelledby="align-target-label">
+    <span class="target-label" id={`${simId}-target-label`}>Alignment Reference:</span>
+    <div class="btn-group" role="radiogroup" aria-labelledby={`${simId}-target-label`}>
       <button
         type="button"
         class="btn-target is-active"
@@ -119,7 +126,7 @@ const initialStatus = getAlignStatus("reset", "margin");
       </span>
     </div>
 
-    <div class="align-canvas" id="align-canvas">
+    <div class="align-canvas">
       <!-- Margin Boundary Guide Box -->
       <div
         class="margin-guide-boundary"
@@ -129,13 +136,13 @@ const initialStatus = getAlignStatus("reset", "margin");
       </div>
 
       <!-- Smart Alignment Guide Line (Lights up on alignment) -->
-      <div class="smart-guide-line" id="smart-guide-line" aria-hidden="true"></div>
+      <div class="smart-guide-line" data-smart-guide aria-hidden="true"></div>
 
       <!-- 3 Distinct Layout Objects -->
       {INITIAL_ALIGN_ITEMS.map((item) => (
         <div
           class="canvas-item"
-          id={`align-item-${item.id}`}
+          data-align-item={item.id}
           style={`left: ${(item.x / 320) * 100}%; top: ${(item.y / 200) * 100}%; width: ${(item.width / 320) * 100}%; height: ${(item.height / 200) * 100}%;`}
         >
           <div class="item-inner">
@@ -147,112 +154,20 @@ const initialStatus = getAlignStatus("reset", "margin");
   </div>
 
   <!-- Active Status Announcement -->
-  <div class="status-callout" id="align-status-callout">
+  <div class="status-callout">
     <strong class="status-prefix">Active Status:</strong>
-    <span id="align-status-text">Objects are in scattered starting positions.</span>
+    <span data-align-status-text>Objects are in scattered starting positions.</span>
   </div>
 
-  <div class="visually-hidden" role="status" aria-live="polite" id="align-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" data-align-live-status>
     {initialStatus}
   </div>
 </div>
 
 <script>
-  import {
-    alignObjects,
-    cloneItems,
-    getAlignStatus,
-    INITIAL_ALIGN_ITEMS,
-    type AlignAction,
-    type AlignItem,
-    type AlignTarget,
-  } from "../../utils/simulators";
+  import { initAlignSimulator } from "../../utils/simulator-controllers";
 
-  const roots = document.querySelectorAll<HTMLElement>("[data-align-simulator]");
-  roots.forEach((root) => {
-    let currentTarget: AlignTarget = "margin";
-    let items: AlignItem[] = cloneItems(INITIAL_ALIGN_ITEMS);
-
-    const targetBtns = root.querySelectorAll<HTMLButtonElement>(".btn-target");
-    const actionBtns = root.querySelectorAll<HTMLButtonElement>(".btn-align-action");
-    const smartGuide = root.querySelector<HTMLDivElement>("#smart-guide-line");
-    const statusText = root.querySelector<HTMLSpanElement>("#align-status-text");
-    const liveStatus = root.querySelector<HTMLDivElement>("#align-live-status");
-
-    function renderObjects(action: AlignAction) {
-      items.forEach((item) => {
-        const el = root?.querySelector<HTMLDivElement>(`#align-item-${item.id}`);
-        if (el) {
-          el.style.left = `${(item.x / 320) * 100}%`;
-          el.style.top = `${(item.y / 200) * 100}%`;
-        }
-      });
-
-      // Smart alignment guide indication
-      if (smartGuide) {
-        if (action === "left") {
-          smartGuide.style.display = "block";
-          smartGuide.style.left = `${(items[0].x / 320) * 100}%`;
-          smartGuide.style.top = "0";
-          smartGuide.style.width = "2px";
-          smartGuide.style.height = "100%";
-        } else if (action === "top") {
-          smartGuide.style.display = "block";
-          smartGuide.style.left = "0";
-          smartGuide.style.top = `${(items[0].y / 200) * 100}%`;
-          smartGuide.style.width = "100%";
-          smartGuide.style.height = "2px";
-        } else {
-          smartGuide.style.display = "none";
-        }
-      }
-
-      // Update readable status
-      const desc = getAlignStatus(action, currentTarget);
-      if (statusText) statusText.textContent = desc;
-      if (liveStatus) liveStatus.textContent = desc;
-    }
-
-    function selectTarget(btn: HTMLButtonElement) {
-      const t = btn.getAttribute("data-target") as AlignTarget;
-      if (!t) return;
-      currentTarget = t;
-      targetBtns.forEach((b) => {
-        const isActive = b === btn;
-        b.classList.toggle("is-active", isActive);
-        b.setAttribute("aria-checked", isActive ? "true" : "false");
-        b.setAttribute("tabindex", isActive ? "0" : "-1");
-      });
-      btn.focus();
-    }
-
-    targetBtns.forEach((btn, idx) => {
-      btn.addEventListener("click", () => selectTarget(btn));
-      btn.addEventListener("keydown", (e) => {
-        let nextIdx = -1;
-        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-          e.preventDefault();
-          nextIdx = (idx + 1) % targetBtns.length;
-        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-          e.preventDefault();
-          nextIdx = (idx - 1 + targetBtns.length) % targetBtns.length;
-        }
-        if (nextIdx >= 0) {
-          selectTarget(targetBtns[nextIdx]);
-        }
-      });
-    });
-
-    actionBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const action = btn.getAttribute("data-action") as AlignAction;
-        if (action) {
-          items = alignObjects(items, action, currentTarget);
-          renderObjects(action);
-        }
-      });
-    });
-  });
+  document.querySelectorAll<HTMLElement>("[data-align-simulator]").forEach(initAlignSimulator);
 </script>
 
 <style>
@@ -490,17 +405,17 @@ const initialStatus = getAlignStatus("reset", "margin");
     line-height: 1.1;
   }
 
-  #align-item-box-1 .item-inner {
+  [data-align-item="box-1"] .item-inner {
     border-color: var(--accent-word);
     background-color: #EFF6FF;
   }
 
-  #align-item-box-2 .item-inner {
+  [data-align-item="box-2"] .item-inner {
     border-color: var(--accent-publisher);
     background-color: #F0FDFA;
   }
 
-  #align-item-box-3 .item-inner {
+  [data-align-item="box-3"] .item-inner {
     border-color: var(--accent-tip);
     background-color: #FFFBEB;
   }

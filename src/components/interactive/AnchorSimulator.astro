@@ -3,14 +3,21 @@ import {
   INITIAL_ANCHOR_STATE,
   getAnchorStatus,
 } from "../../utils/simulators";
+import { generateDeterministicId } from "../../utils/id";
 
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+const simId = id || generateDeterministicId("anchor-sim", "simulator");
 const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
 ---
 
-<div class="anchor-simulator card" id="anchor-simulator" data-anchor-simulator>
+<div class="anchor-simulator card" id={id} data-anchor-simulator>
   <div class="simulator-header">
     <div class="header-text">
-      <h3 id="anchor-sim-title" class="simulator-title">
+      <h3 class="simulator-title">
         <svg
           class="sim-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -37,12 +44,12 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
   <!-- Mode Toggle & Action Controls -->
   <div class="anchor-controls">
     <div class="control-group">
-      <span class="control-label" id="anchor-mode-label">Anchor Behaviour:</span>
-      <div class="btn-group" role="radiogroup" aria-labelledby="anchor-mode-label">
+      <span class="control-label" id={`${simId}-mode-label`}>Anchor Behaviour:</span>
+      <div class="btn-group" role="radiogroup" aria-labelledby={`${simId}-mode-label`}>
         <button
           type="button"
           class="btn-anchor-mode is-active"
-          id="btn-mode-move"
+          data-btn-mode-move
           data-mode="move-with-text"
           role="radio"
           aria-checked="true"
@@ -53,7 +60,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
         <button
           type="button"
           class="btn-anchor-mode"
-          id="btn-mode-fix"
+          data-btn-mode-fix
           data-mode="fix-position"
           role="radio"
           aria-checked="false"
@@ -68,14 +75,14 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
       <button
         type="button"
         class="btn btn-primary btn-action"
-        id="btn-add-paragraph"
+        data-btn-add-paragraph
       >
         + Add Paragraph Above
       </button>
       <button
         type="button"
         class="btn btn-secondary btn-action"
-        id="btn-reset-anchor"
+        data-btn-reset-anchor
       >
         Reset Page
       </button>
@@ -86,30 +93,30 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
   <div class="anchor-status-banner">
     <div class="status-indicator">
       <span class="indicator-icon" aria-hidden="true">⚓</span>
-      <span class="status-summary" id="anchor-summary-text">
+      <span class="status-summary" data-anchor-summary-text>
         Current mode: <strong>Move with text</strong>. Photo is anchored to Paragraph 1.
       </span>
     </div>
-    <span class="badge" id="anchor-para-count">0 paragraphs added</span>
+    <span class="badge" data-anchor-para-count>0 paragraphs added</span>
   </div>
 
   <!-- Mock Word Document Canvas -->
-  <div class="mock-anchor-page" id="mock-anchor-page">
+  <div class="mock-anchor-page">
     <div class="page-top-margin">
       <span class="margin-indicator" aria-hidden="true">Top Margin (2.54 cm)</span>
     </div>
 
-    <div class="page-content-area" id="anchor-content-area">
+    <div class="page-content-area">
       <div class="page-text-column">
         <!-- Dynamic Stream of Paragraphs Inserted Above -->
-        <div class="stream-container" id="stream-container">
+        <div class="stream-container" data-stream-container>
           <!-- New paragraphs injected dynamically -->
         </div>
 
         <!-- The Anchored Host Paragraph -->
-        <div class="host-paragraph-row" id="host-paragraph-row">
+        <div class="host-paragraph-row">
           <!-- Anchor Flag Icon attached to this paragraph -->
-          <div class="anchor-marker" id="anchor-marker" title="Object anchor point">
+          <div class="anchor-marker" title="Object anchor point">
             <span class="anchor-glyph" aria-hidden="true">⚓</span>
             <span class="visually-hidden">Anchor point attached to paragraph 1</span>
           </div>
@@ -125,7 +132,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
 
       <!-- The Floating Photo Column -->
       <div class="page-photo-column">
-        <div class="floating-photo" id="floating-photo">
+        <div class="floating-photo" data-floating-photo>
           <div class="photo-card">
             <div class="photo-graphic" aria-hidden="true">
               <svg viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -136,7 +143,7 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
             </div>
             <div class="photo-info">
               <span class="photo-title">Landscape Photo</span>
-              <span class="photo-mode-tag" id="photo-mode-tag">Moving with text</span>
+              <span class="photo-mode-tag" data-photo-mode-tag>Moving with text</span>
             </div>
           </div>
         </div>
@@ -145,155 +152,15 @@ const initialStatus = getAnchorStatus(INITIAL_ANCHOR_STATE);
   </div>
 
   <!-- Assistive Live Region -->
-  <div class="visually-hidden" role="status" aria-live="polite" id="anchor-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" data-anchor-live-status>
     {initialStatus}
   </div>
 </div>
 
 <script>
-  import {
-    addParagraph,
-    calculatePhotoOffset,
-    getAnchorStatus,
-    resetAnchorState,
-    setAnchorMode,
-    type AnchorState,
-  } from "../../utils/simulators";
+  import { initAnchorSimulator } from "../../utils/simulator-controllers";
 
-  const roots = document.querySelectorAll<HTMLElement>("[data-anchor-simulator]");
-  roots.forEach((root) => {
-    let state: AnchorState = {
-      mode: "move-with-text",
-      addedParagraphs: 0,
-    };
-
-    const btnMove = root.querySelector<HTMLButtonElement>("#btn-mode-move");
-    const btnFix = root.querySelector<HTMLButtonElement>("#btn-mode-fix");
-    const btnAdd = root.querySelector<HTMLButtonElement>("#btn-add-paragraph");
-    const btnReset = root.querySelector<HTMLButtonElement>("#btn-reset-anchor");
-    const streamContainer = root.querySelector<HTMLDivElement>("#stream-container");
-    const floatingPhoto = root.querySelector<HTMLDivElement>("#floating-photo");
-    const photoModeTag = root.querySelector<HTMLSpanElement>("#photo-mode-tag");
-    const summaryText = root.querySelector<HTMLSpanElement>("#anchor-summary-text");
-    const paraCountBadge = root.querySelector<HTMLSpanElement>("#anchor-para-count");
-    const liveStatus = root.querySelector<HTMLDivElement>("#anchor-live-status");
-
-    const modeBtns = [btnMove, btnFix].filter((b): b is HTMLButtonElement => Boolean(b));
-
-    function syncModeButtons(mode: "move-with-text" | "fix-position") {
-      modeBtns.forEach((b) => {
-        const isSelected = b.getAttribute("data-mode") === mode;
-        b.classList.toggle("is-active", isSelected);
-        b.setAttribute("aria-checked", isSelected ? "true" : "false");
-        b.setAttribute("tabindex", isSelected ? "0" : "-1");
-      });
-    }
-
-    function setMode(mode: "move-with-text" | "fix-position", focusBtn?: HTMLButtonElement) {
-      state = setAnchorMode(state, mode);
-      syncModeButtons(mode);
-      if (focusBtn) focusBtn.focus();
-      render();
-    }
-
-    modeBtns.forEach((btn, index) => {
-      btn.addEventListener("click", () => {
-        const m = btn.getAttribute("data-mode") as "move-with-text" | "fix-position";
-        if (m) setMode(m, btn);
-      });
-      btn.addEventListener("keydown", (e) => {
-        let nextIndex = -1;
-        if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-          e.preventDefault();
-          nextIndex = (index + 1) % modeBtns.length;
-        } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-          e.preventDefault();
-          nextIndex = (index - 1 + modeBtns.length) % modeBtns.length;
-        }
-        if (nextIndex >= 0) {
-          const nextBtn = modeBtns[nextIndex];
-          const m = nextBtn.getAttribute("data-mode") as "move-with-text" | "fix-position";
-          if (m) setMode(m, nextBtn);
-        }
-      });
-    });
-
-    function render() {
-      // Render added paragraphs
-      if (streamContainer) {
-        streamContainer.replaceChildren();
-        for (let i = 1; i <= state.addedParagraphs; i++) {
-          const p = document.createElement("p");
-          p.className = "mock-paragraph inserted-p";
-          const pStrong = document.createElement("strong");
-          pStrong.textContent = `[Added Paragraph ${i}]: `;
-          p.replaceChildren(
-            pStrong,
-            document.createTextNode("New content inserted above the host paragraph pushes the stream forward.")
-          );
-          streamContainer.appendChild(p);
-        }
-      }
-
-      // Position floating photo based on actual measured displacement of stream container
-      if (floatingPhoto) {
-        const paraHeight =
-          state.addedParagraphs > 0 && streamContainer
-            ? streamContainer.offsetHeight / state.addedParagraphs
-            : 0;
-        const offsetPx = calculatePhotoOffset(state, paraHeight);
-        floatingPhoto.style.transform = `translateY(${offsetPx}px)`;
-      }
-
-      if (photoModeTag) {
-        photoModeTag.textContent =
-          state.mode === "move-with-text" ? "Moving with text" : "Pinned to page";
-      }
-
-      // Update counters & summaries
-      if (paraCountBadge) {
-        paraCountBadge.textContent = `${state.addedParagraphs} / 3 added`;
-      }
-
-      if (summaryText) {
-        const strong = document.createElement("strong");
-        if (state.mode === "move-with-text") {
-          strong.textContent = "Move with text";
-          summaryText.replaceChildren(
-            document.createTextNode("Current mode: "),
-            strong,
-            document.createTextNode(". Photo shifts down with paragraph stream.")
-          );
-        } else {
-          strong.textContent = "Fix position on page";
-          summaryText.replaceChildren(
-            document.createTextNode("Current mode: "),
-            strong,
-            document.createTextNode(". Text flows past while photo remains pinned.")
-          );
-        }
-      }
-
-      if (btnAdd) {
-        btnAdd.disabled = state.addedParagraphs >= 3;
-      }
-
-      if (liveStatus) {
-        liveStatus.textContent = getAnchorStatus(state);
-      }
-    }
-
-    btnAdd?.addEventListener("click", () => {
-      state = addParagraph(state);
-      render();
-    });
-
-    btnReset?.addEventListener("click", () => {
-      state = resetAnchorState();
-      syncModeButtons(state.mode);
-      render();
-    });
-  });
+  document.querySelectorAll<HTMLElement>("[data-anchor-simulator]").forEach(initAnchorSimulator);
 </script>
 
 <style>

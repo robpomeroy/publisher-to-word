@@ -1,15 +1,20 @@
 ---
 import { getWrapModes, getWrapMode, getWrapStatus } from "../../utils/simulators";
 
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
 const modes = getWrapModes();
 const defaultMode = getWrapMode("square");
 const initialStatus = getWrapStatus("square");
 ---
 
-<div class="wrap-simulator card" id="wrap-simulator" data-wrap-simulator>
+<div class="wrap-simulator card" id={id} data-wrap-simulator>
   <div class="simulator-header">
     <div class="header-text">
-      <h3 id="wrap-sim-title" class="simulator-title">
+      <h3 class="simulator-title">
         <svg
           class="sim-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -50,21 +55,21 @@ const initialStatus = getWrapStatus("square");
   </div>
 
   <!-- Dynamic Feedback Banner -->
-  <div class="mode-feedback" id="wrap-feedback">
+  <div class="mode-feedback">
     <div class="feedback-badge-row">
-      <span class="badge badge-ribbon" id="wrap-badge">{defaultMode.label}</span>
-      <span class="anchor-status-pill" id="wrap-anchor-pill">
+      <span class="badge badge-ribbon" data-wrap-badge>{defaultMode.label}</span>
+      <span class="anchor-status-pill" data-wrap-anchor-pill>
         <span class="anchor-glyph" aria-hidden="true">⚓</span>
-        <span id="wrap-anchor-desc">{defaultMode.anchorLabel}</span>
+        <span data-wrap-anchor-desc>{defaultMode.anchorLabel}</span>
       </span>
     </div>
-    <p class="feedback-recommendation" id="wrap-recommendation">
+    <p class="feedback-recommendation" data-wrap-recommendation>
       <strong>Recommendation:</strong> {defaultMode.recommendation}
     </p>
   </div>
 
   <!-- Mock Word Page Preview -->
-  <div class="mock-word-page wrap-square" id="wrap-preview-page">
+  <div class="mock-word-page wrap-square" data-wrap-preview-page>
     <div class="mock-page-header">
       <span class="mock-ruler-notch" aria-hidden="true"></span>
       <span class="mock-page-tag">Page 1 of 1</span>
@@ -76,8 +81,8 @@ const initialStatus = getWrapStatus("square");
       </p>
 
       <!-- The Wrapped Object (for floating and positioned modes) -->
-      <div class="sim-object" id="sim-object" aria-hidden="true">
-        <div class="sim-object-anchor" id="sim-object-anchor" title="Anchored to this paragraph">
+      <div class="sim-object" aria-hidden="true">
+        <div class="sim-object-anchor" data-sim-object-anchor title="Anchored to this paragraph">
           ⚓
         </div>
         <div class="sim-object-image">
@@ -117,76 +122,21 @@ const initialStatus = getWrapStatus("square");
       </p>
 
       <p class="mock-p p-body-2">
-        Notice how selecting <strong id="wrap-inline-callout">Square</strong> gives you predictable margins on all four sides. For 90% of former Publisher layouts, Square or Top and Bottom provides the reliable structure you need.
+        Notice how selecting <strong data-wrap-inline-callout>Square</strong> gives you predictable margins on all four sides. For 90% of former Publisher layouts, Square or Top and Bottom provides the reliable structure you need.
       </p>
     </div>
   </div>
 
   <!-- Accessible Screen Reader Status Region -->
-  <div class="visually-hidden" role="status" aria-live="polite" id="wrap-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" data-wrap-live-status>
     {initialStatus}
   </div>
 </div>
 
 <script>
-  import { getWrapMode, getWrapStatus } from "../../utils/simulators";
+  import { initWrapSimulator } from "../../utils/simulator-controllers";
 
-  const containers = document.querySelectorAll<HTMLElement>("[data-wrap-simulator]");
-  containers.forEach((container) => {
-    const buttons = container.querySelectorAll<HTMLButtonElement>(".btn-wrap-mode");
-    const previewPage = container.querySelector<HTMLElement>(".mock-word-page");
-    const wrapBadge = container.querySelector<HTMLElement>("#wrap-badge");
-    const anchorDesc = container.querySelector<HTMLElement>("#wrap-anchor-desc");
-    const anchorPill = container.querySelector<HTMLElement>("#wrap-anchor-pill");
-    const recommendation = container.querySelector<HTMLElement>("#wrap-recommendation");
-    const liveStatus = container.querySelector<HTMLElement>("#wrap-live-status");
-    const inlineCallout = container.querySelector<HTMLElement>("#wrap-inline-callout");
-    const simAnchor = container.querySelector<HTMLElement>("#sim-object-anchor");
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const modeId = btn.getAttribute("data-mode");
-        if (!modeId) return;
-
-        const config = getWrapMode(modeId);
-
-        // Update button states
-        buttons.forEach((b) => {
-          const isActive = b === btn;
-          b.classList.toggle("is-active", isActive);
-          b.setAttribute("aria-pressed", isActive ? "true" : "false");
-        });
-
-        // Update preview container class
-        if (previewPage) {
-          previewPage.className = `mock-word-page wrap-${config.id}`;
-        }
-
-        // Update feedback
-        if (wrapBadge) wrapBadge.textContent = config.label;
-        if (anchorDesc) anchorDesc.textContent = config.anchorLabel;
-        if (recommendation) {
-          const recStrong = document.createElement("strong");
-          recStrong.textContent = "Recommendation: ";
-          recommendation.replaceChildren(recStrong, document.createTextNode(config.recommendation));
-        }
-        if (inlineCallout) inlineCallout.textContent = config.label;
-
-        // Toggle anchor visibility
-        if (anchorPill) {
-          anchorPill.style.opacity = config.hasAnchor ? "1" : "0.5";
-        }
-        if (simAnchor) {
-          simAnchor.style.display = config.hasAnchor ? "flex" : "none";
-        }
-
-        // Update live region for assistive tech
-        if (liveStatus) {
-          liveStatus.textContent = getWrapStatus(config.id);
-        }
-      });
-    });
-  });
+  document.querySelectorAll<HTMLElement>("[data-wrap-simulator]").forEach(initWrapSimulator);
 </script>
 
 <style>

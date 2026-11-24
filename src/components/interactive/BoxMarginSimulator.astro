@@ -7,7 +7,14 @@ import {
   getBoxMarginStatus,
   getBoxPreviewStyles,
 } from "../../utils/simulators";
+import { generateDeterministicId } from "../../utils/id";
 
+interface Props {
+  id?: string;
+}
+
+const { id } = Astro.props;
+const simId = id || generateDeterministicId("box-sim", "simulator");
 const marginList = Object.values(MARGIN_PRESETS);
 const fillList = Object.values(FILL_PRESETS);
 const outlineList = Object.values(OUTLINE_PRESETS);
@@ -16,10 +23,10 @@ const initialStatus = getBoxMarginStatus(INITIAL_BOX_STATE);
 const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
 ---
 
-<div class="box-margin-simulator card" id="box-margin-simulator" data-box-margin-simulator>
+<div class="box-margin-simulator card" id={id} data-box-margin-simulator>
   <div class="simulator-header">
     <div class="header-text">
-      <h3 id="box-sim-title" class="simulator-title">
+      <h3 class="simulator-title">
         <svg
           class="sim-icon"
           xmlns="http://www.w3.org/2000/svg"
@@ -47,8 +54,8 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
   <div class="simulator-controls-grid">
     <!-- 1. Internal Margins (Padding) -->
     <div class="control-section">
-      <span class="section-label" id="label-internal-margin">1. Internal Margins (Padding)</span>
-      <div class="button-strip" role="group" aria-labelledby="label-internal-margin">
+      <span class="section-label" id={`${simId}-label-margin`}>1. Internal Margins (Padding)</span>
+      <div class="button-strip" role="group" aria-labelledby={`${simId}-label-margin`}>
         {marginList.map((m) => (
           <button
             type="button"
@@ -64,8 +71,8 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
 
     <!-- 2. Shape Fill -->
     <div class="control-section">
-      <span class="section-label" id="label-shape-fill">2. Shape Fill</span>
-      <div class="button-strip" role="group" aria-labelledby="label-shape-fill">
+      <span class="section-label" id={`${simId}-label-fill`}>2. Shape Fill</span>
+      <div class="button-strip" role="group" aria-labelledby={`${simId}-label-fill`}>
         {fillList.map((f) => (
           <button
             type="button"
@@ -81,8 +88,8 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
 
     <!-- 3. Shape Outline -->
     <div class="control-section">
-      <span class="section-label" id="label-shape-outline">3. Shape Outline</span>
-      <div class="button-strip" role="group" aria-labelledby="label-shape-outline">
+      <span class="section-label" id={`${simId}-label-outline`}>3. Shape Outline</span>
+      <div class="button-strip" role="group" aria-labelledby={`${simId}-label-outline`}>
         {outlineList.map((o) => (
           <button
             type="button"
@@ -113,7 +120,7 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
 
     <div
       class="preview-text-box"
-      id="preview-text-box"
+      data-preview-text-box
       style={`padding: ${initialStyles.padding}; background-color: ${initialStyles.backgroundColor}; border: ${initialStyles.border};`}
     >
       <div class="preview-box-header">
@@ -130,96 +137,15 @@ const initialStyles = getBoxPreviewStyles(INITIAL_BOX_STATE);
   </div>
 
   <!-- Status Notification for Assistive Technology -->
-  <div class="visually-hidden" role="status" aria-live="polite" id="box-live-status">
+  <div class="visually-hidden" role="status" aria-live="polite" data-box-live-status>
     {initialStatus}
   </div>
 </div>
 
 <script>
-  import {
-    getBoxMarginStatus,
-    getBoxPreviewStyles,
-    INITIAL_BOX_STATE,
-    type BoxMarginState,
-    type FillPresetId,
-    type MarginPresetId,
-    type OutlinePresetId,
-  } from "../../utils/simulators";
+  import { initBoxMarginSimulator } from "../../utils/simulator-controllers";
 
-  const roots = document.querySelectorAll<HTMLElement>("[data-box-margin-simulator]");
-  roots.forEach((root) => {
-    let state: BoxMarginState = { ...INITIAL_BOX_STATE };
-
-    const marginBtns = root.querySelectorAll<HTMLButtonElement>(".btn-margin");
-    const fillBtns = root.querySelectorAll<HTMLButtonElement>(".btn-fill");
-    const outlineBtns = root.querySelectorAll<HTMLButtonElement>(".btn-outline");
-    const textBox = root.querySelector<HTMLDivElement>("#preview-text-box");
-    const liveStatus = root.querySelector<HTMLDivElement>("#box-live-status");
-
-    function update() {
-      // Apply styles to preview
-      if (textBox) {
-        const styles = getBoxPreviewStyles(state);
-        textBox.style.padding = styles.padding;
-        textBox.style.backgroundColor = styles.backgroundColor;
-        textBox.style.border = styles.border;
-      }
-
-      // Update button pressed states
-      marginBtns.forEach((btn) => {
-        const active = btn.getAttribute("data-margin") === state.margin;
-        btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-
-      fillBtns.forEach((btn) => {
-        const active = btn.getAttribute("data-fill") === state.fill;
-        btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-
-      outlineBtns.forEach((btn) => {
-        const active = btn.getAttribute("data-outline") === state.outline;
-        btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-
-      // Announce
-      if (liveStatus) {
-        liveStatus.textContent = getBoxMarginStatus(state);
-      }
-    }
-
-    marginBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const m = btn.getAttribute("data-margin") as MarginPresetId;
-        if (m) {
-          state.margin = m;
-          update();
-        }
-      });
-    });
-
-    fillBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const f = btn.getAttribute("data-fill") as FillPresetId;
-        if (f) {
-          state.fill = f;
-          update();
-        }
-      });
-    });
-
-    outlineBtns.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const o = btn.getAttribute("data-outline") as OutlinePresetId;
-        if (o) {
-          state.outline = o;
-          update();
-        }
-      });
-    });
-  });
+  document.querySelectorAll<HTMLElement>("[data-box-margin-simulator]").forEach(initBoxMarginSimulator);
 </script>
 
 <style>

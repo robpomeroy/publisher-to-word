@@ -1,95 +1,90 @@
 import { describe, expect, it } from 'vitest';
-import { parseHTML } from 'linkedom';
+import { parseHTML, Event as LinkeDOMEvent } from 'linkedom';
 import {
-  alignObjects,
-  calculatePhotoOffset,
-  cloneItems,
+  getNextRadioIndex,
+  initWrapSimulator,
+  initAnchorSimulator,
+  initAlignSimulator,
+  initBoxMarginSimulator,
+} from '../src/utils/simulator-controllers';
+import {
   getAlignStatus,
-  getAnchorStatus,
-  getBoxMarginStatus,
-  getBoxPreviewStyles,
-  getWrapMode,
   getWrapStatus,
-  INITIAL_ALIGN_ITEMS,
-  INITIAL_ANCHOR_STATE,
-  INITIAL_BOX_STATE,
-  type AlignAction,
-  type AlignItem,
-  type AlignTarget,
-  type AnchorState,
-  type BoxMarginState,
-  type FillPresetId,
-  type MarginPresetId,
-  type OutlinePresetId,
 } from '../src/utils/simulators';
 
-describe('Simulator DOM Interactions & State Wiring', () => {
-  describe('WrapSimulator DOM interactions', () => {
-    function setupWrapSimulator() {
+function sendKey(el: HTMLElement, key: string) {
+  const event = new LinkeDOMEvent('keydown', { bubbles: true, cancelable: true });
+  (event as any).key = key;
+  el.dispatchEvent(event as unknown as Event);
+}
+
+describe('Simulator Production Controllers DOM Tests', () => {
+  describe('getNextRadioIndex', () => {
+    it('handles forward arrow keys with cyclic wrapping', () => {
+      expect(getNextRadioIndex('ArrowRight', 0, 3)).toBe(1);
+      expect(getNextRadioIndex('ArrowRight', 2, 3)).toBe(0);
+      expect(getNextRadioIndex('ArrowDown', 1, 3)).toBe(2);
+    });
+
+    it('handles backward arrow keys with cyclic wrapping', () => {
+      expect(getNextRadioIndex('ArrowLeft', 0, 3)).toBe(2);
+      expect(getNextRadioIndex('ArrowLeft', 2, 3)).toBe(1);
+      expect(getNextRadioIndex('ArrowUp', 0, 3)).toBe(2);
+    });
+
+    it('returns -1 for non-arrow keys', () => {
+      expect(getNextRadioIndex('Enter', 0, 3)).toBe(-1);
+      expect(getNextRadioIndex('Tab', 0, 3)).toBe(-1);
+    });
+  });
+  describe('initWrapSimulator', () => {
+    function setupWrapDOM() {
       const html = `
-        <div class="wrap-simulator card" id="wrap-simulator" data-wrap-simulator>
+        <div class="wrap-simulator card" data-wrap-simulator>
           <div class="wrap-toolbar">
             <button class="btn-wrap-mode is-active" data-mode="square" aria-pressed="true">Square</button>
             <button class="btn-wrap-mode" data-mode="tight" aria-pressed="false">Tight</button>
             <button class="btn-wrap-mode" data-mode="top-bottom" aria-pressed="false">Top and Bottom</button>
+            <button class="btn-wrap-mode" data-mode="inline" aria-pressed="false">In Line</button>
           </div>
-          <div class="mock-word-page wrap-square" id="wrap-preview-page">
-            <span id="wrap-badge">Square</span>
-            <span id="wrap-anchor-desc">Anchored to paragraph</span>
-            <span id="wrap-anchor-pill" class="anchor-status-pill"></span>
-            <div id="sim-object-anchor" class="sim-object-anchor"></div>
-            <p id="wrap-recommendation"><strong>Recommendation: </strong>Default recommendation</p>
-            <strong id="wrap-inline-callout">Square</strong>
+          <div class="mode-feedback">
+            <span class="badge" data-wrap-badge>Square</span>
+            <span class="anchor-status-pill" data-wrap-anchor-pill>
+              <span data-wrap-anchor-desc>Anchor icon next to paragraph</span>
+            </span>
+            <p data-wrap-recommendation><strong>Recommendation: </strong>Default recommendation</p>
           </div>
-          <div class="visually-hidden" role="status" aria-live="polite" id="wrap-live-status">
+          <div class="mock-word-page wrap-square" data-wrap-preview-page>
+            <div class="sim-object-anchor" data-sim-object-anchor></div>
+            <strong data-wrap-inline-callout>Square</strong>
+          </div>
+          <div class="visually-hidden" role="status" aria-live="polite" data-wrap-live-status>
             Square wrap selected.
           </div>
         </div>
       `;
       const { document } = parseHTML(html);
-      const root = document.querySelector<HTMLElement>('[data-wrap-simulator]')!;
-      const buttons = root.querySelectorAll<HTMLButtonElement>('.btn-wrap-mode');
-      const previewPage = root.querySelector<HTMLElement>('#wrap-preview-page')!;
-      const wrapBadge = root.querySelector<HTMLElement>('#wrap-badge')!;
-      const anchorDesc = root.querySelector<HTMLElement>('#wrap-anchor-desc')!;
-      const anchorPill = root.querySelector<HTMLElement>('#wrap-anchor-pill')!;
-      const recommendation = root.querySelector<HTMLElement>('#wrap-recommendation')!;
-      const liveStatus = root.querySelector<HTMLElement>('#wrap-live-status')!;
-      const inlineCallout = root.querySelector<HTMLElement>('#wrap-inline-callout')!;
-      const simAnchor = root.querySelector<HTMLElement>('#sim-object-anchor')!;
+      const container = document.querySelector<HTMLElement>('[data-wrap-simulator]')!;
+      initWrapSimulator(container);
 
-      function selectMode(btn: HTMLButtonElement) {
-        const modeId = btn.getAttribute('data-mode')!;
-        const config = getWrapMode(modeId);
+      const buttons = container.querySelectorAll<HTMLButtonElement>('.btn-wrap-mode');
+      const previewPage = container.querySelector<HTMLElement>('[data-wrap-preview-page]')!;
+      const wrapBadge = container.querySelector<HTMLElement>('[data-wrap-badge]')!;
+      const anchorDesc = container.querySelector<HTMLElement>('[data-wrap-anchor-desc]')!;
+      const anchorPill = container.querySelector<HTMLElement>('[data-wrap-anchor-pill]')!;
+      const recommendation = container.querySelector<HTMLElement>('[data-wrap-recommendation]')!;
+      const liveStatus = container.querySelector<HTMLElement>('[data-wrap-live-status]')!;
+      const inlineCallout = container.querySelector<HTMLElement>('[data-wrap-inline-callout]')!;
+      const simAnchor = container.querySelector<HTMLElement>('[data-sim-object-anchor]')!;
 
-        buttons.forEach((b) => {
-          const isActive = b === btn;
-          b.classList.toggle('is-active', isActive);
-          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-        });
-
-        previewPage.className = `mock-word-page wrap-${config.id}`;
-        wrapBadge.textContent = config.label;
-        anchorDesc.textContent = config.anchorLabel;
-
-        const recStrong = document.createElement('strong');
-        recStrong.textContent = 'Recommendation: ';
-        recommendation.replaceChildren(recStrong, document.createTextNode(config.recommendation));
-
-        inlineCallout.textContent = config.label;
-        anchorPill.style.opacity = config.hasAnchor ? '1' : '0.5';
-        simAnchor.style.display = config.hasAnchor ? 'flex' : 'none';
-        liveStatus.textContent = getWrapStatus(config.id);
-      }
-
-      return { root, buttons, previewPage, wrapBadge, anchorDesc, anchorPill, recommendation, liveStatus, inlineCallout, simAnchor, selectMode };
+      return { container, buttons, previewPage, wrapBadge, anchorDesc, anchorPill, recommendation, liveStatus, inlineCallout, simAnchor };
     }
 
-    it('updates active state, preview classes, badge, and live region on mode change', () => {
-      const { buttons, previewPage, wrapBadge, recommendation, liveStatus, selectMode } = setupWrapSimulator();
+    it('updates active state, classes, badge, recommendations, and live status on click', () => {
+      const { buttons, previewPage, wrapBadge, recommendation, liveStatus, inlineCallout, anchorPill, simAnchor } = setupWrapDOM();
       const tightBtn = buttons[1];
 
-      selectMode(tightBtn);
+      tightBtn.click();
 
       expect(tightBtn.classList.contains('is-active')).toBe(true);
       expect(tightBtn.getAttribute('aria-pressed')).toBe('true');
@@ -98,161 +93,126 @@ describe('Simulator DOM Interactions & State Wiring', () => {
 
       expect(previewPage.className).toBe('mock-word-page wrap-tight');
       expect(wrapBadge.textContent).toBe('Tight');
+      expect(inlineCallout.textContent).toBe('Tight');
       expect(recommendation.textContent).toContain('Ideal for transparent PNGs');
+      expect(anchorPill.style.opacity).toBe('1');
+      expect(simAnchor.style.display).toBe('flex');
       expect(liveStatus.textContent).toBe(getWrapStatus('tight'));
-      expect(liveStatus.classList.contains('visually-hidden')).toBe(true);
+
+      // Also click In Line (has no floating anchor)
+      const inlineBtn = buttons[3];
+      inlineBtn.click();
+      expect(inlineBtn.classList.contains('is-active')).toBe(true);
+      expect(previewPage.className).toBe('mock-word-page wrap-inline');
+      expect(anchorPill.style.opacity).toBe('0.5');
+      expect(simAnchor.style.display).toBe('none');
     });
   });
 
-  describe('AnchorSimulator DOM interactions', () => {
-    function setupAnchorSimulator() {
+  describe('initAnchorSimulator', () => {
+    function setupAnchorDOM() {
       const html = `
-        <div class="anchor-simulator card" id="anchor-simulator" data-anchor-simulator>
+        <div class="anchor-simulator card" data-anchor-simulator>
           <div role="radiogroup" aria-label="Anchor Mode">
-            <button id="btn-mode-move" data-mode="move-with-text" class="btn-mode is-active" aria-checked="true" tabindex="0">Move with text</button>
-            <button id="btn-mode-fix" data-mode="fix-position" class="btn-mode" aria-checked="false" tabindex="-1">Fix position</button>
+            <button class="btn-anchor-mode is-active" data-btn-mode-move data-mode="move-with-text" aria-checked="true" tabindex="0">Move with text</button>
+            <button class="btn-anchor-mode" data-btn-mode-fix data-mode="fix-position" aria-checked="false" tabindex="-1">Fix position</button>
           </div>
-          <button id="btn-add-paragraph">Add Paragraph</button>
-          <button id="btn-reset-anchor">Reset</button>
-          <span id="anchor-summary-text"></span>
-          <span id="anchor-para-count">0 / 3 added</span>
-          <div class="stream-container" id="stream-container"></div>
-          <div class="floating-photo" id="floating-photo">
-            <span id="photo-mode-tag">Moving with text</span>
+          <button data-btn-add-paragraph>Add Paragraph</button>
+          <button data-btn-reset-anchor>Reset</button>
+          <span data-anchor-summary-text>Initial</span>
+          <span data-anchor-para-count>0 / 3 added</span>
+          <div class="stream-container" data-stream-container></div>
+          <div class="floating-photo" data-floating-photo>
+            <span data-photo-mode-tag>Moving with text</span>
           </div>
-          <div class="visually-hidden" role="status" aria-live="polite" id="anchor-live-status"></div>
+          <div class="visually-hidden" role="status" aria-live="polite" data-anchor-live-status></div>
         </div>
       `;
       const { document } = parseHTML(html);
       const root = document.querySelector<HTMLElement>('[data-anchor-simulator]')!;
-      let state: AnchorState = { ...INITIAL_ANCHOR_STATE };
+      initAnchorSimulator(root);
 
-      const btnMove = root.querySelector<HTMLButtonElement>('#btn-mode-move')!;
-      const btnFix = root.querySelector<HTMLButtonElement>('#btn-mode-fix')!;
-      const btnAdd = root.querySelector<HTMLButtonElement>('#btn-add-paragraph')!;
-      const btnReset = root.querySelector<HTMLButtonElement>('#btn-reset-anchor')!;
-      const streamContainer = root.querySelector<HTMLDivElement>('#stream-container')!;
-      const floatingPhoto = root.querySelector<HTMLDivElement>('#floating-photo')!;
-      const photoModeTag = root.querySelector<HTMLSpanElement>('#photo-mode-tag')!;
-      const summaryText = root.querySelector<HTMLSpanElement>('#anchor-summary-text')!;
-      const paraCountBadge = root.querySelector<HTMLSpanElement>('#anchor-para-count')!;
-      const liveStatus = root.querySelector<HTMLDivElement>('#anchor-live-status')!;
-      const modeBtns = [btnMove, btnFix];
+      const btnMove = root.querySelector<HTMLButtonElement>('[data-btn-mode-move]')!;
+      const btnFix = root.querySelector<HTMLButtonElement>('[data-btn-mode-fix]')!;
+      const btnAdd = root.querySelector<HTMLButtonElement>('[data-btn-add-paragraph]')!;
+      const btnReset = root.querySelector<HTMLButtonElement>('[data-btn-reset-anchor]')!;
+      const streamContainer = root.querySelector<HTMLDivElement>('[data-stream-container]')!;
+      const floatingPhoto = root.querySelector<HTMLDivElement>('[data-floating-photo]')!;
+      const photoModeTag = root.querySelector<HTMLSpanElement>('[data-photo-mode-tag]')!;
+      const summaryText = root.querySelector<HTMLSpanElement>('[data-anchor-summary-text]')!;
+      const paraCountBadge = root.querySelector<HTMLSpanElement>('[data-anchor-para-count]')!;
+      const liveStatus = root.querySelector<HTMLDivElement>('[data-anchor-live-status]')!;
 
-      function syncModeButtons(mode: 'move-with-text' | 'fix-position') {
-        modeBtns.forEach((b) => {
-          const isSelected = b.getAttribute('data-mode') === mode;
-          b.classList.toggle('is-active', isSelected);
-          b.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-          b.setAttribute('tabindex', isSelected ? '0' : '-1');
-        });
-      }
-
-      function render() {
-        streamContainer.replaceChildren();
-        for (let i = 1; i <= state.addedParagraphs; i++) {
-          const p = document.createElement('p');
-          p.className = 'mock-paragraph inserted-p';
-          const pStrong = document.createElement('strong');
-          pStrong.textContent = `[Added Paragraph ${i}]: `;
-          p.replaceChildren(pStrong, document.createTextNode('New content inserted.'));
-          streamContainer.appendChild(p);
-        }
-
-        const paraHeight = 40;
-        const offsetPx = calculatePhotoOffset(state, paraHeight);
-        floatingPhoto.style.transform = `translateY(${offsetPx}px)`;
-
-        photoModeTag.textContent = state.mode === 'move-with-text' ? 'Moving with text' : 'Pinned to page';
-        paraCountBadge.textContent = `${state.addedParagraphs} / 3 added`;
-
-        const strong = document.createElement('strong');
-        strong.textContent = state.mode === 'move-with-text' ? 'Move with text' : 'Fix position on page';
-        summaryText.replaceChildren(document.createTextNode('Current mode: '), strong);
-
-        btnAdd.disabled = state.addedParagraphs >= 3;
-        liveStatus.textContent = getAnchorStatus(state);
-      }
-
-      return {
-        root,
-        btnMove,
-        btnFix,
-        btnAdd,
-        btnReset,
-        streamContainer,
-        floatingPhoto,
-        photoModeTag,
-        summaryText,
-        paraCountBadge,
-        liveStatus,
-        getState: () => state,
-        setState: (s: AnchorState) => {
-          state = s;
-          syncModeButtons(state.mode);
-          render();
-        },
-        addPara: () => {
-          if (state.addedParagraphs < 3) {
-            state = { ...state, addedParagraphs: state.addedParagraphs + 1 };
-            render();
-          }
-        },
-        reset: () => {
-          state = { mode: 'move-with-text', addedParagraphs: 0 };
-          syncModeButtons(state.mode);
-          render();
-        },
-      };
+      return { root, btnMove, btnFix, btnAdd, btnReset, streamContainer, floatingPhoto, photoModeTag, summaryText, paraCountBadge, liveStatus };
     }
 
-    it('adds paragraphs up to maximum of 3 and disables add button safely', () => {
-      const sim = setupAnchorSimulator();
+    it('handles paragraph insertions up to 3 and disables add button', () => {
+      const dom = setupAnchorDOM();
 
-      sim.addPara();
-      expect(sim.getState().addedParagraphs).toBe(1);
-      expect(sim.streamContainer.children.length).toBe(1);
-      expect(sim.paraCountBadge.textContent).toBe('1 / 3 added');
-      expect(sim.floatingPhoto.style.transform).toBe('translateY(40px)');
+      dom.btnAdd.click();
+      expect(dom.streamContainer.children.length).toBe(1);
+      expect(dom.paraCountBadge.textContent).toBe('1 / 3 added');
+      expect(dom.summaryText.textContent).toContain('Move with text');
 
-      sim.addPara();
-      sim.addPara();
-      expect(sim.getState().addedParagraphs).toBe(3);
-      expect(sim.btnAdd.disabled).toBe(true);
-      expect(sim.floatingPhoto.style.transform).toBe('translateY(120px)');
-      expect(sim.liveStatus.textContent).toContain('Photo shifted down by 3 paragraph(s)');
+      dom.btnAdd.click();
+      dom.btnAdd.click();
+      expect(dom.streamContainer.children.length).toBe(3);
+      expect(dom.btnAdd.disabled).toBe(true);
+      expect(dom.liveStatus.textContent).toContain('Photo shifted down by 3 paragraph(s)');
     });
 
-    it('pins photo in fix-position mode when paragraphs are added', () => {
-      const sim = setupAnchorSimulator();
+    it('switches modes via click and keyboard arrow navigation', () => {
+      const dom = setupAnchorDOM();
 
-      sim.setState({ mode: 'fix-position', addedParagraphs: 0 });
-      expect(sim.btnFix.getAttribute('aria-checked')).toBe('true');
-      expect(sim.btnMove.getAttribute('aria-checked')).toBe('false');
+      // Direct click mode switch
+      dom.btnFix.click();
+      expect(dom.btnFix.getAttribute('aria-checked')).toBe('true');
+      expect(dom.btnMove.getAttribute('aria-checked')).toBe('false');
 
-      sim.addPara();
-      expect(sim.floatingPhoto.style.transform).toBe('translateY(0px)');
-      expect(sim.photoModeTag.textContent).toBe('Pinned to page');
+      dom.btnMove.click();
+      expect(dom.btnMove.getAttribute('aria-checked')).toBe('true');
+
+      // Keyboard arrow navigation
+      sendKey(dom.btnMove, 'ArrowRight');
+      expect(dom.btnFix.getAttribute('aria-checked')).toBe('true');
+      expect(dom.btnMove.getAttribute('aria-checked')).toBe('false');
+      expect(dom.photoModeTag.textContent).toBe('Pinned to page');
+      expect(dom.summaryText.textContent).toContain('Fix position on page');
+
+      sendKey(dom.btnFix, 'ArrowLeft');
+      expect(dom.btnMove.getAttribute('aria-checked')).toBe('true');
+      expect(dom.btnFix.getAttribute('aria-checked')).toBe('false');
+      expect(dom.photoModeTag.textContent).toBe('Moving with text');
+
+      // ArrowDown and ArrowUp navigation
+      sendKey(dom.btnMove, 'ArrowDown');
+      expect(dom.btnFix.getAttribute('aria-checked')).toBe('true');
+      sendKey(dom.btnFix, 'ArrowUp');
+      expect(dom.btnMove.getAttribute('aria-checked')).toBe('true');
+
+      // Ignored key event (e.g. Enter)
+      sendKey(dom.btnMove, 'Enter');
+      expect(dom.btnMove.getAttribute('aria-checked')).toBe('true');
     });
 
-    it('resets added paragraphs and restores button state on reset', () => {
-      const sim = setupAnchorSimulator();
+    it('resets state when reset button is clicked', () => {
+      const dom = setupAnchorDOM();
 
-      sim.addPara();
-      sim.addPara();
-      sim.reset();
+      dom.btnAdd.click();
+      dom.btnAdd.click();
+      expect(dom.streamContainer.children.length).toBe(2);
 
-      expect(sim.getState().addedParagraphs).toBe(0);
-      expect(sim.streamContainer.children.length).toBe(0);
-      expect(sim.btnAdd.disabled).toBe(false);
-      expect(sim.floatingPhoto.style.transform).toBe('translateY(0px)');
+      dom.btnReset.click();
+      expect(dom.streamContainer.children.length).toBe(0);
+      expect(dom.btnAdd.disabled).toBe(false);
+      expect(dom.paraCountBadge.textContent).toBe('0 / 3 added');
     });
   });
 
-  describe('AlignSimulator DOM interactions', () => {
-    function setupAlignSimulator() {
+  describe('initAlignSimulator', () => {
+    function setupAlignDOM() {
       const html = `
-        <div class="align-simulator card" id="align-simulator" data-align-simulator>
+        <div class="align-simulator card" data-align-simulator>
           <div role="radiogroup" aria-label="Alignment Reference">
             <button class="btn-target is-active" data-target="margin" aria-checked="true" tabindex="0">Margin</button>
             <button class="btn-target" data-target="page" aria-checked="false" tabindex="-1">Page</button>
@@ -262,180 +222,211 @@ describe('Simulator DOM Interactions & State Wiring', () => {
             <button class="btn-align-action" data-action="left">Align Left</button>
             <button class="btn-align-action" data-action="center">Align Center</button>
             <button class="btn-align-action" data-action="right">Align Right</button>
+            <button class="btn-align-action" data-action="top">Align Top</button>
+            <button class="btn-align-action" data-action="distribute">Distribute</button>
             <button class="btn-align-action" data-action="reset">Reset</button>
           </div>
           <div class="align-canvas">
-            <div class="smart-guide-line" id="smart-guide-line" style="display: none;"></div>
-            <div class="canvas-item" id="align-item-box-1" style="left: 6.25%; top: 17.5%;"></div>
-            <div class="canvas-item" id="align-item-box-2" style="left: 40.625%; top: 37.5%;"></div>
-            <div class="canvas-item" id="align-item-box-3" style="left: 68.75%; top: 12.5%;"></div>
+            <div class="smart-guide-line" data-smart-guide style="display: none;"></div>
+            <div class="canvas-item" data-align-item="box-1" style="left: 6.25%; top: 17.5%;"></div>
+            <div class="canvas-item" data-align-item="box-2" style="left: 40.625%; top: 37.5%;"></div>
+            <div class="canvas-item" data-align-item="box-3" style="left: 68.75%; top: 12.5%;"></div>
           </div>
-          <div id="align-status-text">Initial</div>
-          <div class="visually-hidden" role="status" aria-live="polite" id="align-live-status">Initial</div>
+          <div data-align-status-text>Initial</div>
+          <div class="visually-hidden" role="status" aria-live="polite" data-align-live-status>Initial</div>
         </div>
       `;
       const { document } = parseHTML(html);
       const root = document.querySelector<HTMLElement>('[data-align-simulator]')!;
-      let currentTarget: AlignTarget = 'margin';
-      let items: AlignItem[] = cloneItems(INITIAL_ALIGN_ITEMS);
+      initAlignSimulator(root);
 
       const targetBtns = root.querySelectorAll<HTMLButtonElement>('.btn-target');
-      const smartGuide = root.querySelector<HTMLDivElement>('#smart-guide-line')!;
-      const statusText = root.querySelector<HTMLDivElement>('#align-status-text')!;
-      const liveStatus = root.querySelector<HTMLDivElement>('#align-live-status')!;
+      const actionBtns = root.querySelectorAll<HTMLButtonElement>('.btn-align-action');
+      const smartGuide = root.querySelector<HTMLDivElement>('[data-smart-guide]')!;
+      const statusText = root.querySelector<HTMLDivElement>('[data-align-status-text]')!;
+      const liveStatus = root.querySelector<HTMLDivElement>('[data-align-live-status]')!;
+      const item1 = root.querySelector<HTMLDivElement>('[data-align-item="box-1"]')!;
+      const item2 = root.querySelector<HTMLDivElement>('[data-align-item="box-2"]')!;
 
-      function renderObjects(action: AlignAction) {
-        items.forEach((item) => {
-          const el = root.querySelector<HTMLDivElement>(`#align-item-${item.id}`);
-          if (el) {
-            el.style.left = `${(item.x / 320) * 100}%`;
-            el.style.top = `${(item.y / 200) * 100}%`;
-          }
-        });
-
-        if (action === 'left') {
-          smartGuide.style.display = 'block';
-          smartGuide.style.left = `${(items[0].x / 320) * 100}%`;
-        } else {
-          smartGuide.style.display = 'none';
-        }
-
-        const desc = getAlignStatus(action, currentTarget);
-        statusText.textContent = desc;
-        liveStatus.textContent = desc;
-      }
-
-      function executeAction(action: AlignAction) {
-        items = alignObjects(items, action, currentTarget);
-        renderObjects(action);
-      }
-
-      function setTarget(target: AlignTarget) {
-        currentTarget = target;
-        targetBtns.forEach((b) => {
-          const isSelected = b.getAttribute('data-target') === target;
-          b.classList.toggle('is-active', isSelected);
-          b.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-          b.setAttribute('tabindex', isSelected ? '0' : '-1');
-        });
-      }
-
-      return { root, targetBtns, smartGuide, statusText, liveStatus, executeAction, setTarget, getItems: () => items };
+      return { root, targetBtns, actionBtns, smartGuide, statusText, liveStatus, item1, item2 };
     }
 
-    it('positions items using responsive percentage coordinates on align left', () => {
-      const sim = setupAlignSimulator();
+    it('aligns items to margin boundaries using percentage coordinates', () => {
+      const dom = setupAlignDOM();
+      const leftBtn = dom.actionBtns[0];
 
-      sim.executeAction('left');
-      const item1 = sim.root.querySelector<HTMLDivElement>('#align-item-box-1')!;
-      const item2 = sim.root.querySelector<HTMLDivElement>('#align-item-box-2')!;
+      leftBtn.click();
+      // Margin left is 40px -> 40/320 = 12.5%
+      expect(dom.item1.style.left).toBe('12.5%');
+      expect(dom.item2.style.left).toBe('12.5%');
+      expect(dom.smartGuide.style.display).toBe('block');
+      expect(dom.smartGuide.style.left).toBe('12.5%');
+      expect(dom.liveStatus.textContent).toBe(getAlignStatus('left', 'margin'));
 
-      // With target 'margin', margin.left is 40px -> 40/320 = 12.5%
-      expect(item1.style.left).toBe('12.5%');
-      expect(item2.style.left).toBe('12.5%');
-      expect(sim.smartGuide.style.display).toBe('block');
-      expect(sim.smartGuide.style.left).toBe('12.5%');
-      expect(sim.liveStatus.textContent).toBe(getAlignStatus('left', 'margin'));
+      // Test top alignment (exercises vertical smart guide)
+      const topBtn = dom.actionBtns[3];
+      topBtn.click();
+      expect(dom.smartGuide.style.display).toBe('block');
+      expect(dom.smartGuide.style.height).toBe('2px');
+
+      // Test center alignment (hides smart guide)
+      const centerBtn = dom.actionBtns[1];
+      centerBtn.click();
+      expect(dom.smartGuide.style.display).toBe('none');
+
+      // Test right alignment
+      const rightBtn = dom.actionBtns[2];
+      rightBtn.click();
+      expect(dom.liveStatus.textContent).toBe(getAlignStatus('right', 'margin'));
+
+      // Test distribute and reset
+      const distBtn = dom.actionBtns[4];
+      distBtn.click();
+      const resetBtn = dom.actionBtns[5];
+      resetBtn.click();
     });
 
-    it('switches targets and aligns to page boundaries properly', () => {
-      const sim = setupAlignSimulator();
+    it('navigates targets with keyboard arrows and aligns to page boundaries', () => {
+      const dom = setupAlignDOM();
 
-      sim.setTarget('page');
-      sim.executeAction('left');
-      const item1 = sim.root.querySelector<HTMLDivElement>('#align-item-box-1')!;
+      // Navigate to 'page' via arrow key
+      sendKey(dom.targetBtns[0], 'ArrowRight');
+      expect(dom.targetBtns[1].classList.contains('is-active')).toBe(true);
+      expect(dom.targetBtns[1].getAttribute('aria-checked')).toBe('true');
 
-      // With target 'page', page.left is 0px -> 0%
-      expect(item1.style.left).toBe('0%');
-      expect(sim.liveStatus.textContent).toBe(getAlignStatus('left', 'page'));
+      // Navigate with ArrowDown and ArrowUp
+      sendKey(dom.targetBtns[1], 'ArrowDown');
+      expect(dom.targetBtns[2].classList.contains('is-active')).toBe(true);
+      sendKey(dom.targetBtns[2], 'ArrowUp');
+      expect(dom.targetBtns[1].classList.contains('is-active')).toBe(true);
+      sendKey(dom.targetBtns[1], 'ArrowLeft');
+      expect(dom.targetBtns[0].classList.contains('is-active')).toBe(true);
+
+      // Ignored key event
+      sendKey(dom.targetBtns[0], 'Enter');
+      expect(dom.targetBtns[0].classList.contains('is-active')).toBe(true);
+
+      // Switch to selected objects
+      dom.targetBtns[2].click();
+      dom.actionBtns[0].click();
+      expect(dom.liveStatus.textContent).toBe(getAlignStatus('left', 'selected'));
     });
   });
 
-  describe('BoxMarginSimulator DOM interactions', () => {
-    function setupBoxMarginSimulator() {
+  describe('initBoxMarginSimulator', () => {
+    function setupBoxDOM() {
       const html = `
-        <div class="box-margin-simulator card" id="box-margin-simulator" data-box-margin-simulator>
+        <div class="box-margin-simulator card" data-box-margin-simulator>
           <div role="radiogroup" aria-label="Margin Preset">
-            <button class="btn-margin is-active" data-margin="normal" aria-checked="true">Normal</button>
-            <button class="btn-margin" data-margin="none" aria-checked="false">None (Publisher style)</button>
+            <button class="btn-box-opt btn-margin is-active" data-margin="default" aria-pressed="true">Default</button>
+            <button class="btn-box-opt btn-margin" data-margin="tight" aria-pressed="false">Zero Margins</button>
           </div>
           <div role="radiogroup" aria-label="Fill Color">
-            <button class="btn-fill is-active" data-fill="subtle" aria-checked="true">Subtle</button>
-            <button class="btn-fill" data-fill="none" aria-checked="false">No Fill</button>
+            <button class="btn-box-opt btn-fill is-active" data-fill="white" aria-pressed="true">White</button>
+            <button class="btn-box-opt btn-fill" data-fill="none" aria-pressed="false">No Fill</button>
           </div>
           <div role="radiogroup" aria-label="Border Outline">
-            <button class="btn-outline is-active" data-outline="subtle" aria-checked="true">Subtle</button>
-            <button class="btn-outline" data-outline="none" aria-checked="false">No Outline</button>
+            <button class="btn-box-opt btn-outline is-active" data-outline="black" aria-pressed="true">Black</button>
+            <button class="btn-box-opt btn-outline" data-outline="none" aria-pressed="false">No Outline</button>
           </div>
-          <div id="preview-text-box" style="padding: 0.75rem 1rem;"></div>
-          <div class="visually-hidden" role="status" aria-live="polite" id="box-live-status">Initial</div>
+          <div class="preview-text-box" data-preview-text-box style="padding: 0.75rem;"></div>
+          <div class="visually-hidden" role="status" aria-live="polite" data-box-live-status>Initial</div>
         </div>
       `;
       const { document } = parseHTML(html);
       const root = document.querySelector<HTMLElement>('[data-box-margin-simulator]')!;
-      let state: BoxMarginState = { ...INITIAL_BOX_STATE };
+      initBoxMarginSimulator(root);
 
-      const textBox = root.querySelector<HTMLDivElement>('#preview-text-box')!;
-      const liveStatus = root.querySelector<HTMLDivElement>('#box-live-status')!;
-      const marginBtns = root.querySelectorAll<HTMLButtonElement>('.btn-margin');
-      const fillBtns = root.querySelectorAll<HTMLButtonElement>('.btn-fill');
-      const outlineBtns = root.querySelectorAll<HTMLButtonElement>('.btn-outline');
+      const textBox = root.querySelector<HTMLDivElement>('[data-preview-text-box]')!;
+      const liveStatus = root.querySelector<HTMLDivElement>('[data-box-live-status]')!;
+      const marginTightBtn = root.querySelectorAll<HTMLButtonElement>('.btn-margin')[1];
+      const fillNoneBtn = root.querySelectorAll<HTMLButtonElement>('.btn-fill')[1];
+      const outlineNoneBtn = root.querySelectorAll<HTMLButtonElement>('.btn-outline')[1];
 
-      function update() {
-        const styles = getBoxPreviewStyles(state);
-        textBox.style.padding = styles.padding;
-        textBox.style.backgroundColor = styles.backgroundColor;
-        textBox.style.border = styles.border;
-        liveStatus.textContent = getBoxMarginStatus(state);
-      }
-
-      function setMargin(margin: MarginPresetId) {
-        state = { ...state, margin };
-        marginBtns.forEach((b) => {
-          const isSelected = b.getAttribute('data-margin') === margin;
-          b.classList.toggle('is-active', isSelected);
-          b.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-        });
-        update();
-      }
-
-      function setFill(fill: FillPresetId) {
-        state = { ...state, fill };
-        fillBtns.forEach((b) => {
-          const isSelected = b.getAttribute('data-fill') === fill;
-          b.classList.toggle('is-active', isSelected);
-          b.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-        });
-        update();
-      }
-
-      function setOutline(outline: OutlinePresetId) {
-        state = { ...state, outline };
-        outlineBtns.forEach((b) => {
-          const isSelected = b.getAttribute('data-outline') === outline;
-          b.classList.toggle('is-active', isSelected);
-          b.setAttribute('aria-checked', isSelected ? 'true' : 'false');
-        });
-        update();
-      }
-
-      return { root, textBox, liveStatus, setMargin, setFill, setOutline, getState: () => state };
+      return { root, textBox, liveStatus, marginTightBtn, fillNoneBtn, outlineNoneBtn };
     }
 
-    it('updates text box preview styles and status live announcement', () => {
-      const sim = setupBoxMarginSimulator();
+    it('updates text box preview styles and live announcements on preset selection', () => {
+      const dom = setupBoxDOM();
 
-      sim.setMargin('tight');
-      expect(sim.textBox.style.padding).toBe('0');
-      expect(sim.liveStatus.textContent).toContain('0 cm (Publisher style)');
+      dom.marginTightBtn.click();
+      expect(dom.textBox.style.padding).toBe('0');
+      expect(dom.liveStatus.textContent).toContain('0 cm (Publisher style)');
 
-      sim.setFill('none');
-      expect(sim.textBox.style.backgroundColor).toBe('transparent');
-      expect(sim.liveStatus.textContent).toContain('No Fill (Transparent)');
+      dom.fillNoneBtn.click();
+      expect(dom.textBox.style.backgroundColor).toBe('transparent');
+      expect(dom.liveStatus.textContent).toContain('No Fill (Transparent)');
 
-      sim.setOutline('none');
-      expect(sim.textBox.style.border).toBe('1px dashed transparent');
-      expect(sim.liveStatus.textContent).toContain('No Outline');
+      dom.outlineNoneBtn.click();
+      expect(dom.textBox.style.border).toBe('1px dashed transparent');
+      expect(dom.liveStatus.textContent).toContain('No Outline');
+    });
+
+    it('supports keyboard navigation within button radio groups', () => {
+      const dom = setupBoxDOM();
+      const marginDefaultBtn = dom.root.querySelectorAll<HTMLButtonElement>('.btn-margin')[0];
+      const marginTightBtn = dom.root.querySelectorAll<HTMLButtonElement>('.btn-margin')[1];
+
+      sendKey(marginDefaultBtn, 'ArrowRight');
+      expect(dom.textBox.style.padding).toBe('0');
+      expect(dom.liveStatus.textContent).toContain('0 cm (Publisher style)');
+
+      sendKey(marginTightBtn, 'ArrowLeft');
+      expect(dom.textBox.style.padding).toBe('0.75rem');
+
+      sendKey(marginDefaultBtn, 'ArrowDown');
+      expect(dom.textBox.style.padding).toBe('0');
+
+      sendKey(marginTightBtn, 'ArrowUp');
+      expect(dom.textBox.style.padding).toBe('0.75rem');
+
+      const fillWhiteBtn = dom.root.querySelectorAll<HTMLButtonElement>('.btn-fill')[0];
+      const fillNoneBtn = dom.root.querySelectorAll<HTMLButtonElement>('.btn-fill')[1];
+      sendKey(fillWhiteBtn, 'ArrowRight');
+      expect(dom.textBox.style.backgroundColor).toBe('transparent');
+      sendKey(fillNoneBtn, 'ArrowLeft');
+      expect(dom.textBox.style.backgroundColor).not.toBe('transparent');
+
+      const outlineBlackBtn = dom.root.querySelectorAll<HTMLButtonElement>('.btn-outline')[0];
+      const outlineNoneBtn = dom.root.querySelectorAll<HTMLButtonElement>('.btn-outline')[1];
+      sendKey(outlineBlackBtn, 'ArrowDown');
+      expect(dom.textBox.style.border).toBe('1px dashed transparent');
+      sendKey(outlineNoneBtn, 'ArrowUp');
+      expect(dom.textBox.style.border).not.toBe('1px dashed transparent');
+
+      // Ignored key event
+      sendKey(marginDefaultBtn, 'Enter');
+    });
+  });
+
+  describe('graceful handling of minimal/missing DOM elements', () => {
+    it('handles minimal wrap simulator markup without crashing', () => {
+      const { document } = parseHTML('<div data-wrap-simulator><button class="btn-wrap-mode" data-mode="square"></button></div>');
+      const root = document.querySelector<HTMLElement>('[data-wrap-simulator]')!;
+      initWrapSimulator(root);
+      root.querySelector<HTMLButtonElement>('.btn-wrap-mode')!.click();
+    });
+
+    it('handles minimal anchor simulator markup without crashing', () => {
+      const { document } = parseHTML('<div data-anchor-simulator><button data-btn-add-paragraph></button><button data-btn-reset-anchor></button></div>');
+      const root = document.querySelector<HTMLElement>('[data-anchor-simulator]')!;
+      initAnchorSimulator(root);
+      root.querySelector<HTMLButtonElement>('[data-btn-add-paragraph]')!.click();
+      root.querySelector<HTMLButtonElement>('[data-btn-reset-anchor]')!.click();
+    });
+
+    it('handles minimal align simulator markup without crashing', () => {
+      const { document } = parseHTML('<div data-align-simulator><button class="btn-align-action" data-action="left"></button></div>');
+      const root = document.querySelector<HTMLElement>('[data-align-simulator]')!;
+      initAlignSimulator(root);
+      root.querySelector<HTMLButtonElement>('.btn-align-action')!.click();
+    });
+
+    it('handles minimal box margin simulator markup without crashing', () => {
+      const { document } = parseHTML('<div data-box-margin-simulator><button class="btn-margin" data-margin="tight"></button></div>');
+      const root = document.querySelector<HTMLElement>('[data-box-margin-simulator]')!;
+      initBoxMarginSimulator(root);
+      root.querySelector<HTMLButtonElement>('.btn-margin')!.click();
     });
   });
 });
