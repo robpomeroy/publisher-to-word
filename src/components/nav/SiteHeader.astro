@@ -229,11 +229,12 @@ const PRIMARY_LINKS_AFTER = [
     padding: var(--space-2);
     border-radius: var(--radius-md);
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
-  :not(.site-header.is-wide, .site-header.is-measuring) .site-brand {
-    min-width: 0;
-    flex-shrink: 1;
+  .site-nav {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .brand-icon {
@@ -314,6 +315,8 @@ const PRIMARY_LINKS_AFTER = [
     font-family: inherit;
     font-size: inherit;
     cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .nav-link:hover {
@@ -420,6 +423,13 @@ const PRIMARY_LINKS_AFTER = [
     border: 0;
     background: transparent;
     box-shadow: none;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .site-header.is-wide .site-menu > li {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .site-header.is-wide .site-menu::backdrop {
@@ -571,6 +581,10 @@ const PRIMARY_LINKS_AFTER = [
     });
 
     resizeObserver.observe(inner);
+
+    window.addEventListener("resize", () => {
+      updateNavLayout(false);
+    }, { passive: true });
 
     // Submenu interactive handling
     if (dropdown && submenu && submenuTrigger) {
