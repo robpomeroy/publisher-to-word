@@ -111,8 +111,8 @@ Just like in Publisher, you can link two or more text boxes in Word so that when
     },
     {
       title: "3. Adjust Internal Margins",
-      detail: "Right-click the box border → Format Shape. Click Text Options (top of pane) → click the 3rd icon (Text Box). Adjust Left, Right, Top, and Bottom margins down to 0.2 cm or 0 cm.",
-      ribbonBadge: "Format Shape → Text Options → Text Box",
+      detail: "Right-click the box border → Format Shape. In the side pane, click the Size/Layout & Properties icon (3rd icon) → expand Text Box. Adjust Left, Right, Top, and Bottom margins down to 0.2 cm or 0 cm.",
+      ribbonBadge: "Format Shape → Size/Layout & Properties → Text Box",
     },
     {
       title: "4. Link to Another Box (Optional)",
@@ -126,12 +126,12 @@ Just like in Publisher, you can link two or more text boxes in Word so that when
   title="Where to Find Text Box Tools in Word"
   ribbonPath={["Insert tab", "Text group", "Text Box", "Draw Text Box"]}
   altRibbonPath={["Select Box", "Shape Format tab", "Text group", "Create Link"]}
-  rightClickPath={["Right-Click Border", "Format Shape", "Text Options", "Text Box icon"]}
+  rightClickPath={["Right-Click Border", "Format Shape", "Size/Layout & Properties", "Text Box"]}
 />
 
 <GotchaBox title="Common Snag — 'Create Link is greyed out!'" collapsible={false}>
   <p>
-    Word will only let you link into a target text box that is <strong>completely empty</strong>. If Box 2 has even a single space or blank paragraph mark (<samp>¶</samp>) inside it, Word will refuse to pour text into it. Click inside Box 2, press <kbd>Backspace</kbd> to delete everything, and try again.
+    Word will only let you link into a target text box that is <strong>completely empty</strong>. If Box 2 has even a single character, space, or blank paragraph mark (<samp>¶</samp>) inside it, Word will refuse to pour text into it. Click inside Box 2, select all contents with <kbd>Ctrl</kbd> + <kbd>A</kbd> (or <kbd>Cmd ⌘</kbd> + <kbd>A</kbd> on Mac), press <kbd>Delete</kbd> or <kbd>Backspace</kbd>, then select Box 1 and retry Create Link.
   </p>
 </GotchaBox>
 

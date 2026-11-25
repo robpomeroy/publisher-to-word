@@ -108,12 +108,12 @@ A section break acts as a firewall between different parts of your document. Eve
     },
     {
       title: "3. Insert a Section Break for layout changes",
-      detail: "When you need a page in landscape (e.g. for a wide budget table) or want different headers, go to Layout → Breaks → Section Breaks → Next Page.",
-      ribbonBadge: "Layout tab → Breaks → Next Page",
+      detail: "When you need a page in landscape or want different headers on a new page, go to Layout → Breaks → Section Breaks → Next Page. (To change column counts on the same page without splitting pages, choose Continuous instead).",
+      ribbonBadge: "Layout tab → Breaks → Section Breaks",
     },
     {
       title: "4. Break the 'Link to Previous' connection",
-      detail: "Click into the header of your new section. On the Header & Footer ribbon tab, click 'Link to Previous' to turn it OFF. You can now edit this header without modifying earlier pages.",
+      detail: "Click into the header of your new section. On the Header & Footer ribbon tab, click 'Link to Previous' to turn it OFF. Crucial note: Word maintains separate links for the First Page Header, the Primary Header, and the Footer. Be sure to unlink each header and footer you plan to modify.",
       ribbonBadge: "Header & Footer tab → Link to Previous",
     },
   ]}
@@ -128,7 +128,10 @@ A section break acts as a firewall between different parts of your document. Eve
 
 <GotchaBox title="Common Snag — 'Editing one header changes every page!'" collapsible={false}>
   <p>
-    By default, every new section maintains <strong>Link to Previous</strong> enabled, mirroring content from the previous section. If you type a new title in Section 2, Section 1 changes too. To sever this link, click in Section 2&apos;s header and toggle <strong>Link to Previous</strong> OFF on the ribbon before making edits.
+    By default, every new section maintains <strong>Link to Previous</strong> enabled, mirroring content from the previous section.
+  </p>
+  <p>
+    Crucially, Word links headers and footers independently: unlinking a first-page header leaves the regular header and all footers still connected to the previous section! Whenever you want independent page content, click into each specific header and footer area you plan to change and toggle <strong>Link to Previous</strong> OFF before editing.
   </p>
 </GotchaBox>
 

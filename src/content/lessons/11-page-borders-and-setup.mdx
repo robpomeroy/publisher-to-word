@@ -73,7 +73,7 @@ This occurs because of a single hidden dropdown setting in Word's Page Borders m
     <text x="380" y="202" fill="#15803D" font-size="9" font-weight="700" font-family="system-ui">✅ Border sits safely inside printable area</text>
   </svg>
   <figcaption class="lesson-figcaption">
-    Most desktop inkjet and laser printers require an unprintable mechanical paper-feed margin of 1.2 to 1.5 cm at the bottom edge. Setting Word to measure borders from Text prevents cut-offs.
+    Most desktop inkjet and laser printers require an unprintable mechanical paper-feed margin of 1.2 to 1.5 cm at the bottom edge. Setting Word to measure borders from Text moves the border inwards, avoiding common cut-offs.
   </figcaption>
 </figure>
 
@@ -95,13 +95,13 @@ This occurs because of a single hidden dropdown setting in Word's Page Borders m
     },
     {
       title: "3. The Critical Print Fix: Measure from Text",
-      detail: "Before clicking OK, click the 'Options...' button at the bottom-right of the dialogue box. Change 'Measure from: Edge of page' to 'Measure from: Text'.",
+      detail: "Before clicking OK, click the 'Options...' button at the bottom-right of the dialogue box. Change 'Measure from: Edge of page' to 'Measure from: Text'. If your printer still clips the border on narrow margins, increase the document bottom margin on Layout → Margins.",
       ribbonBadge: "Page Borders → Options → Measure from: Text",
     },
     {
-      title: "4. Multi-Column Layouts",
-      detail: "Need a 2-column or 3-column newsletter layout? Go to Layout → Columns → Two. To make only part of a page two columns, we will use Section Breaks in Lesson 13!",
-      ribbonBadge: "Layout tab → Columns",
+      title: "4. Multi-Column Layouts (Whole Page vs Section)",
+      detail: "Need a newsletter layout? Go to Layout → Columns → Two. To make only part of a single page two columns, insert Continuous section breaks before and after the text (Layout → Breaks → Section Breaks: Continuous), then apply columns to that middle section.",
+      ribbonBadge: "Layout tab → Columns / Breaks → Continuous",
     },
   ]}
 />
@@ -134,6 +134,6 @@ This occurs because of a single hidden dropdown setting in Word's Page Borders m
     "In Microsoft Word, go to the Design tab and click Page Borders.",
     "Choose 'Box' on the left, pick a 1.5 pt line width, and click the Options button.",
     "Change 'Measure from: Edge of page' to 'Measure from: Text' and click OK twice.",
-    "Press Ctrl + P to open Print Preview: notice how the bottom line is clearly visible and protected from being cut off!",
+    "Press Ctrl + P to open Print Preview: notice how the bottom line is drawn well clear of the unprintable edge!",
   ]}
 />
