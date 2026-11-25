@@ -1,6 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { parseHTML } from 'linkedom';
-import { isCurrent, measureNavFits, applyNavLayout } from '../src/utils/nav';
+import {
+  isCurrent,
+  measureNavFits,
+  applyNavLayout,
+  computeSubmenuFallbackPosition,
+} from '../src/utils/nav';
 
 describe('Navigation Utilities (src/utils/nav.ts)', () => {
   describe('isCurrent', () => {
@@ -113,6 +118,73 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
 
       expect(header.classList.contains('is-wide')).toBe(false);
       expect(menu.getAttribute('popover')).toBe('auto');
+    });
+
+    it('synchronises submenu attributes between wide popover and narrow disclosure states', () => {
+      const { document } = parseHTML(`
+        <header class="site-header">
+          <ul id="site-menu"></ul>
+          <button id="lessons-trigger" aria-expanded="true">Lessons</button>
+          <ul id="lessons-submenu"></ul>
+        </header>
+      `);
+      const header = document.querySelector('header') as unknown as HTMLElement;
+      const menu = document.querySelector('#site-menu') as unknown as HTMLElement;
+      const submenu = document.querySelector('#lessons-submenu') as unknown as HTMLElement;
+      const submenuTrigger = document.querySelector('#lessons-trigger') as unknown as HTMLElement;
+
+      const hideSubmenuPopover = vi.fn();
+      submenu.hidePopover = hideSubmenuPopover;
+      submenu.matches = (sel: string) => sel === ':popover-open';
+
+      // 1. Switch to wide layout
+      applyNavLayout({ header, menu, submenu, submenuTrigger }, true);
+      expect(header.classList.contains('is-wide')).toBe(true);
+      expect(submenu.getAttribute('popover')).toBe('auto');
+      expect(submenu.hidden).toBe(false);
+      expect(submenuTrigger.getAttribute('aria-expanded')).toBe('false');
+
+      // 2. Switch to narrow layout
+      applyNavLayout({ header, menu, submenu, submenuTrigger }, false);
+      expect(header.classList.contains('is-wide')).toBe(false);
+      expect(submenu.hasAttribute('popover')).toBe(false);
+      expect(submenu.hidden).toBe(true);
+      expect(submenuTrigger.getAttribute('aria-expanded')).toBe('false');
+      expect(hideSubmenuPopover).toHaveBeenCalled();
+    });
+  });
+
+  describe('computeSubmenuFallbackPosition', () => {
+    it('places submenu below trigger with default spacing when it fits', () => {
+      const triggerRect = { top: 20, bottom: 60, left: 200, right: 300 };
+      const submenuRect = { width: 180, height: 120 };
+      const viewport = { innerWidth: 1024, innerHeight: 768 };
+
+      const coords = computeSubmenuFallbackPosition(triggerRect, submenuRect, viewport);
+      expect(coords.top).toBe(68); // 60 + 8
+      expect(coords.left).toBe(200);
+    });
+
+    it('flips submenu above trigger when it would overflow bottom edge and fits above', () => {
+      const triggerRect = { top: 680, bottom: 720, left: 200, right: 300 };
+      const submenuRect = { width: 180, height: 100 };
+      const viewport = { innerWidth: 1024, innerHeight: 768 };
+
+      // 720 + 8 + 100 = 828 > 768
+      const coords = computeSubmenuFallbackPosition(triggerRect, submenuRect, viewport);
+      expect(coords.top).toBe(572); // 680 - 100 - 8
+      expect(coords.left).toBe(200);
+    });
+
+    it('clamps left coordinate when submenu would overflow right viewport edge', () => {
+      const triggerRect = { top: 20, bottom: 60, left: 900, right: 980 };
+      const submenuRect = { width: 200, height: 100 };
+      const viewport = { innerWidth: 1000, innerHeight: 768 };
+
+      // 900 + 200 = 1100 > 1000
+      const coords = computeSubmenuFallbackPosition(triggerRect, submenuRect, viewport);
+      expect(coords.top).toBe(68);
+      expect(coords.left).toBe(784); // 1000 - 200 - 16
     });
   });
 });

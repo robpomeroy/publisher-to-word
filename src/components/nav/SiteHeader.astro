@@ -7,9 +7,15 @@ interface Props {
 
 const { currentPath = Astro.url.pathname } = Astro.props;
 
-const NAV_LINKS = [
+const isSandboxesActive = isCurrent(currentPath, "/sandboxes");
+const isLessonsCurriculumActive = isCurrent(currentPath, "/lessons") && !isSandboxesActive;
+const isLessonsActive = isLessonsCurriculumActive || isSandboxesActive;
+
+const PRIMARY_LINKS_BEFORE = [
   { href: "/start-here", label: "Start Here" },
-  { href: "/lessons", label: "Lessons" },
+];
+
+const PRIMARY_LINKS_AFTER = [
   { href: "/translator", label: "Translator" },
   { href: "/rescue", label: "Rescue Guide" },
   { href: "/projects", label: "Projects" },
@@ -49,7 +55,61 @@ const NAV_LINKS = [
       </button>
 
       <ul id="site-menu" class="site-menu" popover="auto">
-        {NAV_LINKS.map(link => {
+        {PRIMARY_LINKS_BEFORE.map(link => {
+          const current = isCurrent(currentPath, link.href);
+          return (
+            <li>
+              <a
+                href={link.href}
+                class:list={["nav-link", { "is-active": current }]}
+                aria-current={current ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
+
+        <li class="nav-dropdown">
+          <button
+            id="lessons-menu-trigger"
+            class:list={["nav-link", "dropdown-trigger", { "is-active": isLessonsActive }]}
+            type="button"
+            aria-expanded="false"
+            aria-controls="lessons-submenu"
+            popovertarget="lessons-submenu"
+          >
+            <span>Lessons</span>
+            <svg class="dropdown-chevron" viewBox="0 0 16 16" width="12" height="12" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M3.22 5.47a.75.75 0 0 1 1.06 0L8 9.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L3.22 6.53a.75.75 0 0 1 0-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <ul id="lessons-submenu" class="dropdown-list">
+            <li>
+              <a
+                href="/lessons"
+                class:list={["dropdown-link", { "is-active": isLessonsCurriculumActive }]}
+                aria-current={isLessonsCurriculumActive ? "page" : undefined}
+              >
+                <span class="dropdown-link-title">All 14 Lessons</span>
+                <span class="dropdown-link-desc">Step-by-step visual curriculum</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/sandboxes"
+                class:list={["dropdown-link", { "is-active": isSandboxesActive }]}
+                aria-current={isSandboxesActive ? "page" : undefined}
+              >
+                <span class="dropdown-link-title">Visual Sandboxes</span>
+                <span class="dropdown-link-desc">Interactive layout simulators</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        {PRIMARY_LINKS_AFTER.map(link => {
           const current = isCurrent(currentPath, link.href);
           return (
             <li>
@@ -67,6 +127,46 @@ const NAV_LINKS = [
     </nav>
   </div>
 </header>
+
+{/* Pre-paint layout execution: prevents flashing of menu button on wide desktop viewports */}
+<script is:inline>
+  (function() {
+    try {
+      var header = document.querySelector(".site-header");
+      var inner = header ? header.querySelector(".header-inner") : null;
+      var menu = document.getElementById("site-menu");
+      var submenu = document.getElementById("lessons-submenu");
+      var submenuTrigger = document.getElementById("lessons-menu-trigger");
+      if (header && inner && menu) {
+        header.classList.add("is-measuring", "is-wide");
+        var fits = inner.scrollWidth <= inner.clientWidth;
+        header.classList.remove("is-measuring");
+        header.classList.toggle("is-wide", fits);
+        if (fits) {
+          menu.removeAttribute("popover");
+          if (submenu) {
+            submenu.setAttribute("popover", "auto");
+            submenu.hidden = false;
+          }
+          if (submenuTrigger) {
+            submenuTrigger.setAttribute("aria-expanded", "false");
+          }
+        } else {
+          menu.setAttribute("popover", "auto");
+          if (submenu) {
+            submenu.removeAttribute("popover");
+            submenu.hidden = true;
+          }
+          if (submenuTrigger) {
+            submenuTrigger.setAttribute("aria-expanded", "false");
+          }
+        }
+      }
+    } catch {
+      // Ignore pre-paint measurement errors
+    }
+  })();
+</script>
 
 <style>
   .site-header {
@@ -117,7 +217,7 @@ const NAV_LINKS = [
     white-space: nowrap;
   }
 
-  /* Brand */
+  /* Brand: flex-shrink 0 ensures logo is never crushed before navbar switches */
   .site-brand {
     display: flex;
     align-items: center;
@@ -128,8 +228,12 @@ const NAV_LINKS = [
     font-size: var(--font-size-lg);
     padding: var(--space-2);
     border-radius: var(--radius-md);
-    flex-shrink: 1;
+    flex-shrink: 0;
+  }
+
+  :not(.site-header.is-wide, .site-header.is-measuring) .site-brand {
     min-width: 0;
+    flex-shrink: 1;
   }
 
   .brand-icon {
@@ -205,6 +309,11 @@ const NAV_LINKS = [
     text-decoration: none;
     color: var(--ink-primary);
     font-weight: 600;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
   }
 
   .nav-link:hover {
@@ -218,6 +327,77 @@ const NAV_LINKS = [
     background-color: var(--accent-word-bg);
     color: var(--accent-word);
     border-left: 3px solid var(--accent-word);
+  }
+
+  /* Dropdown Trigger and Chevrons */
+  .dropdown-trigger {
+    width: 100%;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+
+  .dropdown-chevron {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .dropdown-trigger[aria-expanded="true"] .dropdown-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Submenu Lists */
+  .dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Collapsed layout: nested in-flow disclosure */
+  :not(.site-header.is-wide) .dropdown-list {
+    margin-block-start: var(--space-1);
+    padding-inline-start: var(--space-3);
+    border-left: 2px solid var(--border-subtle);
+    margin-inline-start: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  :not(.site-header.is-wide) .dropdown-list[hidden] {
+    display: none !important;
+  }
+
+  .dropdown-link {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--ink-primary);
+    min-block-size: var(--target-min-size);
+    justify-content: center;
+  }
+
+  .dropdown-link:hover {
+    background-color: var(--surface-subtle);
+    color: var(--accent-word);
+  }
+
+  .dropdown-link[aria-current="page"],
+  .dropdown-link.is-active {
+    background-color: var(--accent-word-bg);
+    color: var(--accent-word);
+  }
+
+  .dropdown-link-title {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+  }
+
+  .dropdown-link-desc {
+    font-size: var(--font-size-xs);
+    color: var(--ink-secondary);
+    font-weight: 400;
   }
 
   /* Wide layout (Inline Navigation) */
@@ -259,6 +439,11 @@ const NAV_LINKS = [
     color: var(--accent-word);
   }
 
+  .site-header.is-wide .dropdown-trigger {
+    width: auto;
+    anchor-name: --lessons-trigger;
+  }
+
   /* Visual bottom pill indicator with high contrast (>= 3:1) */
   .site-header.is-wide .nav-link[aria-current="page"]::after,
   .site-header.is-wide .nav-link.is-active::after {
@@ -271,11 +456,64 @@ const NAV_LINKS = [
     border-radius: var(--radius-pill);
   }
 
+  /* Wide layout: Submenu floating popover */
+  .site-header.is-wide .nav-dropdown {
+    position: relative;
+  }
+
+  .site-header.is-wide .dropdown-list[popover] {
+    position: absolute;
+    position-anchor: --lessons-trigger;
+    position-area: block-end span-inline-end;
+    position-try-fallbacks: flip-block, flip-inline;
+    inset: auto;
+    height: auto;
+    inline-size: max-content;
+    min-inline-size: 15rem;
+    margin-block-start: 0.5rem;
+    overflow: visible;
+    padding: var(--space-2);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+  }
+
+  /* Hover bridge prevents pointerleave during mouse movement from button into popover */
+  .site-header.is-wide .dropdown-list::before {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 100%;
+    block-size: 0.5rem;
+  }
+
+  .site-header.is-wide .dropdown-list:not(:is(:popover-open, [class~=":popover-open"])) {
+    display: none;
+  }
+
+  .site-header.is-wide .dropdown-list:is(:popover-open, [class~=":popover-open"]) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  @supports not (position-area: block-end) {
+    .site-header.is-wide .dropdown-list[popover] {
+      position: fixed;
+      margin: 0;
+    }
+  }
+
   /* High contrast mode support */
   @media (forced-colors: active) {
     .site-header.is-wide .nav-link[aria-current="page"]::after,
     .site-header.is-wide .nav-link.is-active::after {
       background-color: Highlight;
+    }
+
+    .dropdown-list {
+      border: 1px solid ButtonText !important;
     }
   }
 
@@ -286,7 +524,7 @@ const NAV_LINKS = [
 </style>
 
 <script>
-  import { measureNavFits, applyNavLayout } from "../../utils/nav";
+  import { measureNavFits, applyNavLayout, computeSubmenuFallbackPosition } from "../../utils/nav";
 
   // Progressive Enhancement for Popover API
   if (!Object.hasOwn(HTMLElement.prototype, "popover")) {
@@ -298,29 +536,127 @@ const NAV_LINKS = [
   const inner = header?.querySelector<HTMLElement>(".header-inner");
   const menu = document.getElementById("site-menu");
   const menuBtn = header?.querySelector<HTMLButtonElement>(".menu-button");
+  const dropdown = header?.querySelector<HTMLElement>(".nav-dropdown");
+  const submenu = document.getElementById("lessons-submenu");
+  const submenuTrigger = document.getElementById("lessons-menu-trigger") as HTMLButtonElement | null;
 
   if (header && inner && menu) {
     let isCurrentlyWide: boolean | null = null;
+    let isHoverPreview = false;
     let rafId: number | null = null;
 
-    const updateNavLayout = () => {
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
+    const updateNavLayout = (immediate = false) => {
+      const run = () => {
         const fitsInline = measureNavFits(header, inner);
 
         if (fitsInline !== isCurrentlyWide) {
           isCurrentlyWide = fitsInline;
-          applyNavLayout({ header, menu, menuBtn }, fitsInline);
+          applyNavLayout({ header, menu, menuBtn, submenu, submenuTrigger }, fitsInline);
         }
-      });
+      };
+
+      if (immediate) {
+        run();
+      } else {
+        if (rafId !== null) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(run);
+      }
     };
 
+    // Run initial check immediately
+    updateNavLayout(true);
+
     const resizeObserver = new ResizeObserver(() => {
-      updateNavLayout();
+      updateNavLayout(false);
     });
 
     resizeObserver.observe(inner);
-    updateNavLayout();
+
+    // Submenu interactive handling
+    if (dropdown && submenu && submenuTrigger) {
+      const canHover = window.matchMedia("(hover: hover)");
+
+      // Hover preview in wide mode
+      dropdown.addEventListener("pointerenter", (e) => {
+        if (!header.classList.contains("is-wide")) return;
+        if (!canHover.matches || e.pointerType === "touch") return;
+
+        if (typeof submenu.showPopover === "function" && !submenu.matches?.(":popover-open")) {
+          try {
+            submenu.showPopover();
+            isHoverPreview = true;
+          } catch {
+            // Ignore if polyfill or state error
+          }
+        }
+      });
+
+      dropdown.addEventListener("pointerleave", (e) => {
+        if (!header.classList.contains("is-wide")) return;
+        if (!canHover.matches || e.pointerType === "touch") return;
+
+        if (isHoverPreview && typeof submenu.hidePopover === "function" && submenu.matches?.(":popover-open")) {
+          try {
+            submenu.hidePopover();
+          } catch {
+            // Ignore
+          }
+          isHoverPreview = false;
+        }
+      });
+
+      // Click handling
+      submenuTrigger.addEventListener("click", (e) => {
+        if (header.classList.contains("is-wide")) {
+          if (isHoverPreview) {
+            isHoverPreview = false;
+            e.preventDefault();
+          }
+        } else {
+          // Narrow mode: toggle in-flow disclosure
+          e.preventDefault();
+          const isHidden = submenu.hidden;
+          submenu.hidden = !isHidden;
+          submenuTrigger.setAttribute("aria-expanded", isHidden ? "true" : "false");
+        }
+      });
+
+      // Close when keyboard focus leaves dropdown in wide mode
+      dropdown.addEventListener("focusout", (e) => {
+        if (!header.classList.contains("is-wide")) return;
+        const nextTarget = e.relatedTarget as Node | null;
+        if (nextTarget && dropdown.contains(nextTarget)) return;
+
+        if (typeof submenu.hidePopover === "function" && submenu.matches?.(":popover-open")) {
+          try {
+            submenu.hidePopover();
+          } catch {
+            // Ignore
+          }
+          isHoverPreview = false;
+        }
+      });
+
+      // Synchronise aria-expanded and fallback positioning on toggle
+      submenu.addEventListener("toggle", (e: Event) => {
+        const toggleEvent = e as ToggleEvent;
+        const isOpen = toggleEvent.newState === "open";
+        submenuTrigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+
+        if (!isOpen) {
+          isHoverPreview = false;
+        } else if (!CSS.supports("position-area", "block-end") && header.classList.contains("is-wide")) {
+          const trigRect = submenuTrigger.getBoundingClientRect();
+          const subRect = submenu.getBoundingClientRect();
+          const coords = computeSubmenuFallbackPosition(trigRect, subRect, {
+            innerWidth: window.innerWidth,
+            innerHeight: window.innerHeight,
+          });
+          submenu.style.top = `${coords.top}px`;
+          submenu.style.left = `${coords.left}px`;
+        }
+      });
+    }
   }
 
   // Scroll down auto-hide fallback for browsers without Container Scroll-State queries
