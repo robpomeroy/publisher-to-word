@@ -1,0 +1,139 @@
+---
+title: "Page Borders & Page Setup"
+module: 3
+moduleTitle: "Styling, Aligning & Organising"
+order: 11
+summary: "Set margins, orientation, and add page borders without your printer chopping off the bottom line."
+wordTabs: ["Design", "Layout"]
+hasMacNotes: true
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## The Tale of the Missing Bottom Border
+
+In Microsoft Publisher, page setup was straightforward. You picked A4 or Letter, set your margins, and drew a decorative border around the page knowing your printer would reproduce it accurately.
+
+In Microsoft Word, thousands of users run into a classic printer defect: they add a decorative page border, send the flyer to their home or office printer, and **the bottom border line is completely missing!**
+
+This occurs because of a single hidden dropdown setting in Word's Page Borders menu: **Measure from: Edge of page** versus **Measure from: Text**.
+
+<PublisherCompare
+  title="Page Setup in Publisher vs. Word"
+  publisherWay="Page boundaries were defined visually on the master page. Borders were drawn inside printable areas automatically."
+  wordWay="Word defaults to measuring page borders from the 'Edge of page', which falls inside home printers' unprintable hardware margin."
+/>
+
+<figure class="lesson-figure">
+  <svg
+    viewBox="0 0 680 230"
+    role="img"
+    aria-labelledby="svg-page-border-title svg-page-border-desc"
+  >
+    <title id="svg-page-border-title">Page Border Measurement: Edge of Page versus Measure from Text</title>
+    <desc id="svg-page-border-desc">
+      On the left, measuring from the edge of page pushes the bottom border into the printer hardware unprintable margin where it gets chopped off. On the right, measuring from text pulls the border safely inside the printable area.
+    </desc>
+
+    {/**/}
+    <rect x="20" y="20" width="300" height="190" rx="4" fill="#FFFFFF" stroke="#DC2626" stroke-width="2" />
+    <rect x="20" y="20" width="300" height="24" rx="4" fill="#FEE2E2" />
+    <text x="30" y="36" fill="#B91C1C" font-size="10" font-weight="700" font-family="system-ui">Default: Measure from Edge of Page</text>
+
+    {/**/}
+    <rect x="26" y="50" width="288" height="152" rx="2" fill="none" stroke="#DC2626" stroke-width="2" />
+    <text x="50" y="80" fill="#1E293B" font-size="11" font-weight="700" font-family="system-ui">Parish Newsletter</text>
+    <line x1="50" y1="95" x2="270" y2="95" stroke="#94A3B8" stroke-width="2" />
+    <line x1="50" y1="108" x2="250" y2="108" stroke="#94A3B8" stroke-width="2" />
+
+    {/**/}
+    <rect x="20" y="185" width="300" height="25" fill="#EF4444" opacity="0.25" />
+    <line x1="20" y1="185" x2="320" y2="185" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 2" />
+    <text x="35" y="202" fill="#DC2626" font-size="9" font-weight="700" font-family="system-ui">⚠️ Printer unprintable roller margin chops border!</text>
+
+    {/**/}
+    <rect x="360" y="20" width="300" height="190" rx="4" fill="#FFFFFF" stroke="#15803D" stroke-width="2" />
+    <rect x="360" y="20" width="300" height="24" rx="4" fill="#DCFCE7" />
+    <text x="370" y="36" fill="#15803D" font-size="10" font-weight="700" font-family="system-ui">Fixed: Measure from Text (Safe Print Area)</text>
+
+    {/**/}
+    <rect x="390" y="55" width="240" height="120" rx="2" fill="none" stroke="#15803D" stroke-width="2" />
+    <text x="410" y="80" fill="#1E293B" font-size="11" font-weight="700" font-family="system-ui">Parish Newsletter</text>
+    <line x1="410" y1="95" x2="610" y2="95" stroke="#94A3B8" stroke-width="2" />
+    <line x1="410" y1="108" x2="590" y2="108" stroke="#94A3B8" stroke-width="2" />
+
+    {/**/}
+    <rect x="360" y="185" width="300" height="25" fill="#22C55E" opacity="0.15" />
+    <line x1="360" y1="185" x2="660" y2="185" stroke="#15803D" stroke-width="1.5" stroke-dasharray="4 2" />
+    <text x="380" y="202" fill="#15803D" font-size="9" font-weight="700" font-family="system-ui">✅ Border sits safely inside printable area</text>
+  </svg>
+  <figcaption class="lesson-figcaption">
+    Most desktop inkjet and laser printers require an unprintable mechanical paper-feed margin of 1.2 to 1.5 cm at the bottom edge. Setting Word to measure borders from Text moves the border inwards, avoiding common cut-offs.
+  </figcaption>
+</figure>
+
+---
+
+## Setting Up Your Page Cleanly
+
+<StepList
+  steps={[
+    {
+      title: "1. Margins, Orientation & Paper Size",
+      detail: "Go to the Layout tab. Use Margins (Normal, Narrow, or Custom), Orientation (Portrait vs Landscape), and Size (A4 or Letter) to set your foundation before laying out objects.",
+      ribbonBadge: "Layout tab → Page Setup group",
+    },
+    {
+      title: "2. Adding a Page Border",
+      detail: "Go to the Design tab (far right) → Page Borders. In the dialogue box, select 'Box', choose your line style, colour, and width.",
+      ribbonBadge: "Design tab → Page Borders",
+    },
+    {
+      title: "3. The Critical Print Fix: Measure from Text",
+      detail: "Before clicking OK, click the 'Options...' button at the bottom-right of the dialogue box. Change 'Measure from: Edge of page' to 'Measure from: Text'. If your printer still clips the border on narrow margins, increase the document bottom margin on Layout → Margins.",
+      ribbonBadge: "Page Borders → Options → Measure from: Text",
+    },
+    {
+      title: "4. Multi-Column Layouts (Whole Page vs Section)",
+      detail: "Need a newsletter layout? Go to Layout → Columns → Two. To make only part of a single page two columns, insert Continuous section breaks before and after the text (Layout → Breaks → Section Breaks: Continuous), then apply columns to that middle section.",
+      ribbonBadge: "Layout tab → Columns / Breaks → Continuous",
+    },
+  ]}
+/>
+
+<WhereToFindIt
+  title="Where to Find Page Setup and Page Borders"
+  ribbonPath={["Design tab", "Page Background group", "Page Borders", "Options... button"]}
+  altRibbonPath={["Layout tab", "Page Setup group", "Margins, Orientation, Size, Columns"]}
+/>
+
+<GotchaBox title="Common Snag — 'Where did Page Borders go?'" collapsible={false}>
+  <p>
+    In older versions of Word, Page Borders lived on the Page Layout tab. In modern Microsoft 365, Word moved Page Borders onto the <strong>Design</strong> tab (look at the far right of the top ribbon).
+  </p>
+</GotchaBox>
+
+<MacNote summary="Using Word on a Mac? Page borders and printer margins">
+  <p>
+    On macOS, page borders are located under <strong>Format</strong> menu (at the top of your Mac screen) → <strong>Borders and Shading</strong> → <strong>Page Border</strong> tab, or via the <strong>Design</strong> ribbon tab. Click <strong>Options</strong> to adjust the margin calculation source.
+  </p>
+</MacNote>
+
+---
+
+## Hands-On Practice
+
+<TryItCard
+  title="Try It in Word (60 Seconds)"
+  steps={[
+    "In Microsoft Word, go to the Design tab and click Page Borders.",
+    "Choose 'Box' on the left, pick a 1.5 pt line width, and click the Options button.",
+    "Change 'Measure from: Edge of page' to 'Measure from: Text' and click OK twice.",
+    "Press Ctrl + P to open Print Preview: notice how the bottom line is drawn well clear of the unprintable edge!",
+  ]}
+/>

@@ -98,7 +98,7 @@ summary: "Ensure text doesn't overflow"
       expect(ALL_LESSONS[13].slug).toBe('14-printing-and-pdf');
     });
 
-    it('should dynamically derive Lesson 1 title, summary, and isAvailable from authored content', () => {
+    it('should dynamically derive all 14 lessons from authored content on disk', () => {
       const lesson1 = getLessonBySlug('01-how-text-flows');
       expect(lesson1).toBeDefined();
       expect(lesson1?.order).toBe(1);
@@ -106,10 +106,13 @@ summary: "Ensure text doesn't overflow"
       expect(lesson1?.title).toContain('How Text Flows in Word');
       expect(lesson1?.summary).toContain('pressing Enter');
 
-      // Unauthored lesson 2 remains unavailable
-      const lesson2 = getLessonBySlug('02-show-hidden-clues');
-      expect(lesson2).toBeDefined();
-      expect(lesson2?.isAvailable).toBe(false);
+      // All 14 lessons are now authored and available
+      expect(ALL_LESSONS.every(l => l.isAvailable)).toBe(true);
+
+      const lesson14 = getLessonBySlug('14-printing-and-pdf');
+      expect(lesson14).toBeDefined();
+      expect(lesson14?.isAvailable).toBe(true);
+      expect(lesson14?.title).toContain('Printing');
     });
 
     it('should allow buildCurriculum to dynamically enrich unauthored stubs when authored data is provided', () => {
