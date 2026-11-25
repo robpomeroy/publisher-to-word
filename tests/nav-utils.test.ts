@@ -44,6 +44,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       expect(fits).toBe(true);
       expect(header.classList.contains('is-measuring')).toBe(false);
       expect(header.classList.contains('is-wide')).toBe(true);
+      expect(header.classList.contains('is-narrow')).toBe(false);
     });
 
     it('removes is-wide when contents do not fit inline (prevents stuck is-wide regression)', () => {
@@ -59,6 +60,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       expect(fits).toBe(false);
       expect(header.classList.contains('is-measuring')).toBe(false);
       expect(header.classList.contains('is-wide')).toBe(false);
+      expect(header.classList.contains('is-narrow')).toBe(true);
     });
   });
 
@@ -81,6 +83,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       applyNavLayout({ header, menu, menuBtn }, true);
 
       expect(header.classList.contains('is-wide')).toBe(true);
+      expect(header.classList.contains('is-narrow')).toBe(false);
       expect(menu.hasAttribute('popover')).toBe(false);
       expect(menuBtn.hasAttribute('aria-expanded')).toBe(false);
       expect(hidePopover).toHaveBeenCalled();
@@ -102,6 +105,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
 
       expect(() => applyNavLayout({ header, menu }, true)).not.toThrow();
       expect(header.classList.contains('is-wide')).toBe(true);
+      expect(header.classList.contains('is-narrow')).toBe(false);
       expect(menu.hasAttribute('popover')).toBe(false);
     });
 
@@ -117,6 +121,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       applyNavLayout({ header, menu }, false);
 
       expect(header.classList.contains('is-wide')).toBe(false);
+      expect(header.classList.contains('is-narrow')).toBe(true);
       expect(menu.getAttribute('popover')).toBe('auto');
     });
 
@@ -140,6 +145,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       // 1. Switch to wide layout
       applyNavLayout({ header, menu, submenu, submenuTrigger }, true);
       expect(header.classList.contains('is-wide')).toBe(true);
+      expect(header.classList.contains('is-narrow')).toBe(false);
       expect(submenu.getAttribute('popover')).toBe('auto');
       expect(submenu.hidden).toBe(false);
       expect(submenuTrigger.getAttribute('aria-expanded')).toBe('false');
@@ -147,6 +153,7 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       // 2. Switch to narrow layout
       applyNavLayout({ header, menu, submenu, submenuTrigger }, false);
       expect(header.classList.contains('is-wide')).toBe(false);
+      expect(header.classList.contains('is-narrow')).toBe(true);
       expect(submenu.hasAttribute('popover')).toBe(false);
       expect(submenu.hidden).toBe(true);
       expect(submenuTrigger.getAttribute('aria-expanded')).toBe('false');

@@ -25,11 +25,13 @@ export function isCurrent(currentPath: string, href: string): boolean {
 export function measureNavFits(header: HTMLElement, inner: HTMLElement): boolean {
   header.classList.add("is-measuring");
   header.classList.add("is-wide");
+  header.classList.remove("is-narrow");
 
   const fitsInline = inner.scrollWidth <= inner.clientWidth;
 
   header.classList.remove("is-measuring");
   header.classList.toggle("is-wide", fitsInline);
+  header.classList.toggle("is-narrow", !fitsInline);
 
   return fitsInline;
 }
@@ -42,6 +44,7 @@ export function applyNavLayout(
   fitsInline: boolean
 ): void {
   elements.header.classList.toggle("is-wide", fitsInline);
+  elements.header.classList.toggle("is-narrow", !fitsInline);
 
   if (fitsInline) {
     if (typeof elements.menu.hidePopover === "function" && elements.menu.matches?.(":popover-open")) {

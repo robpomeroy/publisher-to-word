@@ -128,46 +128,6 @@ const PRIMARY_LINKS_AFTER = [
   </div>
 </header>
 
-{/* Pre-paint layout execution: prevents flashing of menu button on wide desktop viewports */}
-<script is:inline>
-  (function() {
-    try {
-      var header = document.querySelector(".site-header");
-      var inner = header ? header.querySelector(".header-inner") : null;
-      var menu = document.getElementById("site-menu");
-      var submenu = document.getElementById("lessons-submenu");
-      var submenuTrigger = document.getElementById("lessons-menu-trigger");
-      if (header && inner && menu) {
-        header.classList.add("is-measuring", "is-wide");
-        var fits = inner.scrollWidth <= inner.clientWidth;
-        header.classList.remove("is-measuring");
-        header.classList.toggle("is-wide", fits);
-        if (fits) {
-          menu.removeAttribute("popover");
-          if (submenu) {
-            submenu.setAttribute("popover", "auto");
-            submenu.hidden = false;
-          }
-          if (submenuTrigger) {
-            submenuTrigger.setAttribute("aria-expanded", "false");
-          }
-        } else {
-          menu.setAttribute("popover", "auto");
-          if (submenu) {
-            submenu.removeAttribute("popover");
-            submenu.hidden = true;
-          }
-          if (submenuTrigger) {
-            submenuTrigger.setAttribute("aria-expanded", "false");
-          }
-        }
-      }
-    } catch {
-      // Ignore pre-paint measurement errors
-    }
-  })();
-</script>
-
 <style>
   .site-header {
     position: sticky;
@@ -356,7 +316,23 @@ const PRIMARY_LINKS_AFTER = [
   }
 
   /* Collapsed layout: nested in-flow disclosure */
-  :not(.site-header.is-wide) .dropdown-list {
+  @media (max-width: 61.24rem) {
+    .site-header:not(.is-wide) .dropdown-list {
+      margin-block-start: var(--space-1);
+      padding-inline-start: var(--space-3);
+      border-left: 2px solid var(--border-subtle);
+      margin-inline-start: var(--space-3);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    .site-header:not(.is-wide) .dropdown-list[hidden] {
+      display: none !important;
+    }
+  }
+
+  .site-header.is-narrow .dropdown-list {
     margin-block-start: var(--space-1);
     padding-inline-start: var(--space-3);
     border-left: 2px solid var(--border-subtle);
@@ -366,7 +342,7 @@ const PRIMARY_LINKS_AFTER = [
     gap: var(--space-1);
   }
 
-  :not(.site-header.is-wide) .dropdown-list[hidden] {
+  .site-header.is-narrow .dropdown-list[hidden] {
     display: none !important;
   }
 
@@ -515,10 +491,121 @@ const PRIMARY_LINKS_AFTER = [
     }
   }
 
+  /* Pre-paint wide layout on desktop (>= 61.25rem = 980px) to prevent flash before JS execution */
+  @media (min-width: 61.25rem) {
+    .site-header:not(.is-narrow) .menu-button {
+      display: none;
+    }
+
+    .site-header:not(.is-narrow) .site-menu {
+      position: static;
+      display: flex;
+      align-items: center;
+      gap: var(--space-1);
+      inline-size: auto;
+      max-inline-size: none;
+      block-size: auto;
+      max-block-size: none;
+      overflow: visible;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .site-header:not(.is-narrow) .site-menu > li {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .site-header:not(.is-narrow) .site-menu::backdrop {
+      display: none;
+    }
+
+    .site-header:not(.is-narrow) .nav-link {
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      border-left: none;
+      position: relative;
+    }
+
+    .site-header:not(.is-narrow) .nav-link[aria-current="page"],
+    .site-header:not(.is-narrow) .nav-link.is-active {
+      background-color: transparent;
+      color: var(--accent-word);
+    }
+
+    .site-header:not(.is-narrow) .dropdown-trigger {
+      width: auto;
+      anchor-name: --lessons-trigger;
+    }
+
+    .site-header:not(.is-narrow) .nav-link[aria-current="page"]::after,
+    .site-header:not(.is-narrow) .nav-link.is-active::after {
+      content: "";
+      position: absolute;
+      inset-inline: var(--space-3);
+      inset-block-end: 0;
+      block-size: 3px;
+      background-color: var(--accent-word);
+      border-radius: var(--radius-pill);
+    }
+
+    .site-header:not(.is-narrow) .nav-dropdown {
+      position: relative;
+    }
+
+    .site-header:not(.is-narrow) .dropdown-list[popover] {
+      position: absolute;
+      position-anchor: --lessons-trigger;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline;
+      inset: auto;
+      height: auto;
+      inline-size: max-content;
+      min-inline-size: 15rem;
+      margin-block-start: 0.5rem;
+      overflow: visible;
+      padding: var(--space-2);
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-ui);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+    }
+
+    .site-header:not(.is-narrow) .dropdown-list::before {
+      content: "";
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 100%;
+      block-size: 0.5rem;
+    }
+
+    .site-header:not(.is-narrow) .dropdown-list:not(:is(:popover-open, [class~=":popover-open"])) {
+      display: none;
+    }
+
+    .site-header:not(.is-narrow) .dropdown-list:is(:popover-open, [class~=":popover-open"]) {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+    }
+
+    @supports not (position-area: block-end) {
+      .site-header:not(.is-narrow) .dropdown-list[popover] {
+        position: fixed;
+        margin: 0;
+      }
+    }
+  }
+
   /* High contrast mode support */
   @media (forced-colors: active) {
-    .site-header.is-wide .nav-link[aria-current="page"]::after,
-    .site-header.is-wide .nav-link.is-active::after {
+    :is(.site-header.is-wide, .site-header:not(.is-narrow)) .nav-link[aria-current="page"]::after,
+    :is(.site-header.is-wide, .site-header:not(.is-narrow)) .nav-link.is-active::after {
       background-color: Highlight;
     }
 
@@ -555,6 +642,19 @@ const PRIMARY_LINKS_AFTER = [
     let isHoverPreview = false;
     let rafId: number | null = null;
 
+    const positionSubmenuFallback = () => {
+      if (submenu && submenuTrigger && !CSS.supports("position-area", "block-end") && header.classList.contains("is-wide") && submenu.matches?.(":popover-open")) {
+        const trigRect = submenuTrigger.getBoundingClientRect();
+        const subRect = submenu.getBoundingClientRect();
+        const coords = computeSubmenuFallbackPosition(trigRect, subRect, {
+          innerWidth: window.innerWidth,
+          innerHeight: window.innerHeight,
+        });
+        submenu.style.top = `${coords.top}px`;
+        submenu.style.left = `${coords.left}px`;
+      }
+    };
+
     const updateNavLayout = (immediate = false) => {
       const run = () => {
         const fitsInline = measureNavFits(header, inner);
@@ -562,6 +662,9 @@ const PRIMARY_LINKS_AFTER = [
         if (fitsInline !== isCurrentlyWide) {
           isCurrentlyWide = fitsInline;
           applyNavLayout({ header, menu, menuBtn, submenu, submenuTrigger }, fitsInline);
+        }
+        if (fitsInline) {
+          positionSubmenuFallback();
         }
       };
 
@@ -659,15 +762,8 @@ const PRIMARY_LINKS_AFTER = [
 
         if (!isOpen) {
           isHoverPreview = false;
-        } else if (!CSS.supports("position-area", "block-end") && header.classList.contains("is-wide")) {
-          const trigRect = submenuTrigger.getBoundingClientRect();
-          const subRect = submenu.getBoundingClientRect();
-          const coords = computeSubmenuFallbackPosition(trigRect, subRect, {
-            innerWidth: window.innerWidth,
-            innerHeight: window.innerHeight,
-          });
-          submenu.style.top = `${coords.top}px`;
-          submenu.style.left = `${coords.left}px`;
+        } else {
+          positionSubmenuFallback();
         }
       });
     }
