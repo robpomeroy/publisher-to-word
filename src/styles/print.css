@@ -65,6 +65,22 @@
     color: #000000 !important;
   }
 
+  /* Cheat Sheet Page Breaks */
+  .cheat-sheet-page {
+    break-after: page;
+    padding-block-end: 1rem;
+  }
+
+  .cheat-sheet-page:last-child {
+    break-after: auto;
+  }
+
+  .no-print,
+  .print-action-btn,
+  .filter-section {
+    display: none !important;
+  }
+
   a {
     color: #000000 !important;
     text-decoration: underline;

@@ -6,6 +6,7 @@ import "../styles/print.css";
 
 import SiteHeader from "../components/nav/SiteHeader.astro";
 import SiteFooter from "../components/nav/SiteFooter.astro";
+import { resolvePlausibleScriptUrl } from "../utils/analytics";
 
 interface Props {
   title: string;
@@ -16,6 +17,11 @@ const {
   title,
   description = "A simple, reassuring step-by-step visual tutorial website helping former Microsoft Publisher users comfortably master layout, text boxes, and pictures in Microsoft Word."
 } = Astro.props;
+
+const plausibleScriptUrl = resolvePlausibleScriptUrl(
+  import.meta.env.PLAUSIBLE_SCRIPT_URL,
+  import.meta.env.PROD
+);
 ---
 
 <!DOCTYPE html>
@@ -26,6 +32,9 @@ const {
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | Publisher to Word Guide</title>
+    {plausibleScriptUrl && (
+      <script is:inline async src={plausibleScriptUrl} data-plausible-analytics></script>
+    )}
   </head>
   <body>
     <a href="#content" class="skip-link visually-hidden">Skip to main content</a>
@@ -35,6 +44,11 @@ const {
 
     <script>
       import { initPrintTrigger, initPrintDetailsExpansion } from "../utils/print";
+      import { initPlausible } from "../utils/analytics";
+
+      if (document.querySelector("script[data-plausible-analytics]")) {
+        initPlausible();
+      }
 
       initPrintTrigger();
       initPrintDetailsExpansion();

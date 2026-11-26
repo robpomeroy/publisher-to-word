@@ -1,56 +1,54 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
 
-const PROJECTS = [
-  {
-    title: "Project 1: The 1-Page Community Event Flyer",
-    duration: "15 minutes",
-    skills: ["Page Border", "Title Text Box (No Outline)", "Square-wrapped Photo", "Invisible Table for details"],
-    summary: "Put what you've learned into practice by designing a clean, printable A4 flyer with a bold header, a side-by-side photo with flowing text, and a neat contact box."
-  },
-  {
-    title: "Project 2: The 2-Column Club Newsletter",
-    duration: "25 minutes",
-    skills: ["Section Breaks", "2-Column Layout", "Linked Text Boxes", "Drop Caps", "PDF Export"],
-    summary: "Build a classic Publisher-style newsletter with a 1-column title banner across the top, 2 columns of running article text, and a pull-quote callout box."
-  }
-];
+const allProjects = await getCollection("projects");
+const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="Hands-On Projects">
+<BaseLayout title="Guided Layout Projects">
   <main id="content" class="page-main projects-main" tabindex="-1">
     <div class="page-header">
       <span class="badge badge-ribbon">Hands-On Practice</span>
       <h1>Guided Layout Projects</h1>
       <p class="lead">
-        Practise your layout skills with realistic, step-by-step document templates you can recreate from scratch in Microsoft Word.
+        Build confidence with realistic, step-by-step document templates. Each project takes you from a blank Word document to a finished, print-ready publication with zero guesswork.
       </p>
     </div>
 
     <div class="projects-grid">
-      {PROJECTS.map(proj => (
-        <article class="card project-card">
-          <div class="project-header">
-            <span class="badge badge-contextual">{proj.duration}</span>
-            <h2 class="project-title">{proj.title}</h2>
-          </div>
+      {projects.map(proj => {
+        const slug = proj.id.replace(/\.mdx?$/, "");
+        return (
+          <article class="card project-card">
+            <div class="project-header">
+              <div class="project-badges">
+                <span class="badge badge-contextual">{proj.data.duration}</span>
+                <span class="badge badge-alt">{proj.data.format}</span>
+              </div>
+              <h2 class="project-title">{proj.data.title}</h2>
+            </div>
 
-          <p class="project-summary">{proj.summary}</p>
+            <p class="project-summary">{proj.data.summary}</p>
 
-          <div class="project-skills">
-            <h3 class="skills-label">Skills Practised:</h3>
-            <ul class="skills-list">
-              {proj.skills.map(s => (
-                <li><span class="badge">{s}</span></li>
-              ))}
-            </ul>
-          </div>
+            <div class="project-skills">
+              <h3 class="skills-label">Skills Practised:</h3>
+              <ul class="skills-list">
+                {proj.data.skills.map(s => (
+                  <li><span class="badge">{s}</span></li>
+                ))}
+              </ul>
+            </div>
 
-          <div class="project-footer">
-            <span class="badge badge-ribbon">Detailed Walkthrough Coming in Phase 4</span>
-          </div>
-        </article>
-      ))}
+            <div class="project-footer">
+              <a href={`/projects/${slug}/`} class="btn btn-primary project-cta">
+                <span>Start Project Walkthrough</span>
+                <span class="link-arrow" aria-hidden="true">→</span>
+              </a>
+            </div>
+          </article>
+        );
+      })}
     </div>
   </main>
 </BaseLayout>
@@ -65,6 +63,8 @@ const PROJECTS = [
   .lead {
     font-size: var(--font-size-lg);
     color: var(--ink-secondary);
+    line-height: var(--line-height-relaxed);
+    max-inline-size: 68ch;
   }
 
   .projects-grid {
@@ -76,20 +76,37 @@ const PROJECTS = [
   .project-card {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent-word);
+    box-shadow: 0 4px 12px 0 rgb(15 82 186 / 8%);
   }
 
   .project-header {
     margin-block-end: var(--space-3);
   }
 
+  .project-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-end: var(--space-3);
+  }
+
   .project-title {
     font-size: var(--font-size-xl);
-    margin-block: var(--space-2) 0;
+    color: var(--ink-primary);
+    margin: 0;
+    line-height: var(--line-height-snug);
   }
 
   .project-summary {
     color: var(--ink-secondary);
     font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
     margin-block-end: var(--space-4);
     flex-grow: 1;
   }
@@ -97,12 +114,11 @@ const PROJECTS = [
   .project-skills {
     margin-block-end: var(--space-6);
     border-top: 1px solid var(--border-subtle);
-    padding-block-start: var(--space-3);
+    padding-block-start: var(--space-4);
   }
 
   .skills-label {
     font-size: var(--font-size-xs);
-    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--ink-muted);
@@ -119,12 +135,32 @@ const PROJECTS = [
     gap: var(--space-2);
   }
 
-  .skills-list li {
-    margin: 0;
-  }
-
   .project-footer {
     border-top: 1px solid var(--border-subtle);
     padding-block-start: var(--space-4);
+  }
+
+  .project-cta {
+    inline-size: 100%;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .link-arrow {
+    transition: transform 0.15s ease;
+  }
+
+  .project-cta:hover .link-arrow {
+    transform: translateX(3px);
+  }
+
+  @media (forced-colors: active) {
+    .project-card {
+      border: 1px solid ButtonText !important;
+    }
+
+    .project-card:hover {
+      border: 2px solid Highlight !important;
+    }
   }
 </style>

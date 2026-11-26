@@ -1,48 +1,11 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { RESCUE_CATEGORIES, RESCUE_ITEMS } from "../data/rescue";
 
-const RESCUE_ITEMS = [
-  {
-    symptom: "My picture jumped to the next page when I typed above it!",
-    cause: "The picture is set to 'Move with text', or its anchor paragraph was pushed across the page break.",
-    fix: "Click the picture, click the floating Layout arch icon beside it, and choose 'Fix position on page'. If it still jumped, its anchor paragraph moved across the page break: turn on Show/Hide ¶ on the Home tab to see the anchor (⚓), and drag it back to a paragraph on the intended page."
-  },
-  {
-    symptom: "The 'Picture Format' or 'Shape Format' tab disappeared from the top ribbon!",
-    cause: "Word only displays object-specific ribbon tabs while the object is actively selected.",
-    fix: "Click directly on the picture or text box border. The specialised tab will immediately reappear at the far right of the top ribbon."
-  },
-  {
-    symptom: "The 'Group' button is greyed out and I can't click it!",
-    cause: "Word refuses to group items if even one of the selected objects is set to 'In Line with Text'.",
-    fix: "Select each item individually, click its floating Layout arch icon, and change Text Wrapping from 'In Line with Text' to 'Square' or 'In Front of Text'. Once none of them are inline, select both and Group will become active."
-  },
-  {
-    symptom: "I sent a picture 'Behind Text' and now I can't click or select it!",
-    cause: "When an image is behind text, clicking the area selects the typed text layer instead of the picture.",
-    fix: "Go to the Home tab → Select (far right) → Selection Pane. In the list of objects on the right side of your screen, click your picture's name. It will immediately select the picture so you can move or reformat it."
-  },
-  {
-    symptom: "My text box has an unwanted black border and a solid white background!",
-    cause: "Word gives all newly drawn text boxes a default 1pt black line outline and a white solid fill.",
-    fix: "Click the border of the text box. Go to Shape Format on the top ribbon. Set Shape Fill to 'No Fill' (makes background transparent) and set Shape Outline to 'No Outline' (removes the black box border)."
-  },
-  {
-    symptom: "My text is squished right up against the border of the text box!",
-    cause: "Word's internal text box margins are set too tight or unevenly.",
-    fix: "Right-click the border of the text box → Format Shape. In the right pane, click 'Text Options' → click the little Text Box icon (3rd icon) → adjust the Left, Right, Top, and Bottom margins to 0.2 cm or more."
-  },
-  {
-    symptom: "My page border gets cut off at the bottom when I print it!",
-    cause: "By default, Word measures page borders from the 'Edge of page', which often falls inside your desktop printer's unprintable physical margin.",
-    fix: "Go to the Design tab → Page Borders → click the 'Options...' button (bottom right of the dialogue box). Change 'Measure from: Edge of page' to 'Measure from: Text'. This pulls the border safely inside the printable area."
-  },
-  {
-    symptom: "There's a stubborn blank page at the end of my document that won't delete!",
-    cause: "A table or large graphic at the very bottom of page 1 forces a mandatory hidden paragraph mark (¶) onto the next page.",
-    fix: "Turn on Show/Hide ¶ on the Home tab. Locate the lone ¶ on the blank page. Highlight that single mark, go to the Home tab, and set its font size to '1' pt and line spacing to 1.0. This shrinks the mark so tiny it pulls back onto page 1."
-  }
-];
+function getCategoryLabel(catId: string): string {
+  const found = RESCUE_CATEGORIES.find(c => c.id === catId);
+  return found ? found.label : catId;
+}
 ---
 
 <BaseLayout title="Rescue Guide: Why Did That Happen?">
@@ -51,35 +14,168 @@ const RESCUE_ITEMS = [
       <span class="badge badge-ribbon">Troubleshooting</span>
       <h1>"Why Did That Happen?" Rescue Guide</h1>
       <p class="lead">
-        Click any common frustration below to see why Word behaves that way and the immediate 2-click fix.
+        Frustrated by jumping pictures, missing ribbon tabs, or mysterious extra pages? Here is why Word behaves differently from Publisher, and the immediate steps to fix it.
       </p>
     </div>
 
-    <div class="rescue-stack">
+    <!-- Filter & Search Toolbar -->
+    <section class="filter-section" aria-labelledby="filter-heading">
+      <h2 id="filter-heading" class="visually-hidden">Filter Troubleshooting Snags</h2>
+
+      <div class="filter-toolbar">
+        <div class="search-field">
+          <label for="rescue-search" class="search-label">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <span>Search troubleshooting snags:</span>
+          </label>
+          <input
+            type="search"
+            id="rescue-search"
+            class="search-input"
+            placeholder="Filter by symptom, tool or keyword (e.g. jumping picture, white fill, margins)..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="controls-row">
+          <div class="category-pills" role="radiogroup" aria-label="Filter by category">
+            {RESCUE_CATEGORIES.map(cat => (
+              <button
+                type="button"
+                class:list={["pill-btn", { "is-active": cat.id === "all" }]}
+                role="radio"
+                aria-checked={cat.id === "all" ? "true" : "false"}
+                tabindex={cat.id === "all" ? 0 : -1}
+                data-category={cat.id}
+              >
+                <span>{cat.label}</span>
+                <span class="pill-count" aria-hidden="true">
+                  {cat.id === "all"
+                    ? RESCUE_ITEMS.length
+                    : RESCUE_ITEMS.filter(item => item.category === cat.id).length}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div class="actions-group">
+            <button
+              type="button"
+              class="btn btn-secondary toggle-all-btn"
+              id="toggle-all-btn"
+              aria-expanded="false"
+            >
+              <span id="toggle-all-text">Expand All</span>
+              <span class="toggle-icon" aria-hidden="true">↕</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-status" aria-live="polite" id="filter-status">
+        Showing all {RESCUE_ITEMS.length} troubleshooting snags.
+      </div>
+    </section>
+
+    <!-- Rescue Cards Stack -->
+    <div class="rescue-stack" id="rescue-stack">
       {RESCUE_ITEMS.map((item, index) => (
-        <details class="disclosure rescue-card" id={`snag-${index + 1}`}>
+        <details
+          class="disclosure rescue-card"
+          id={item.id}
+          data-category={item.category}
+          data-id={item.id}
+        >
           <summary class="rescue-summary">
-            <span class="symptom-text">{item.symptom}</span>
+            <span class="symptom-wrapper">
+              <span class="snag-number" aria-hidden="true">#{index + 1}</span>
+              <span class="symptom-text">{item.symptom}</span>
+            </span>
+            <span class="badge badge-category">{getCategoryLabel(item.category)}</span>
           </summary>
+
           <div class="rescue-body">
-            <div class="rescue-section">
-              <h2 class="section-label">Why it happens:</h2>
-              <p>{item.cause}</p>
+            <div class="rescue-section cause-section">
+              <h2 class="section-label">Why Word behaves this way</h2>
+              <p class="cause-text">{item.cause}</p>
             </div>
+
             <div class="rescue-section fix-section">
-              <h2 class="section-label">How to fix it:</h2>
-              <p>{item.fix}</p>
+              <h2 class="section-label">How to fix it (Step-by-Step)</h2>
+              <ol class="fix-steps">
+                {item.fixSteps.map(step => (
+                  <li>{step}</li>
+                ))}
+              </ol>
+            </div>
+
+            <div class="rescue-section paths-section">
+              <h2 class="section-label">Where to find the controls</h2>
+              <div class="paths-grid">
+                <div class="path-card">
+                  <span class="path-title">Ribbon Path</span>
+                  <code class="path-code">{item.ribbonPath}</code>
+                </div>
+                {item.altPath && (
+                  <div class="path-card">
+                    <span class="path-title">Alternative / Shortcut</span>
+                    <code class="path-code">{item.altPath}</code>
+                  </div>
+                )}
+              </div>
+
+              {item.tip && (
+                <div class="tip-card">
+                  <span class="tip-icon" aria-hidden="true">💡</span>
+                  <div class="tip-content">
+                    <strong>Practical Tip:</strong> {item.tip}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div class="rescue-footer">
+              <a href={`/lessons/${item.lessonSlug}`} class="lesson-link">
+                <span>Read related lesson: <strong>{item.lessonTitle}</strong></span>
+                <span class="link-arrow" aria-hidden="true">→</span>
+              </a>
+              {item.sandboxUrl && (
+                <a href={item.sandboxUrl} class="sandbox-link">
+                  <span>Practise in interactive sandbox</span>
+                  <span class="link-arrow" aria-hidden="true">↗</span>
+                </a>
+              )}
             </div>
           </div>
         </details>
       ))}
+
+      <!-- Empty State -->
+      <div id="rescue-empty" class="card empty-state" hidden>
+        <span class="empty-icon" aria-hidden="true">🔎</span>
+        <h3 class="empty-title">No matching troubleshooting snags found</h3>
+        <p class="empty-desc">
+          We could not find any issue matching your current search term or category filter.
+        </p>
+        <button type="button" class="btn btn-primary" id="reset-filters-btn">
+          <span>Reset All Filters</span>
+          <span aria-hidden="true">↺</span>
+        </button>
+      </div>
     </div>
   </main>
 </BaseLayout>
 
+<script>
+  import { initRescueController } from "../utils/reference-controllers";
+
+  initRescueController();
+</script>
+
 <style>
   .page-header {
-    margin-block-end: var(--space-8);
+    margin-block-end: var(--space-6);
     padding-block-end: var(--space-6);
     border-bottom: 1px solid var(--border-subtle);
   }
@@ -87,23 +183,209 @@ const RESCUE_ITEMS = [
   .lead {
     font-size: var(--font-size-lg);
     color: var(--ink-secondary);
-    max-inline-size: var(--max-prose-width);
+    line-height: var(--line-height-relaxed);
+    margin-block-start: var(--space-3);
   }
 
-  .rescue-stack {
+  /* Filter Section */
+  .filter-section {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-block-end: var(--space-6);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+  }
+
+  .filter-toolbar {
     display: flex;
     flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .search-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .search-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+  }
+
+  .search-icon {
+    font-size: 1rem;
+  }
+
+  .search-input {
+    inline-size: 100%;
+    min-block-size: var(--target-min-size);
+    padding: var(--space-3) var(--space-4);
+    font-family: inherit;
+    font-size: var(--font-size-base);
+    color: var(--ink-primary);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent-word);
+    box-shadow: 0 0 0 3px rgb(15 82 186 / 15%);
+  }
+
+  .controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
     gap: var(--space-3);
   }
 
-  .rescue-card {
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--target-min-size);
+    padding: var(--space-2) var(--space-4);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--ink-secondary);
+    background-color: var(--surface-subtle);
     border: 1px solid var(--border-ui);
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 3%);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .pill-btn:hover {
+    color: var(--ink-primary);
+    border-color: var(--ink-muted);
+    background-color: var(--surface-hover);
+  }
+
+  .pill-btn.is-active {
+    background-color: var(--accent-word);
+    color: #ffffff;
+    border-color: var(--accent-word);
+  }
+
+  .pill-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-full);
+    background-color: rgb(0 0 0 / 8%);
+    color: inherit;
+  }
+
+  .pill-btn.is-active .pill-count {
+    background-color: rgb(255 255 255 / 25%);
+    color: #ffffff;
+  }
+
+  .toggle-all-btn {
+    font-size: var(--font-size-sm);
+    padding-inline: var(--space-4);
+  }
+
+  .toggle-icon {
+    font-size: 1rem;
+    margin-inline-start: var(--space-1);
+  }
+
+  .filter-status {
+    margin-block-start: var(--space-3);
+    font-size: var(--font-size-sm);
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  /* Rescue Stack */
+  .rescue-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .rescue-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .rescue-card[hidden],
+  .empty-state[hidden] {
+    display: none !important;
+  }
+
+  .rescue-card:hover {
+    border-color: var(--border-accent);
+  }
+
+  .rescue-card[open] {
+    border-color: var(--accent-word);
+    box-shadow: 0 2px 6px 0 rgb(15 82 186 / 8%);
   }
 
   .rescue-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
     font-size: var(--font-size-lg);
-    color: var(--ink-primary);
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .rescue-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .rescue-summary::before {
+    content: "▸";
+    display: inline-block;
+    font-size: 1.1rem;
+    color: var(--accent-word);
+    transition: transform 0.2s ease;
+    margin-inline-end: var(--space-2);
+  }
+
+  .rescue-card[open] > .rescue-summary::before {
+    transform: rotate(90deg);
+  }
+
+  .symptom-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex: 1;
+  }
+
+  .snag-number {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--ink-muted);
   }
 
   .symptom-text {
@@ -114,43 +396,219 @@ const RESCUE_ITEMS = [
     color: var(--accent-word);
   }
 
+  .badge-category {
+    font-size: var(--font-size-xs);
+    background-color: var(--surface-subtle);
+    color: var(--ink-secondary);
+    border: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+
   .rescue-body {
     border-top: 1px solid var(--border-subtle);
-    padding-block-start: var(--space-4);
-  }
-
-  .rescue-section {
-    margin-block-end: var(--space-4);
-  }
-
-  .rescue-section p {
-    max-inline-size: var(--max-prose-width);
+    padding: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    background-color: var(--surface-subtle);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
   }
 
   .section-label {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-xs);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--ink-muted);
     margin: 0;
-    margin-block-end: var(--space-1);
+    margin-block-end: var(--space-2);
+  }
+
+  .cause-section {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+  }
+
+  .cause-text {
+    color: var(--ink-primary);
+    line-height: var(--line-height-relaxed);
+    margin: 0;
   }
 
   .fix-section {
     background-color: var(--accent-success-bg);
     border: 1px solid var(--accent-success-border);
-    padding: var(--space-4);
     border-radius: var(--radius-md);
+    padding: var(--space-5);
   }
 
   .fix-section .section-label {
     color: var(--accent-success);
   }
 
-  .fix-section p {
+  .fix-steps {
+    margin: 0;
+    padding-inline-start: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    color: var(--ink-primary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .fix-steps li {
+    padding-inline-start: var(--space-1);
+  }
+
+  .paths-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .paths-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-3);
+  }
+
+  .path-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .path-title {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--ink-muted);
+  }
+
+  .path-code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+    background-color: var(--surface-subtle);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    overflow-wrap: anywhere;
+  }
+
+  .tip-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    background-color: var(--accent-tip-bg);
+    border: 1px solid var(--accent-tip-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+  }
+
+  .tip-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .tip-content {
+    line-height: var(--line-height-relaxed);
+  }
+
+  .rescue-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block-start: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .lesson-link,
+  .sandbox-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--accent-word);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    transition: all 0.15s ease;
+  }
+
+  .lesson-link:hover,
+  .sandbox-link:hover {
+    background-color: var(--accent-word);
+    color: #ffffff;
+    border-color: var(--accent-word);
+  }
+
+  .lesson-link:hover strong {
+    color: #ffffff;
+  }
+
+  .link-arrow {
+    transition: transform 0.15s ease;
+  }
+
+  .lesson-link:hover .link-arrow,
+  .sandbox-link:hover .link-arrow {
+    transform: translateX(2px);
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-8) var(--space-6);
+    background-color: var(--surface-card);
+    border: 1px dashed var(--border-ui);
+    border-radius: var(--radius-lg);
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-block-end: var(--space-3);
+  }
+
+  .empty-title {
+    font-size: var(--font-size-xl);
     color: var(--ink-primary);
     margin: 0;
-    font-weight: 500;
+    margin-block-end: var(--space-2);
+  }
+
+  .empty-desc {
+    color: var(--ink-secondary);
+    max-inline-size: 38ch;
+    margin-inline: auto;
+    margin-block-end: var(--space-5);
+  }
+
+  @media (forced-colors: active) {
+    .rescue-card {
+      border: 1px solid ButtonText !important;
+    }
+
+    .rescue-card[open] {
+      border: 2px solid Highlight !important;
+    }
+
+    .pill-btn.is-active {
+      border: 2px solid Highlight !important;
+    }
   }
 </style>

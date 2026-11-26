@@ -1,0 +1,326 @@
+---
+title: "The 4-Page Event Programme Booklet"
+order: 3
+duration: "30 minutes"
+summary: "Master Word's 'Book Fold' layout to produce a folded 4-page A5 concert or theatre programme from a single sheet of A4 landscape paper."
+format: "A4 Landscape folded to A5 Booklet (4 pages total)"
+skills:
+  - "Book Fold Multiple Pages Setup"
+  - "Gutter Margins for the Folding Spine"
+  - "Schedule Table Formatting"
+  - "Inside Spread Continuity (Pages 2 & 3)"
+  - "Short-Edge Duplex Printing"
+publisherDifference: "In Publisher, you selected 'Booklet' and pages 1 & 4 were placed together on Sheet 1. In Word, the 'Book fold' setting achieves the exact same result: you author your pages sequentially (1, 2, 3, 4), and Word handles the printer imposition and duplex pairing automatically."
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Project Overview & Blueprint
+
+Folded booklets (such as church service sheets, school play programmes, wedding schedules, or choral concert programmes) are a classic Publisher staple. Many users believe Word cannot create folded booklets and resort to awkward manual two-column hacks.
+
+Word has an exceptional built-in **Book Fold** engine. You type your content naturally across 4 sequential pages, and Word automatically rearranges and pairs the pages for physical two-sided printing.
+
+<PublisherCompare
+  title="Booklet Imposition: Publisher vs Word"
+  publisherWay="Publisher asks if you want to automatically create a 4-page booklet and displays pages side-by-side on your master board."
+  wordWay="Choose 'Multiple pages: Book fold' in Page Setup. You author pages 1, 2, 3, and 4 in standard linear order, and Word prints Page 4 beside Page 1 on the outer sheet."
+/>
+
+### Layout Blueprint
+
+Study the physical sheet folding and page distribution below:
+
+<figure class="blueprint-figure">
+  <svg
+    viewBox="0 0 680 440"
+    role="img"
+    aria-labelledby="booklet-blueprint-title booklet-blueprint-desc"
+    class="blueprint-svg"
+  >
+    <title id="booklet-blueprint-title">4-Page Book Fold Layout & Imposition Blueprint</title>
+    <desc id="booklet-blueprint-desc">
+      Architectural diagram showing Sheet 1 (Outer Sheet) containing Page 4 (Back Cover) on the left and Page 1 (Front Cover) on the right, and Sheet 2 (Inside Spread) containing Page 2 (Welcome) on the left and Page 3 (Programme Schedule) on the right, divided by the central folding spine.
+    </desc>
+
+    {/* Sheet 1: Outer Cover (Pages 4 and 1) */}
+    <rect x="20" y="20" width="300" height="200" rx="4" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2" />
+    <text x="35" y="42" fill="#64748B" font-size="9" font-weight="700" font-family="system-ui">Sheet 1: Outer Cover (A4 Landscape)</text>
+
+    {/* Spine line */}
+    <line x1="170" y1="20" x2="170" y2="220" stroke="#0F52BA" stroke-width="1.5" stroke-dasharray="4 2" />
+    <text x="170" y="235" fill="#0F52BA" font-size="8" font-weight="700" text-anchor="middle" font-family="system-ui">Central Fold Line</text>
+
+    {/* Page 4 (Back Cover) */}
+    <rect x="35" y="55" width="120" height="150" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="95" y="75" fill="#1E293B" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Page 4: Back Cover</text>
+    <text x="95" y="90" fill="#64748B" font-size="8" text-anchor="middle" font-family="system-ui">Acknowledgements & Credits</text>
+    <rect x="45" y="105" width="100" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="45" y="115" width="95" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="45" y="125" width="90" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="45" y="150" width="100" height="35" rx="2" fill="#F1F5F9" />
+    <text x="95" y="172" fill="#64748B" font-size="7" text-anchor="middle" font-family="system-ui">Sponsor Logos</text>
+
+    {/* Page 1 (Front Cover) */}
+    <rect x="185" y="55" width="120" height="150" rx="3" fill="#FFFFFF" stroke="#0F52BA" stroke-width="1.5" />
+    <text x="245" y="80" fill="#0F52BA" font-size="10" font-weight="800" text-anchor="middle" font-family="system-ui">ANNUAL GALA</text>
+    <text x="245" y="93" fill="#1E293B" font-size="8" font-weight="600" text-anchor="middle" font-family="system-ui">Midsummer Concert</text>
+    <circle cx="245" cy="120" r="18" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1" />
+    <text x="245" y="124" fill="#64748B" font-size="12" text-anchor="middle" font-family="system-ui">🎵</text>
+    <text x="245" y="155" fill="#475569" font-size="7" text-anchor="middle" font-family="system-ui">Saturday 21 June • 7:30 PM</text>
+    <text x="245" y="168" fill="#475569" font-size="7" text-anchor="middle" font-family="system-ui">St Mary's Concert Hall</text>
+
+    {/* Sheet 2: Inside Spread (Pages 2 and 3) */}
+    <rect x="360" y="20" width="300" height="200" rx="4" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2" />
+    <text x="375" y="42" fill="#64748B" font-size="9" font-weight="700" font-family="system-ui">Sheet 2: Inside Spread (Reverse side)</text>
+
+    {/* Spine line */}
+    <line x1="510" y1="20" x2="510" y2="220" stroke="#0F52BA" stroke-width="1.5" stroke-dasharray="4 2" />
+    <text x="510" y="235" fill="#0F52BA" font-size="8" font-weight="700" text-anchor="middle" font-family="system-ui">Central Fold Line</text>
+
+    {/* Page 2 (Inside Left: Welcome) */}
+    <rect x="375" y="55" width="120" height="150" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="435" y="75" fill="#1E293B" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Page 2: Welcome</text>
+    <text x="435" y="88" fill="#64748B" font-size="8" text-anchor="middle" font-family="system-ui">Musical Director's Foreword</text>
+    <rect x="385" y="100" width="100" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="385" y="108" width="95" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="385" y="116" width="98" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="385" y="124" width="90" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="385" y="132" width="95" height="4" rx="1" fill="#E2E8F0" />
+    <rect x="385" y="140" width="85" height="4" rx="1" fill="#E2E8F0" />
+
+    {/* Page 3 (Inside Right: Schedule Table) */}
+    <rect x="525" y="55" width="120" height="150" rx="3" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+    <text x="585" y="75" fill="#1E293B" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Page 3: Programme</text>
+    <rect x="535" y="90" width="100" height="14" rx="2" fill="#E2E8F0" />
+    <text x="540" y="100" fill="#1E293B" font-size="7" font-weight="700" font-family="system-ui">Act I: Classical Overtures</text>
+    <rect x="535" y="108" width="100" height="12" rx="1" fill="#F8FAFC" />
+    <text x="540" y="117" fill="#475569" font-size="6" font-family="system-ui">1. Mozart: Eine kleine Nachtmusik</text>
+    <rect x="535" y="123" width="100" height="14" rx="2" fill="#E2E8F0" />
+    <text x="540" y="133" fill="#1E293B" font-size="7" font-weight="700" font-family="system-ui">Interval (20 Minutes)</text>
+    <rect x="535" y="141" width="100" height="12" rx="1" fill="#F8FAFC" />
+    <text x="540" y="150" fill="#475569" font-size="6" font-family="system-ui">2. Elgar: Enigma Variations (Nimrod)</text>
+
+    {/* Flow Explanation */}
+    <rect x="120" y="270" width="440" height="140" rx="6" fill="#F0FDFA" stroke="#0D9488" stroke-width="1.5" />
+    <text x="340" y="295" fill="#0F766E" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui">How Word Handles Book Fold Imposition</text>
+    <text x="140" y="325" fill="#334155" font-size="10" font-family="system-ui">1. You create 4 ordinary sequential pages in Word: Page 1, Page 2, Page 3, Page 4.</text>
+    <text x="140" y="348" fill="#334155" font-size="10" font-family="system-ui">2. Under Page Setup, you set 'Multiple pages: Book fold' on A4 Landscape.</text>
+    <text x="140" y="371" fill="#334155" font-size="10" font-family="system-ui">3. When printed duplex (flip on short edge), Sheet 1 and Sheet 2 fold down the middle</text>
+    <text x="156" y="390" fill="#334155" font-size="10" font-family="system-ui">into a crisp, professional 4-page A5 booklet!</text>
+  </svg>
+</figure>
+
+---
+
+## Step 1: Configure Page Setup to 'Book Fold'
+
+Setting up Book Fold takes less than 30 seconds, but you must open the dedicated Page Setup dialogue box.
+
+<WhereToFindIt
+  title="Where to Find Book Fold Settings"
+  ribbonPath={["Layout", "Page Setup launcher arrow", "Multiple pages: Book fold"]}
+  altRibbonPath={["Layout", "Margins", "Custom Margins"]}
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Open the Page Setup dialogue launcher",
+      detail: "Go to the Layout tab on the ribbon. In the 'Page Setup' group, click the small launcher arrow in the bottom-right corner.",
+      ribbonBadge: "Layout → Page Setup"
+    },
+    {
+      title: "Choose Multiple pages: Book fold",
+      detail: "Locate the 'Multiple pages' dropdown near the middle of the Margins tab. Change 'Normal' to 'Book fold'. Notice that Word automatically flips the Orientation to Landscape.",
+      ribbonBadge: "Multiple pages: Book fold"
+    },
+    {
+      title: "Set margins and spine gutter",
+      detail: "Set Top, Bottom, Inside, and Outside margins to 1.5 cm. Set the 'Gutter' to 0.5 cm. The Gutter is the extra breathing space added beside the center fold so text doesn't disappear into the crease.",
+      ribbonBadge: "Gutter: 0.5 cm"
+    },
+    {
+      title: "Confirm paper size is A4",
+      detail: "Click the 'Paper' tab at the top of the dialogue and verify Paper Size is set to 'A4' (210 × 297 mm). Click OK.",
+      ribbonBadge: "Paper Size: A4"
+    }
+  ]}
+/>
+
+---
+
+## Step 2: Design Page 1 (The Front Cover)
+
+Word now presents your document as A5 portrait pages on screen. Page 1 is your front cover.
+
+<StepList
+  steps={[
+    {
+      title: "Add event title and subtitle",
+      detail: "Type the concert title: 'MIDSUMMER GALA CONCERT'. Set font to 24 pt, Bold, Centered, Deep Navy (#0F52BA). Below it, add the subtitle: 'An Evening of British & Classical Masterworks' (12 pt).",
+      ribbonBadge: "Home → Font"
+    },
+    {
+      title: "Insert musical motif or logo",
+      detail: "Insert an elegant illustration or musical icon centered on the cover. Set wrapping to 'Top and Bottom' or 'In Line with Text' so it remains perfectly centered.",
+      ribbonBadge: "Insert → Pictures"
+    },
+    {
+      title: "Add venue and date details",
+      detail: "Add the performance date and venue at the bottom: 'Saturday 21 June • 7:30 PM' and 'St Mary's Concert Hall, Bath'. Use Shift+Enter between lines for tight spacing.",
+      ribbonBadge: "Shift + Enter"
+    },
+    {
+      title: "Jump to Page 2 with a Page Break",
+      detail: "Press Ctrl+Enter (Insert → Page Break) to create Page 2. Never press Enter repeatedly to push onto the next page!",
+      ribbonBadge: "Ctrl + Enter"
+    }
+  ]}
+/>
+
+---
+
+## Step 3: Design Page 2 (The Inside Welcome)
+
+Page 2 will be the left-hand page when the booklet is opened. It holds the Welcome Note or Order of Service.
+
+<StepList
+  steps={[
+    {
+      title: "Add Welcome Heading",
+      detail: "Type 'Welcome from the Musical Director'. Apply Heading 2 style (14 pt, Bold, Navy).",
+      ribbonBadge: "Heading 2"
+    },
+    {
+      title: "Type the message copy",
+      detail: "Add 2 to 3 paragraphs welcoming patrons, introducing the guest soloists, and thanking the choir and orchestra committee.",
+      ribbonBadge: "Body Prose"
+    },
+    {
+      title: "Add an ornamental divider",
+      detail: "Insert a small centered ornamental flourish or thin border rule beneath the welcome note.",
+      ribbonBadge: "Home → Borders"
+    },
+    {
+      title: "Advance to Page 3",
+      detail: "Press Ctrl+Enter to advance cleanly to Page 3.",
+      ribbonBadge: "Ctrl + Enter"
+    }
+  ]}
+/>
+
+---
+
+## Step 4: Format the Programme Schedule on Page 3
+
+Page 3 is the right-hand page when the booklet is opened. Use a clean, borderless table to align musical pieces, composers, and soloists.
+
+<WhereToFindIt
+  title="Where to Find Table Grid Alignment"
+  ribbonPath={["Insert", "Table", "Insert Table"]}
+  altRibbonPath={["Table Design", "Borders", "No Border"]}
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Insert a 3-column by 6-row table",
+      detail: "Go to Insert → Table → 3 columns × 6 rows. Column 1: Piece / Title, Column 2: Composer, Column 3: Soloist / Notes.",
+      ribbonBadge: "Insert → Table"
+    },
+    {
+      title: "Fill in programme schedule items",
+      detail: "Enter your concert items (e.g., 'Eine kleine Nachtmusik', 'W.A. Mozart', 'Strings Ensemble'). Insert an Interval row spanning across cells using Table Layout → Merge Cells.",
+      ribbonBadge: "Table Content"
+    },
+    {
+      title: "Style table cleanly without vertical lines",
+      detail: "Select the table. Remove all vertical borders. Keep only subtle light grey horizontal dividing lines (0.5 pt #E2E8F0) beneath each item. Add 0.15 cm top/bottom cell padding.",
+      ribbonBadge: "Table Design"
+    },
+    {
+      title: "Advance to Page 4",
+      detail: "Press Ctrl+Enter to advance to the final page.",
+      ribbonBadge: "Ctrl + Enter"
+    }
+  ]}
+/>
+
+---
+
+## Step 5: Design Page 4 (The Back Cover)
+
+Page 4 is the back cover of your folded booklet. It is the ideal place for sponsor acknowledgments, committee credits, and upcoming events.
+
+<StepList
+  steps={[
+    {
+      title: "Add credits heading",
+      detail: "Type 'Acknowledgements & Patron Credits'. Apply Heading 2 style.",
+      ribbonBadge: "Heading 2"
+    },
+    {
+      title: "List society patrons and sponsors",
+      detail: "List local business sponsors, venue benefactors, and volunteers in a neat 2-column bulleted list or small text box.",
+      ribbonBadge: "Patron List"
+    },
+    {
+      title: "Add future dates teaser box",
+      detail: "At the bottom of the back cover, add a shaded box announcing the Winter Carol Concert date.",
+      ribbonBadge: "Teaser Box"
+    }
+  ]}
+/>
+
+---
+
+## Step 6: Print Duplex (Flip on Short Edge)
+
+This is the critical step where many people accidentally print the inside spread upside down!
+
+<WhereToFindIt
+  title="Where to Find Duplex Print Settings"
+  ribbonPath={["File", "Print", "Print on Both Sides (Short Edge)"]}
+  altRibbonPath={["Printer Properties", "Finishing", "Short Edge"]}
+/>
+
+<GotchaBox title="Common Snag — Upside Down Inside Spread" collapsible={false}>
+  <p>
+    <strong>Why it happens:</strong> Standard multi-page documents flip along the long edge (like a normal bound book). Booklets printed on Landscape A4 sheets must flip along the SHORT edge (the 210 mm vertical edge).
+  </p>
+  <p>
+    <strong>Immediate fix:</strong> In the Print dialogue (<kbd>Ctrl</kbd>+<kbd>P</kbd>), change 'Print on Both Sides: Flip pages on long edge' to <strong>Print on Both Sides: Flip pages on short edge</strong>.
+  </p>
+</GotchaBox>
+
+<MacNote summary="Booklet printing on Word for Mac">
+  <p>
+    On macOS, open the Print dialogue (<strong>Cmd ⌘ + P</strong>), change the third dropdown from 'Copies & Pages' to <strong>Layout</strong>, and select <strong>Two-Sided: Short-Edge binding</strong>.
+  </p>
+</MacNote>
+
+---
+
+## Check Your Work: Booklet Checklist
+
+- [ ] **Book Fold Configured:** Page Setup shows 'Multiple pages: Book fold' on A4 Landscape paper.
+- [ ] **4-Page Rule Met:** The status bar reads exactly **Page 1 of 4** (Booklets must always be multiples of 4: 4, 8, 12, etc.).
+- [ ] **Gutter Breathing Room:** There is a visible 0.5 cm gutter cushion along the inside binding edge of both spreads.
+- [ ] **Schedule Table Alignment:** The programme schedule on Page 3 fits cleanly on the single page without spilling over.
+- [ ] **Print Orientation Checked:** Two-sided printing is set to **Flip pages on Short Edge**.
+
+<TryItCard
+  title="Stretch Challenge: Add Centred Page Numbers to Inside Spread"
+  steps={[
+    "Replace the Page Breaks before Page 2 and Page 4 with Section Breaks (Next Page) via Layout → Breaks → Section Breaks: Next Page.",
+    "Double-click inside the footer on Page 2. On the Header & Footer ribbon tab, click 'Link to Previous' to turn off linking from the cover.",
+    "Insert a centred page number on Page 2 (Header & Footer → Page Number → Current Position → Plain Number). Pages 2 and 3 will number sequentially.",
+    "Go to the footer on Page 4 (Back Cover). Turn off 'Link to Previous' and delete the page number so both outer covers stay completely clean."
+  ]}
+/>

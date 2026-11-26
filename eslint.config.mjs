@@ -12,6 +12,14 @@ export default [
         extraFileExtensions: ['.astro'],
       },
     },
+    rules: {
+      'astro/jsx-a11y/no-noninteractive-tabindex': [
+        'error',
+        {
+          roles: ['tabpanel', 'region'],
+        },
+      ],
+    },
   },
   {
     files: ['**/*.ts', '**/*.tsx'],

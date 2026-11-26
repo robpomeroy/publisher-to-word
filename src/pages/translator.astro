@@ -1,50 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const TRANSLATIONS = [
-  {
-    publisher: "Scratch Area (Grey canvas outside page)",
-    word: "No direct equivalent. Store temporary text/images in a scratch table cell or use a temporary extra page at the end of the document.",
-    ribbon: "Insert → Page Break",
-    tip: "Word deletes anything placed outside page boundaries unless it's anchored inside."
-  },
-  {
-    publisher: "Draw Text Box",
-    word: "Insert → Text Box → Draw Text Box (or use an Invisible Table for multi-column layout).",
-    ribbon: "Insert → Text Box",
-    tip: "Remember to remove the default black outline: Shape Format → Shape Outline → No Outline."
-  },
-  {
-    publisher: "Picture Frame (Drop photo into framed box)",
-    word: "Insert → Pictures → This Device, then set Text Wrap to Square or In Front of Text.",
-    ribbon: "Picture Format → Wrap Text",
-    tip: "To crop to a specific shape, use Picture Format → Crop → Crop to Shape."
-  },
-  {
-    publisher: "Master Page (Repeating header/logo on all pages)",
-    word: "Header and Footer layer (double-click top or bottom margin).",
-    ribbon: "Insert → Header / Footer",
-    tip: "Tick 'Different First Page' on the Header & Footer tab to leave the cover page clean."
-  },
-  {
-    publisher: "Text Box Overflow Linking (Flowing text between boxes)",
-    word: "Create Link tool between two empty text boxes.",
-    ribbon: "Shape Format → Create Link",
-    tip: "Click the first box, click Create Link, then click the second empty box with the pitcher icon."
-  },
-  {
-    publisher: "Nudge object slightly with arrow keys",
-    word: "Select object and press Ctrl + Arrow Keys for micro-nudging.",
-    ribbon: "Keyboard shortcut",
-    tip: "Holding Ctrl while pressing Arrow keys nudges by a single pixel instead of a full grid step."
-  },
-  {
-    publisher: "Bring to Front / Send to Back",
-    word: "Bring to Front / Send to Back (click the drop-down arrow beside Bring Forward or Send Backward).",
-    ribbon: "Shape Format → Arrange",
-    tip: "Use the Selection Pane (Home → Select → Selection Pane) to easily click layers hidden behind text."
-  }
-];
+import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
 ---
 
 <BaseLayout title="Publisher → Word Translator">
@@ -53,113 +9,493 @@ const TRANSLATIONS = [
       <span class="badge badge-ribbon">Quick Lookup</span>
       <h1>Publisher → Word Translator</h1>
       <p class="lead">
-        Find the exact Word feature for the Publisher tools and habits you already know by heart.
+        Find the exact Word feature for the Publisher tools, terms, and habits you already know by heart.
       </p>
     </div>
 
-    <div class="table-container">
-      <table class="translator-table">
-        <caption class="visually-hidden">Table comparing Microsoft Publisher features to their Microsoft Word equivalents</caption>
+    <!-- Filter & Search Toolbar -->
+    <section class="filter-section" aria-labelledby="filter-heading">
+      <h2 id="filter-heading" class="visually-hidden">Filter Translations</h2>
+
+      <div class="filter-toolbar">
+        <div class="search-field">
+          <label for="translator-search" class="search-label">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <span>Search habits or features:</span>
+          </label>
+          <input
+            type="search"
+            id="translator-search"
+            class="search-input"
+            placeholder="Filter by term (e.g. scratch, border, anchor, crop)..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="category-pills" role="radiogroup" aria-label="Filter by category">
+          {TRANSLATOR_CATEGORIES.map(cat => (
+            <button
+              type="button"
+              class:list={["pill-btn", { "is-active": cat.id === "all" }]}
+              role="radio"
+              aria-checked={cat.id === "all" ? "true" : "false"}
+              tabindex={cat.id === "all" ? 0 : -1}
+              data-category={cat.id}
+            >
+              <span>{cat.label}</span>
+              <span class="pill-count" aria-hidden="true">
+                {cat.id === "all"
+                  ? TRANSLATOR_ENTRIES.length
+                  : TRANSLATOR_ENTRIES.filter(e => e.category === cat.id).length}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div class="filter-status" aria-live="polite" id="filter-status">
+        Showing all {TRANSLATOR_ENTRIES.length} translations.
+      </div>
+    </section>
+
+    <!-- Responsive Table Container -->
+    <div
+      tabindex="0"
+      role="region"
+      aria-labelledby="translator-table-caption"
+      class="table-wrapper"
+    >
+      <table class="translator-table" id="translator-table">
+        <caption id="translator-table-caption" class="visually-hidden">
+          Comparison directory mapping Microsoft Publisher features to Microsoft Word equivalents with ribbon locations and lesson links.
+        </caption>
         <thead>
           <tr>
-            <th scope="col">In Publisher</th>
-            <th scope="col">In Microsoft Word</th>
-            <th scope="col">Where to Find It</th>
+            <th scope="col" class="col-head-pub">In Microsoft Publisher</th>
+            <th scope="col" class="col-head-word">In Microsoft Word</th>
+            <th scope="col" class="col-head-path">Where to Find It & Guide</th>
           </tr>
         </thead>
         <tbody>
-          {TRANSLATIONS.map(item => (
-            <tr>
-              <td class="col-publisher">
-                <strong>{item.publisher}</strong>
-              </td>
-              <td class="col-word">
-                <p>{item.word}</p>
+          {TRANSLATOR_ENTRIES.map(item => (
+            <tr
+              class="translator-row"
+              data-category={item.category}
+              data-id={item.id}
+            >
+              <th scope="row" class="col-publisher">
+                <span class="pub-title">{item.publisher}</span>
+              </th>
+              <td class="col-word" data-label="In Microsoft Word">
+                <p class="word-desc">{item.word}</p>
                 <div class="tip-inline">
-                  <span aria-hidden="true">💡</span>
+                  <span class="tip-icon" aria-hidden="true">💡</span>
                   <span>{item.tip}</span>
                 </div>
               </td>
-              <td class="col-path">
-                <span class="badge badge-contextual">{item.ribbon}</span>
+              <td class="col-path" data-label="Where to Find It & Guide">
+                <div class="path-details">
+                  <div class="path-badges">
+                    <span class="badge badge-contextual">{item.ribbonPath}</span>
+                    {item.altPath && (
+                      <span class="badge badge-alt">{item.altPath}</span>
+                    )}
+                  </div>
+                  <a
+                    href={`/lessons/${item.lessonSlug}`}
+                    class="lesson-link"
+                    aria-label={`Read ${item.lessonTitle} for ${item.publisher}`}
+                  >
+                    <span>{item.lessonTitle}</span>
+                    <span class="link-arrow" aria-hidden="true">→</span>
+                  </a>
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <!-- Empty State when filter yields 0 matches -->
+      <div id="translator-empty" class="card empty-state" hidden>
+        <span class="empty-icon" aria-hidden="true">🔎</span>
+        <h3 class="empty-title">No matching translations found</h3>
+        <p class="empty-desc">
+          We could not find any Publisher term or Word tool matching your current filter.
+        </p>
+        <button type="button" class="btn btn-primary" id="reset-filters-btn">
+          <span>Reset All Filters</span>
+          <span aria-hidden="true">↺</span>
+        </button>
+      </div>
     </div>
   </main>
 </BaseLayout>
 
+<script>
+  import { initTranslatorController } from "../utils/reference-controllers";
+
+  initTranslatorController();
+</script>
+
 <style>
   .page-header {
-    margin-block-end: var(--space-8);
+    margin-block-end: var(--space-6);
     padding-block-end: var(--space-6);
     border-bottom: 1px solid var(--border-subtle);
   }
 
   .lead {
     font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
     color: var(--ink-secondary);
   }
 
-  .table-container {
-    overflow-x: auto;
+  /* Filter Toolbar */
+  .filter-section {
+    margin-block-end: var(--space-6);
+  }
+
+  .filter-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 2%);
+  }
+
+  .search-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .search-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+  }
+
+  .search-input {
+    width: 100%;
+    min-block-size: var(--target-min-size);
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--font-size-base);
+    font-family: inherit;
+    color: var(--ink-primary);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .search-input:focus-visible {
+    outline: none;
+    border-color: var(--accent-word);
+    box-shadow: 0 0 0 3px var(--accent-word-bg);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-block-size: var(--target-min-size);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ink-secondary);
+    background-color: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .pill-btn:hover {
+    background-color: var(--surface-hover);
+    color: var(--ink-primary);
+    border-color: var(--border-ui);
+  }
+
+  .pill-btn.is-active {
+    background-color: var(--accent-word-bg);
+    color: var(--accent-word);
+    border-color: var(--accent-word);
+  }
+
+  .pill-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--space-2);
+    font-size: var(--font-size-xs);
+    border-radius: var(--radius-pill);
+    background-color: rgb(0 0 0 / 6%);
+    color: inherit;
+  }
+
+  .filter-status {
+    margin-block-start: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+  }
+
+  /* Table Wrapper & Responsive Container */
+  .table-wrapper {
+    overflow: auto;
     border: 1px solid var(--border-ui);
     border-radius: var(--radius-lg);
     background-color: var(--surface-card);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+    container-type: inline-size;
   }
 
   .translator-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     text-align: start;
     font-size: var(--font-size-base);
   }
 
-  .translator-table th {
+  .translator-table thead {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+  }
+
+  .translator-table th[scope="col"] {
     background-color: var(--surface-subtle);
     padding: var(--space-4);
     border-bottom: 2px solid var(--border-ui);
     color: var(--ink-primary);
     font-weight: 700;
     text-align: start;
+    white-space: nowrap;
   }
 
-  .translator-table td {
+  .col-head-pub {
+    width: 28%;
+  }
+
+  .col-head-word {
+    width: 44%;
+  }
+
+  .col-head-path {
+    width: 28%;
+  }
+
+  .translator-row td,
+  .translator-row th[scope="row"] {
     padding: var(--space-4);
     border-bottom: 1px solid var(--border-subtle);
     vertical-align: top;
   }
 
-  .translator-table tr:last-child td {
+  .translator-row:last-child td,
+  .translator-row:last-child th[scope="row"] {
     border-bottom: none;
   }
 
   .col-publisher {
-    width: 28%;
     color: var(--accent-publisher);
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    text-align: start;
   }
 
-  .col-word {
-    width: 48%;
+  .pub-title {
+    display: inline-block;
   }
 
-  .col-word p {
+  .word-desc {
+    color: var(--ink-primary);
+    margin: 0;
     margin-block-end: var(--space-2);
+    line-height: var(--line-height-normal);
   }
 
   .tip-inline {
     display: flex;
+    align-items: flex-start;
     gap: var(--space-2);
     font-size: var(--font-size-sm);
     color: var(--ink-secondary);
     background-color: var(--surface-subtle);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-sm);
+    border-left: 3px solid var(--accent-publisher);
+    line-height: var(--line-height-normal);
   }
 
-  .col-path {
-    width: 24%;
+  .tip-icon {
+    flex-shrink: 0;
+  }
+
+  .path-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .path-badges {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+
+  .badge-alt {
+    background-color: var(--surface-subtle);
+    color: var(--ink-secondary);
+    border: 1px solid var(--border-subtle);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+  }
+
+  .lesson-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--accent-word);
+    text-decoration: none;
+    min-block-size: var(--target-min-size);
+  }
+
+  .lesson-link:hover {
+    text-decoration: underline;
+  }
+
+  .link-arrow {
+    transition: transform 0.15s ease;
+  }
+
+  .lesson-link:hover .link-arrow {
+    transform: translateX(3px);
+  }
+
+  .translator-row[hidden],
+  .empty-state[hidden] {
+    display: none !important;
+  }
+
+  /* Empty State */
+  .empty-state {
+    padding: var(--space-8) var(--space-4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .empty-title {
+    font-size: var(--font-size-xl);
+    color: var(--ink-primary);
+    margin: 0;
+  }
+
+  .empty-desc {
+    color: var(--ink-secondary);
+    max-inline-size: 32rem;
+    margin: 0;
+  }
+
+  /* Container Query: Stacked Card Layout on Narrow Viewports (responsive-table guidance) */
+  @container (width < 46rem) {
+    .translator-table thead {
+      display: none;
+    }
+
+    .translator-table,
+    .translator-table tbody,
+    .translator-row,
+    .translator-row th[scope="row"],
+    .translator-row td {
+      display: block;
+      width: 100%;
+    }
+
+    .translator-row {
+      margin-block-end: var(--space-4);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background-color: var(--surface-card);
+      box-shadow: 0 1px 2px 0 rgb(0 0 0 / 2%);
+    }
+
+    .translator-row th[scope="row"].col-publisher {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 1;
+      background-color: var(--surface-subtle);
+      border-bottom: 2px solid var(--accent-publisher);
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-base);
+    }
+
+    .translator-row td {
+      padding: var(--space-3) var(--space-4);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .translator-row td:last-child {
+      border-bottom: none;
+    }
+
+    .translator-row td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--ink-secondary);
+      margin-block-end: var(--space-1);
+    }
+  }
+
+  /* Print Stylesheet Overrides */
+  @media print {
+    .filter-section {
+      display: none !important;
+    }
+
+    .table-wrapper {
+      border: none;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .translator-table th[scope="col"] {
+      background-color: #F1F5F9 !important;
+      color: #000000 !important;
+    }
+
+    .translator-row {
+      break-inside: avoid;
+    }
   }
 </style>

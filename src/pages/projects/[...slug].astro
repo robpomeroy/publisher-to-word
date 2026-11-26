@@ -1,0 +1,390 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({
+    params: { slug: project.id.replace(/\.mdx?$/, '') },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
+const currentIndex = sortedProjects.findIndex(p => p.id === project.id);
+const prevProject = currentIndex > 0 ? sortedProjects[currentIndex - 1] : null;
+const nextProject =
+  currentIndex < sortedProjects.length - 1
+    ? sortedProjects[currentIndex + 1]
+    : null;
+---
+
+<BaseLayout title={`Project ${project.data.order}: ${project.data.title}`}>
+  <div class="project-layout-container">
+    <nav aria-label="Breadcrumb" class="breadcrumbs">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item">
+          <a href="/" class="breadcrumb-link">Home</a>
+        </li>
+        <li class="breadcrumb-separator" aria-hidden="true">/</li>
+        <li class="breadcrumb-item">
+          <a href="/projects/" class="breadcrumb-link">Projects</a>
+        </li>
+        <li class="breadcrumb-separator" aria-hidden="true">/</li>
+        <li class="breadcrumb-item" aria-current="page">
+          Project {project.data.order}
+        </li>
+      </ol>
+    </nav>
+
+    <main id="content" class="project-main" tabindex="-1">
+      <article class="project-article">
+        <header class="project-header">
+          <div class="header-top-row">
+            <div class="project-badges">
+              <span class="badge badge-ribbon">Project {project.data.order}</span>
+              <span class="badge badge-contextual">{project.data.duration}</span>
+              <span class="badge badge-alt">{project.data.format}</span>
+            </div>
+
+            <button
+              type="button"
+              class="btn btn-secondary print-btn"
+              data-print-trigger
+              aria-label="Print this project guide"
+            >
+              <span aria-hidden="true">🖨️</span>
+              <span>Print Guide</span>
+            </button>
+          </div>
+
+          <h1 class="project-h1">{project.data.title}</h1>
+          <p class="project-lead">{project.data.summary}</p>
+
+          <!-- Downloadable / Printable Brief Card -->
+          <div class="card project-brief-card">
+            <h2 class="brief-title">Project Specification Brief</h2>
+            <div class="brief-grid">
+              <div class="brief-item">
+                <span class="brief-label">Document Format</span>
+                <span class="brief-value">{project.data.format}</span>
+              </div>
+              <div class="brief-item">
+                <span class="brief-label">Estimated Time</span>
+                <span class="brief-value">{project.data.duration}</span>
+              </div>
+              <div class="brief-item">
+                <span class="brief-label">Skills Practised</span>
+                <span class="brief-value">{project.data.skills.join(', ')}</span>
+              </div>
+              <div class="brief-item brief-difference">
+                <span class="brief-label">The Publisher Shift</span>
+                <span class="brief-value">{project.data.publisherDifference}</span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="project-content">
+          <Content />
+        </div>
+
+        <nav class="project-prev-next-nav" aria-label="Adjacent projects">
+          <div class="nav-slot prev-slot">
+            {prevProject ? (
+              <a
+                href={`/projects/${prevProject.id.replace(/\.mdx?$/, '')}/`}
+                class="nav-card"
+              >
+                <span class="nav-direction">← Previous Project</span>
+                <span class="nav-title">{prevProject.data.title}</span>
+              </a>
+            ) : (
+              <a href="/projects/" class="nav-card">
+                <span class="nav-direction">← Back to Overview</span>
+                <span class="nav-title">All Guided Projects</span>
+              </a>
+            )}
+          </div>
+
+          <div class="nav-slot next-slot">
+            {nextProject ? (
+              <a
+                href={`/projects/${nextProject.id.replace(/\.mdx?$/, '')}/`}
+                class="nav-card"
+              >
+                <span class="nav-direction">Next Project →</span>
+                <span class="nav-title">{nextProject.data.title}</span>
+              </a>
+            ) : (
+              <a href="/cheat-sheet/" class="nav-card">
+                <span class="nav-direction">Next Companion Tool →</span>
+                <span class="nav-title">Printable Desk Cheat Sheets</span>
+              </a>
+            )}
+          </div>
+        </nav>
+      </article>
+    </main>
+  </div>
+</BaseLayout>
+
+<style>
+  .project-layout-container {
+    max-inline-size: var(--max-content-width);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-6) var(--space-12);
+  }
+
+  /* Breadcrumbs */
+  .breadcrumbs {
+    margin-block-end: var(--space-6);
+  }
+
+  .breadcrumb-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--ink-muted);
+  }
+
+  .breadcrumb-link {
+    color: var(--ink-secondary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: var(--accent-word);
+    text-decoration: underline;
+  }
+
+  .breadcrumb-separator {
+    color: var(--ink-muted);
+  }
+
+  .project-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .header-top-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-block-end: var(--space-3);
+  }
+
+  .project-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .print-btn {
+    font-size: var(--font-size-sm);
+    padding-inline: var(--space-4);
+  }
+
+  .project-h1 {
+    font-size: var(--font-size-2xl);
+    color: var(--ink-primary);
+    margin-block: var(--space-3) var(--space-2);
+    line-height: var(--line-height-tight);
+  }
+
+  .project-lead {
+    font-size: var(--font-size-lg);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-block-end: var(--space-6);
+    max-inline-size: 68ch;
+  }
+
+  /* Brief Card */
+  .project-brief-card {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-block-start: var(--space-4);
+  }
+
+  .brief-title {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-word);
+    margin: 0;
+    margin-block-end: var(--space-4);
+  }
+
+  .brief-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-4);
+  }
+
+  .brief-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .brief-difference {
+    grid-column: 1 / -1;
+    border-top: 1px dashed var(--border-subtle);
+    padding-block-start: var(--space-3);
+  }
+
+  .brief-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-muted);
+  }
+
+  .brief-value {
+    font-size: var(--font-size-sm);
+    color: var(--ink-primary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* Blueprint Figures */
+  :global(.blueprint-figure) {
+    margin-block: var(--space-8);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+    overflow-x: auto;
+  }
+
+  :global(.blueprint-svg) {
+    display: block;
+    max-inline-size: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+
+  /* Content Styling */
+  .project-content {
+    line-height: var(--line-height-relaxed);
+    color: var(--ink-primary);
+  }
+
+  .project-content :global(h2) {
+    font-size: var(--font-size-xl);
+    color: var(--ink-primary);
+    margin-block: var(--space-8) var(--space-4);
+    padding-block-end: var(--space-2);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .project-content :global(h3) {
+    font-size: var(--font-size-lg);
+    color: var(--ink-primary);
+    margin-block: var(--space-6) var(--space-3);
+  }
+
+  .project-content :global(p) {
+    margin-block-end: var(--space-4);
+  }
+
+  .project-content :global(ul),
+  .project-content :global(ol) {
+    margin-block-end: var(--space-4);
+    padding-inline-start: var(--space-6);
+  }
+
+  .project-content :global(li) {
+    margin-block-end: var(--space-2);
+  }
+
+  /* Prev/Next Navigation */
+  .project-prev-next-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-block-start: var(--space-12);
+    padding-block-start: var(--space-8);
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .nav-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-card);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    min-block-size: 4rem;
+    justify-content: center;
+  }
+
+  .nav-card:hover {
+    border-color: var(--accent-word);
+    background-color: var(--surface-hover);
+  }
+
+  .next-slot .nav-card {
+    text-align: right;
+  }
+
+  .nav-direction {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-word);
+  }
+
+  .nav-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--ink-primary);
+  }
+
+  @media (width < 640px) {
+    .project-prev-next-nav {
+      grid-template-columns: 1fr;
+    }
+
+    .next-slot .nav-card {
+      text-align: left;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .project-brief-card {
+      border: 1px solid ButtonText !important;
+    }
+
+    :global(.blueprint-figure) {
+      border: 1px solid ButtonText !important;
+    }
+
+    .nav-card {
+      border: 1px solid ButtonText !important;
+    }
+  }
+</style>

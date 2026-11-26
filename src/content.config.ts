@@ -14,4 +14,17 @@ const lessons = defineCollection({
   }),
 });
 
-export const collections = { lessons };
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
+  schema: z.object({
+    title: z.string(),
+    order: z.number(),
+    duration: z.string(),
+    summary: z.string(),
+    format: z.string(),
+    skills: z.array(z.string()),
+    publisherDifference: z.string(),
+  }),
+});
+
+export const collections = { lessons, projects };
