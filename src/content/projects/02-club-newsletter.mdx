@@ -1,0 +1,348 @@
+---
+title: "The 2-Column Club Newsletter"
+order: 2
+duration: "25 minutes"
+summary: "Build a classic multi-column club or society newsletter with a 1-column title banner, 2-column running story, linked sidebar box, and continuous section breaks."
+format: "A4 Portrait, 2 pages (210 × 297 mm)"
+skills:
+  - "Continuous Section Breaks"
+  - "2-Column Section Layout"
+  - "Linked Text Boxes (Story Overflow)"
+  - "Sidebar Callout Box"
+  - "Different First Page Header & Footer"
+publisherDifference: "In Publisher, you would draw individual text boxes for each column and manually link them with the chain icon. In Word, native multi-column layout flows your article continuously across columns, while Section Breaks allow a full-width masthead and 2-column body on the same page."
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Project Overview & Blueprint
+
+Newsletters are where Publisher users most frequently get tangled in Word. In Publisher, you created columns by drawing separate text boxes and pouring text between them. In Word, if you click "Columns → Two", your entire document suddenly splits into two columns—including your masthead!
+
+In this project, you will build a sophisticated **2-Page Club Newsletter** for the *Avon Gardening Society*. You will master the secret weapon of Word page layout: **Continuous Section Breaks**.
+
+<PublisherCompare
+  title="Newsletter Layout: Publisher vs Word"
+  publisherWay="Draw Box 1 for the title banner. Draw Box 2 for the left column. Draw Box 3 for the right column. Use the linking wand tool to chain Box 2 to Box 3."
+  wordWay="Type your full-width masthead, insert a Continuous Section Break, and switch only the new section to 2 columns. Text pours automatically from the left column into the right."
+/>
+
+### Layout Blueprint
+
+Study the structural blueprint of the two-page newsletter layout below:
+
+<figure class="blueprint-figure">
+  <svg
+    viewBox="0 0 680 440"
+    role="img"
+    aria-labelledby="newsletter-blueprint-title newsletter-blueprint-desc"
+    class="blueprint-svg"
+  >
+    <title id="newsletter-blueprint-title">2-Column Club Newsletter Layout Blueprint</title>
+    <desc id="newsletter-blueprint-desc">
+      Architectural diagram showing Page 1 with a full-width masthead, a continuous section break line, 2-column article body with left photo and right sidebar box, and Page 2 continuing columns with a running header and footer.
+    </desc>
+
+    {/* Page 1 (Left) */}
+    <rect x="30" y="10" width="290" height="410" rx="6" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2" />
+    <text x="45" y="32" fill="#64748B" font-size="10" font-weight="700" font-family="system-ui">Page 1 (Cover / Feature)</text>
+
+    {/* Masthead Banner (Full width) */}
+    <rect x="45" y="42" width="260" height="55" rx="3" fill="#065F46" />
+    <text x="175" y="68" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle" font-family="system-ui">THE GREEN THUMB</text>
+    <text x="175" y="84" fill="#A7F3D0" font-size="8" text-anchor="middle" font-family="system-ui">Avon Horticultural Society Newsletter • Summer Edition</text>
+
+    {/* Section Break indicator */}
+    <line x1="45" y1="108" x2="305" y2="108" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="4 2" />
+    <text x="175" y="117" fill="#DC2626" font-size="8" font-weight="700" text-anchor="middle" font-family="system-ui">::: Section Break (Continuous) :::</text>
+
+    {/* Column 1 (Left) */}
+    <rect x="45" y="125" width="120" height="12" rx="2" fill="#1E293B" />
+    <rect x="45" y="145" width="120" height="70" rx="3" fill="#E2E8F0" stroke="#0F52BA" stroke-width="1" />
+    <text x="105" y="185" fill="#0F52BA" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Photo: Top Wrap</text>
+    <rect x="45" y="225" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="235" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="245" width="118" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="255" width="110" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="265" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="275" width="105" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="285" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="45" y="295" width="118" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Column 2 (Right) */}
+    <rect x="185" y="125" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="185" y="135" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="185" y="145" width="118" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Sidebar Box in Col 2 */}
+    <rect x="185" y="160" width="120" height="105" rx="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5" />
+    <text x="245" y="178" fill="#92400E" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Monthly Tips Box</text>
+    <rect x="195" y="188" width="100" height="5" rx="1.5" fill="#B45309" />
+    <rect x="195" y="198" width="95" height="5" rx="1.5" fill="#B45309" />
+    <rect x="195" y="208" width="98" height="5" rx="1.5" fill="#B45309" />
+    <rect x="195" y="218" width="90" height="5" rx="1.5" fill="#B45309" />
+    <rect x="195" y="228" width="94" height="5" rx="1.5" fill="#B45309" />
+    <text x="245" y="252" fill="#92400E" font-size="7" font-weight="600" text-anchor="middle" font-family="system-ui">[Linked Box Source]</text>
+
+    <rect x="185" y="275" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="185" y="285" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="185" y="295" width="118" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Page 2 (Right) */}
+    <rect x="360" y="10" width="290" height="410" rx="6" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2" />
+    <text x="375" y="32" fill="#64748B" font-size="10" font-weight="700" font-family="system-ui">Page 2 (Running Content)</text>
+
+    {/* Running Header */}
+    <rect x="375" y="42" width="260" height="18" rx="2" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1" />
+    <text x="385" y="55" fill="#64748B" font-size="8" font-family="system-ui">Avon Horticultural Society Newsletter</text>
+    <text x="625" y="55" fill="#64748B" font-size="8" font-weight="700" text-anchor="end" font-family="system-ui">Page 2</text>
+
+    {/* Page 2 Columns */}
+    <rect x="375" y="70" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="80" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="90" width="118" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="100" width="110" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="110" width="116" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="120" width="108" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="130" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="375" y="140" width="112" height="6" rx="2" fill="#CBD5E1" />
+
+    <rect x="515" y="70" width="120" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="515" y="80" width="115" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="515" y="90" width="118" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="515" y="100" width="110" height="6" rx="2" fill="#CBD5E1" />
+    <rect x="515" y="110" width="116" height="6" rx="2" fill="#CBD5E1" />
+
+    {/* Overflow Linked Box on Page 2 */}
+    <rect x="375" y="240" width="260" height="120" rx="4" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5" />
+    <text x="505" y="260" fill="#92400E" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Tips Overflow (Linked Text Box Target)</text>
+    <rect x="390" y="275" width="230" height="5" rx="1.5" fill="#B45309" />
+    <rect x="390" y="285" width="220" height="5" rx="1.5" fill="#B45309" />
+    <rect x="390" y="295" width="225" height="5" rx="1.5" fill="#B45309" />
+    <rect x="390" y="305" width="210" height="5" rx="1.5" fill="#B45309" />
+
+    {/* Running Footer */}
+    <line x1="375" y1="390" x2="635" y2="390" stroke="#CBD5E1" stroke-width="1" />
+    <text x="505" y="405" fill="#64748B" font-size="8" text-anchor="middle" font-family="system-ui">www.avongardening.org.uk • Registered Society</text>
+  </svg>
+</figure>
+
+---
+
+## Step 1: Document Setup & Full-Width Masthead
+
+Begin with a 2-page document setup. Margins are 2.0 cm. The masthead banner spans the entire page width at the top of Page 1.
+
+<StepList
+  steps={[
+    {
+      title: "Set page margins to 2.0 cm",
+      detail: "Create a blank document. Go to Layout → Margins → Normal (or Custom Margins: 2.0 cm on all sides).",
+      ribbonBadge: "Layout → Margins"
+    },
+    {
+      title: "Create the masthead typography",
+      detail: "Type the newsletter title: 'THE GREEN THUMB'. Set to 32 pt, Bold, Forest Green colour (#065F46). Below it, type the subtitle: 'The Quarterly Newsletter of the Avon Horticultural Society • Issue 42'.",
+      ribbonBadge: "Home → Font"
+    },
+    {
+      title: "Add a crisp dividing border rule",
+      detail: "Place your cursor at the end of the subtitle and press Enter. Go to the Home tab → Borders dropdown → choose 'Horizontal Line' or 'Bottom Border'. This creates a crisp separator rule without drawing loose floating lines.",
+      ribbonBadge: "Home → Borders"
+    }
+  ]}
+/>
+
+---
+
+## Step 2: Insert the Continuous Section Break
+
+This is the pivotal technique in Word publishing. A **Continuous Section Break** splits the page layout rules into two distinct zones without starting a new page.
+
+<WhereToFindIt
+  title="Where to Find Continuous Section Break"
+  ribbonPath={["Layout", "Breaks", "Continuous"]}
+  altRibbonPath={["Layout", "Page Setup", "Breaks"]}
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Place cursor below the separator rule",
+      detail: "Click on the blank line directly below your masthead separator line.",
+      ribbonBadge: "Cursor Position"
+    },
+    {
+      title: "Insert Continuous Section Break",
+      detail: "Go to Layout → Breaks. Under the 'Section Breaks' heading, click 'Continuous'.",
+      ribbonBadge: "Layout → Breaks"
+    },
+    {
+      title: "Confirm break with Show/Hide ¶",
+      detail: "Press Ctrl+Shift+8 (or Home → Show/Hide ¶). You will see a double dotted line reading 'Section Break (Continuous)' across the page. Your cursor is now in Section 2.",
+      ribbonBadge: "Ctrl + Shift + 8"
+    }
+  ]}
+/>
+
+<GotchaBox title="Common Snag — Accidental Section Break Deletion" collapsible={false}>
+  <p>
+    <strong>Why it happens:</strong> When you press Backspace or Delete on the paragraph mark adjacent to a continuous section break, Word deletes the break. Deleting a break instantly merges Section 2 back into Section 1's single-column settings.
+  </p>
+  <p>
+    <strong>Immediate fix:</strong> Immediately press <kbd>Ctrl</kbd>+<kbd>Z</kbd> to undo. Always keep Show/Hide ¶ enabled so you never accidentally erase a Section Break line.
+  </p>
+</GotchaBox>
+
+---
+
+## Step 3: Switch Section 2 to Two Columns
+
+With your cursor positioned safely inside Section 2 (below the dotted break line), apply a 2-column layout.
+
+<WhereToFindIt
+  title="Where to Configure Columns in Word"
+  ribbonPath={["Layout", "Columns", "Two"]}
+  altRibbonPath={["Layout", "Columns", "More Columns..."]}
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Apply 2 columns to active section",
+      detail: "Go to Layout → Columns → Two. Notice that only the space below the section break splits into two columns; your masthead above remains beautifully full-width!",
+      ribbonBadge: "Layout → Columns"
+    },
+    {
+      title: "Refine column gutter spacing",
+      detail: "Go to Layout → Columns → More Columns... Set the Spacing between columns to 0.8 cm (the default 1.25 cm is often too wide for newsletters). Tick 'Line between' if you would like an elegant vertical rule between columns.",
+      ribbonBadge: "Columns Dialogue"
+    }
+  ]}
+/>
+
+---
+
+## Step 4: Add Running Article & Insert Photo with Caption
+
+Type or paste your article into Column 1. As text fills Column 1, Word automatically overflows it into Column 2 and onto Page 2.
+
+<StepList
+  steps={[
+    {
+      title: "Add headline and article text",
+      detail: "Type 'Preparing Your Perennials for the Summer Heat'. Set as Heading 2 (16 pt Bold). Flow several paragraphs of article text beneath it.",
+      ribbonBadge: "Home → Styles"
+    },
+    {
+      title: "Insert a column photo with top wrap",
+      detail: "Go to Insert → Pictures → This Device. Insert a photo into Column 1. Click the floating Layout arch icon and select 'Top and Bottom' wrapping. Resize the image so its width matches the column exactly (approx 7.8 cm wide).",
+      ribbonBadge: "Wrap → Top and Bottom"
+    },
+    {
+      title: "Add an integrated caption label",
+      detail: "Right-click the picture → 'Insert Caption...'. Type: 'Figure 1: Mulching retaining soil moisture during dry spells.' Word inserts a linked, professional caption label directly beneath the graphic.",
+      ribbonBadge: "Right-click → Insert Caption"
+    }
+  ]}
+/>
+
+---
+
+## Step 5: Add a Highlight Sidebar Box (with Text Box Linking)
+
+Like Publisher, Word supports **Linked Text Boxes**. If your sidebar tips exceed one box, text flows into a continuation box on Page 2!
+
+<WhereToFindIt
+  title="Where to Find Create Link in Word"
+  ribbonPath={["Shape Format", "Text", "Create Link"]}
+  contextualTab="Shape Format"
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Draw Sidebar Box on Page 1",
+      detail: "Go to Insert → Text Box → Draw Text Box. Draw a box in Column 2. Set Shape Fill to Light Amber (#FEF3C7) and Shape Outline to Warm Amber (#D97706, 1.5 pt).",
+      ribbonBadge: "Insert → Text Box"
+    },
+    {
+      title: "Draw Continuation Box on Page 2",
+      detail: "Scroll down to Page 2. Insert → Text Box → Draw Text Box. Draw a matching box across the bottom of Page 2.",
+      ribbonBadge: "Draw Box on Page 2"
+    },
+    {
+      title: "Chain the two boxes together",
+      detail: "Click the border of Box 1 on Page 1. Go to the Shape Format tab on the ribbon. In the Text group, click 'Create Link'. Your cursor transforms into a pouring pitcher icon. Click inside Box 2 on Page 2.",
+      ribbonBadge: "Shape Format → Create Link"
+    },
+    {
+      title: "Type your monthly tips content",
+      detail: "Type your numbered tips into Box 1. As you type past the bottom edge of Box 1, watch the overflow words seamlessly spill into Box 2 on Page 2—just like Publisher's text frame chaining!",
+      ribbonBadge: "Overflow Flow"
+    }
+  ]}
+/>
+
+---
+
+## Step 6: Configure Headers, Footers & Different First Page
+
+Page 1 has your bold masthead, so it should not display a running header or page number. Page 2 needs a running header reading 'Avon Horticultural Society Newsletter • Page 2'.
+
+<WhereToFindIt
+  title="Where to Find Different First Page"
+  ribbonPath={["Header & Footer", "Options", "Different First Page"]}
+  contextualTab="Header & Footer"
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Activate Header editing",
+      detail: "Double-click in the top margin of Page 1. The 'Header & Footer' contextual tab appears on the ribbon.",
+      ribbonBadge: "Double-click Margin"
+    },
+    {
+      title: "Tick Different First Page",
+      detail: "In the Options group on the ribbon, tick the 'Different First Page' checkbox. Notice that Page 1's header clears, while Page 2 retains its header area.",
+      ribbonBadge: "Different First Page"
+    },
+    {
+      title: "Add running header and page number on Page 2",
+      detail: "Scroll to Page 2. In the header, type 'The Green Thumb • Summer Edition'. Press Tab twice to jump to the right margin, then click 'Page Number' → 'Current Position' → 'Plain Number'.",
+      ribbonBadge: "Page Number"
+    }
+  ]}
+/>
+
+<MacNote summary="Section breaks and column settings in Word for Mac">
+  <p>
+    On Word for Mac, Continuous Section Breaks are located under <strong>Layout → Breaks → Section Breaks (Continuous)</strong>. To format columns, use <strong>Format → Columns...</strong> from the Mac menu bar.
+  </p>
+</MacNote>
+
+---
+
+## Check Your Work: Newsletter Checklist
+
+- [ ] **Section Continuity:** The masthead spans 1 full-width column, followed immediately by 2 equal-width columns on Page 1.
+- [ ] **Break Visibility:** Show/Hide ¶ clearly displays 'Section Break (Continuous)' directly between masthead and columns.
+- [ ] **Linked Text Overflow:** Adding text into the Page 1 sidebar box pushes extra sentences smoothly into the Page 2 continuation box.
+- [ ] **First Page Unlinked:** Page 1 has NO running header; Page 2 displays the header and 'Page 2'.
+- [ ] **Two-Page Cap:** Ensure your document is exactly 2 pages long, without an accidental blank 3rd page.
+
+<TryItCard
+  title="Stretch Challenge: Add a 2-Line Drop Cap"
+  steps={[
+    "Highlight the very first letter of your main article on Page 1.",
+    "Go to Insert → Drop Cap (in the Text group) → choose 'Drop Cap Options...'.",
+    "Select 'Dropped' position.",
+    "Set 'Lines to drop' to 2 (instead of Word's default 3) and click OK."
+  ]}
+/>

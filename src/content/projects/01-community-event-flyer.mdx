@@ -1,0 +1,317 @@
+---
+title: "The 1-Page Community Event Flyer"
+order: 1
+duration: "15 minutes"
+summary: "Design a clean, printable single-page event flyer from scratch using Word's layout tools without pictures jumping or borders clipping."
+format: "A4 Portrait, 1 page (210 × 297 mm)"
+skills:
+  - "Page Border (Measure from Text)"
+  - "Title Banner Box (No Outline)"
+  - "Square-wrapped Event Photo"
+  - "Invisible Details Table"
+  - "Print-Ready PDF Export"
+publisherDifference: "In Publisher, you would scatter unlinked text boxes and image frames anywhere on the page. In Word, we establish clean margins, anchor a title banner at the top, flow description text alongside a square-wrapped picture, and lock key event logistics into an invisible table."
+---
+
+import PublisherCompare from '../../components/teaching/PublisherCompare.astro';
+import WhereToFindIt from '../../components/teaching/WhereToFindIt.astro';
+import StepList from '../../components/teaching/StepList.astro';
+import GotchaBox from '../../components/teaching/GotchaBox.astro';
+import MacNote from '../../components/teaching/MacNote.astro';
+import TryItCard from '../../components/teaching/TryItCard.astro';
+
+## Project Overview & Blueprint
+
+Single-page flyers are the classic document that sends former Microsoft Publisher users into despair with Word. When you drop in a hero photo, text jumps wildly; when you print, the bottom border vanishes into thin air.
+
+In this mini-project, you will build a professional **Community Summer Fair Flyer** from a blank document. You will see how Word's anchoring, wrapping, and table features let you achieve the exact visual polish of Publisher—without the layout fighting you.
+
+<PublisherCompare
+  title="Flyer Construction: Publisher vs Word"
+  publisherWay="Draw 5 independent text boxes and drag them around until they look aligned. Group them arbitrarily. Hope elements don't shift when opened on another computer."
+  wordWay="Set a stable 1.5 cm margin, drop in a top banner, wrap your hero image with 'Square', and use a 2-column borderless table for dates, times, and ticket prices."
+/>
+
+### Layout Blueprint
+
+Study the structural layout blueprint below before starting:
+
+<figure class="blueprint-figure">
+  <svg
+    viewBox="0 0 680 480"
+    role="img"
+    aria-labelledby="flyer-blueprint-title flyer-blueprint-desc"
+    class="blueprint-svg"
+  >
+    <title id="flyer-blueprint-title">A4 Community Event Flyer Layout Blueprint</title>
+    <desc id="flyer-blueprint-desc">
+      Architectural layout showing the outer 1.5 cm page boundary, top title banner, square-wrapped hero photo on the left, running descriptive copy on the right, centered invisible details table, and contact footer.
+    </desc>
+
+    {/* Background canvas */}
+    <rect x="140" y="10" width="400" height="460" rx="6" fill="#FAF9F6" stroke="#94A3B8" stroke-width="2" />
+    <text x="155" y="32" fill="#64748B" font-size="10" font-weight="700" font-family="system-ui">A4 Portrait (210 × 297 mm)</text>
+
+    {/* Outer Page Border (Safe margin) */}
+    <rect x="155" y="42" width="370" height="415" rx="4" fill="none" stroke="#0F52BA" stroke-width="1.5" stroke-dasharray="4 2" />
+    <text x="165" y="58" fill="#0F52BA" font-size="9" font-weight="600" font-family="system-ui">Page Border (Measured from Text, 10 pt offset)</text>
+
+    {/* Title Banner */}
+    <rect x="165" y="68" width="350" height="60" rx="3" fill="#1E293B" />
+    <text x="340" y="96" fill="#FFFFFF" font-size="15" font-weight="800" text-anchor="middle" font-family="system-ui">OAKWOOD SUMMER FAIR</text>
+    <text x="340" y="114" fill="#94A3B8" font-size="10" font-weight="500" text-anchor="middle" font-family="system-ui">Saturday 14 June • Oakwood Village Green</text>
+
+    {/* Hero Photo (Left) */}
+    <rect x="165" y="140" width="140" height="110" rx="3" fill="#E2E8F0" stroke="#0F52BA" stroke-width="1.5" />
+    <text x="235" y="195" fill="#0F52BA" font-size="11" font-weight="700" text-anchor="middle" font-family="system-ui">Hero Image</text>
+    <text x="235" y="210" fill="#64748B" font-size="8" text-anchor="middle" font-family="system-ui">(Square Wrap, Left)</text>
+
+    {/* Body text beside photo */}
+    <rect x="315" y="145" width="200" height="8" rx="2" fill="#CBD5E1" />
+    <rect x="315" y="160" width="195" height="8" rx="2" fill="#CBD5E1" />
+    <rect x="315" y="175" width="198" height="8" rx="2" fill="#CBD5E1" />
+    <rect x="315" y="205" width="190" height="8" rx="2" fill="#CBD5E1" />
+    <rect x="315" y="220" width="170" height="8" rx="2" fill="#CBD5E1" />
+    <rect x="315" y="235" width="120" height="8" rx="2" fill="#CBD5E1" />
+
+    {/* Subheading */}
+    <text x="340" y="275" fill="#1E293B" font-size="12" font-weight="700" text-anchor="middle" font-family="system-ui">Essential Event Details</text>
+
+    {/* Invisible 2x4 Table */}
+    <rect x="165" y="288" width="350" height="100" rx="3" fill="#FFFFFF" stroke="#0D9488" stroke-width="1.5" stroke-dasharray="3 3" />
+    <line x1="330" y1="288" x2="330" y2="388" stroke="#0D9488" stroke-width="1" stroke-dasharray="2 2" />
+    <line x1="165" y1="313" x2="515" y2="313" stroke="#E2E8F0" stroke-width="1" />
+    <line x1="165" y1="338" x2="515" y2="338" stroke="#E2E8F0" stroke-width="1" />
+    <line x1="165" y1="363" x2="515" y2="363" stroke="#E2E8F0" stroke-width="1" />
+    <text x="175" y="305" fill="#1E293B" font-size="9" font-weight="700" font-family="system-ui">Time & Gates:</text>
+    <text x="340" y="305" fill="#475569" font-size="9" font-family="system-ui">11:00 AM – 5:00 PM</text>
+    <text x="175" y="330" fill="#1E293B" font-size="9" font-weight="700" font-family="system-ui">Admission:</text>
+    <text x="340" y="330" fill="#475569" font-size="9" font-family="system-ui">Free (Donations Welcome)</text>
+    <text x="175" y="355" fill="#1E293B" font-size="9" font-weight="700" font-family="system-ui">Attractions:</text>
+    <text x="340" y="355" fill="#475569" font-size="9" font-family="system-ui">Live Brass Band, Bouncy Castle, Dog Show</text>
+    <text x="175" y="380" fill="#1E293B" font-size="9" font-weight="700" font-family="system-ui">Refreshments:</text>
+    <text x="340" y="380" fill="#475569" font-size="9" font-family="system-ui">Local Hog Roast, Artisan Tea Tent & Cider Bar</text>
+
+    {/* Footer bar */}
+    <rect x="165" y="400" width="350" height="45" rx="3" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="1" />
+    <text x="340" y="418" fill="#1E293B" font-size="9" font-weight="700" text-anchor="middle" font-family="system-ui">Organised by the Oakwood Community Trust</text>
+    <text x="340" y="433" fill="#64748B" font-size="8" text-anchor="middle" font-family="system-ui">www.oakwoodfair.org.uk • Registered Charity #1048291</text>
+  </svg>
+</figure>
+
+---
+
+## Step 1: Set Up Page Margins & Safe Page Border
+
+Start with a clean document set to A4 with consistent 1.5 cm margins all round. Then apply a page border configured safely so home printers do not clip the bottom line.
+
+<WhereToFindIt
+  title="Page Margins & Border Options"
+  ribbonPath={["Layout", "Margins", "Custom Margins"]}
+  altRibbonPath={["Design", "Page Borders", "Options"]}
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Set custom page margins to 1.5 cm",
+      detail: "Go to the Layout tab → Margins → Custom Margins... Set Top, Bottom, Left, and Right margins to 1.5 cm, then click OK.",
+      ribbonBadge: "Layout → Margins"
+    },
+    {
+      title: "Open the Page Borders dialogue",
+      detail: "Switch to the Design tab on the ribbon and click 'Page Borders' at the far right of the Page Background group.",
+      ribbonBadge: "Design → Page Borders"
+    },
+    {
+      title: "Select box border and click Options",
+      detail: "Under Setting, choose 'Box'. Pick a 1 pt or 1.5 pt solid line. Before clicking OK, click the crucial 'Options...' button in the bottom-right corner.",
+      ribbonBadge: "Options..."
+    },
+    {
+      title: "Change measure point to Text",
+      detail: "In the Border and Shading Options dialogue, change 'Measure from: Edge of page' to 'Measure from: Text'. Set margins to 10 pt and click OK twice.",
+      ribbonBadge: "Measure from: Text"
+    }
+  ]}
+/>
+
+<GotchaBox title="Common Snag — Cut-Off Bottom Border Line" collapsible={false}>
+  <p>
+    <strong>Why it happens:</strong> Inkjet and laser printers have a physical gripper bar at the bottom that cannot receive toner or ink. Measuring page borders from the 'Edge of page' puts the bottom line inside this unprintable margin.
+  </p>
+  <p>
+    <strong>Immediate fix:</strong> Always set 'Measure from' to 'Text' with a 10 pt offset. This pulls the border safely inside your desktop printer's active printable boundary.
+  </p>
+</GotchaBox>
+
+---
+
+## Step 2: Create the Bold Title Banner
+
+In Publisher, you would draw a coloured rectangle and drop a text box over it. In Word, you can create a single styled shape or formatted paragraph with shading. Here, we use a neat shape container with zero outline.
+
+<StepList
+  steps={[
+    {
+      title: "Insert a rectangle shape",
+      detail: "Go to Insert → Shapes → Rectangle. Click and drag across the top margin inside your border.",
+      ribbonBadge: "Insert → Shapes"
+    },
+    {
+      title: "Format dark fill and remove outline",
+      detail: "With the shape selected, go to the Shape Format tab. Click Shape Fill and choose Dark Slate (#1E293B). Click Shape Outline and select 'No Outline'.",
+      ribbonBadge: "Shape Format → Fill & Outline"
+    },
+    {
+      title: "Add headline title text",
+      detail: "Right-click the shape and select 'Add Text'. Type: 'OAKWOOD SUMMER FAIR'. Set the font to Arial or Aptos, Bold, 26 pt, White text, centered.",
+      ribbonBadge: "Home → Font Size 26 pt"
+    },
+    {
+      title: "Add date sub-banner with soft break",
+      detail: "Press Shift+Enter to create a soft line break directly beneath the title without extra paragraph gap. Type: 'Saturday 14 June • Oakwood Village Green'. Set to 12 pt, Normal weight, Light Grey (#CBD5E1).",
+      ribbonBadge: "Shift + Enter"
+    }
+  ]}
+/>
+
+---
+
+## Step 3: Insert the Event Photo with Square Wrapping
+
+Now insert your event photo. We will configure Word so body text hugs the right side of the picture smoothly without unexpected displacement.
+
+<WhereToFindIt
+  title="Where to Find Square Wrapping"
+  ribbonPath={["Picture Format", "Wrap Text", "Square"]}
+  floatingIconTip="Click photo → floating arch icon beside top-right corner → choose Square"
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Insert your picture file",
+      detail: "Place your cursor on the blank line below the title banner. Go to Insert → Pictures → This Device (or choose a placeholder photo).",
+      ribbonBadge: "Insert → Pictures"
+    },
+    {
+      title: "Switch text wrap to Square",
+      detail: "Click the photo. Click the floating Layout arch icon beside its top-right corner. Choose 'Square'.",
+      ribbonBadge: "Layout Options → Square"
+    },
+    {
+      title: "Fix position on page coordinates",
+      detail: "In the same Layout Options pop-up, click 'Fix position on page'. This pins the image to the physical page coordinates so typing paragraphs above will never shove it down.",
+      ribbonBadge: "Fix position on page"
+    },
+    {
+      title: "Resize and position to the left margin",
+      detail: "Drag the corner handle inward until the photo is approximately 7 cm wide. Drag it to align neatly with the left margin guide beneath the title banner.",
+      ribbonBadge: "Picture Format → Size"
+    }
+  ]}
+/>
+
+---
+
+## Step 4: Flow the Event Copy Beside the Photo
+
+Because your photo wrap is set to **Square**, any text typed on this page automatically wraps around the right side of the picture.
+
+<StepList
+  steps={[
+    {
+      title: "Type the promotional intro copy",
+      detail: "Click into the document text area to the right of your photo. Type your event introduction: 'Join us for Oakwood's biggest family celebration of the year! Enjoy live music, traditional games, local food stalls, and entertainment for all ages.'",
+      ribbonBadge: "Document Body"
+    },
+    {
+      title: "Format paragraph typography",
+      detail: "Set the font to 11 pt, 1.25 line spacing, and 4 pt space after paragraph (Home tab → Line and Paragraph Spacing).",
+      ribbonBadge: "Home → Paragraph"
+    },
+    {
+      title: "Confirm anchor stability with Show/Hide ¶",
+      detail: "Turn on Show/Hide ¶ (Ctrl+Shift+8). Notice the small anchor icon (⚓) in the left margin. It points to the top paragraph of your description. As long as this paragraph stays on page 1, your photo stays firmly anchored.",
+      ribbonBadge: "Ctrl + Shift + 8"
+    }
+  ]}
+/>
+
+---
+
+## Step 5: Format Event Logistics with an Invisible Table
+
+The number one mistake former Publisher users make is drawing 6 small text boxes side-by-side to align dates, times, and ticket prices. In Word, text boxes easily nudge out of alignment. An **invisible table** is faster, immune to reflow glitches, and always aligns pixel-perfectly.
+
+<WhereToFindIt
+  title="Where to Find Borderless Table Options"
+  ribbonPath={["Table Design", "Borders", "No Border"]}
+  altRibbonPath={["Table Layout", "Cell Margins"]}
+/>
+
+<StepList
+  steps={[
+    {
+      title: "Insert a 2-column by 4-row grid",
+      detail: "Press Enter below the photo and description. Go to Insert → Table and insert a grid with 2 columns and 4 rows.",
+      ribbonBadge: "Insert → Table"
+    },
+    {
+      title: "Populate event logistics",
+      detail: "In Column 1, enter labels: 'Time & Gates', 'Admission', 'Main Attractions', 'Refreshments'. In Column 2, enter the corresponding details.",
+      ribbonBadge: "Table Content"
+    },
+    {
+      title: "Adjust widths and cell padding",
+      detail: "Drag the center column divider so Column 1 is roughly 4 cm wide and Column 2 takes the remaining width. Select the whole table, right-click → Table Properties → Options... Set top and bottom cell margins to 0.15 cm for comfortable breathing room.",
+      ribbonBadge: "Table Properties"
+    },
+    {
+      title: "Strip table borders (Invisible Table)",
+      detail: "Select the entire table. Go to Table Design → Borders → select 'No Border'. The gridlines will disappear in print, leaving cleanly aligned columns.",
+      ribbonBadge: "Table Design → No Border"
+    }
+  ]}
+/>
+
+---
+
+## Step 6: Export a Print-Ready PDF
+
+When sharing your flyer with a print shop or posting it on a community bulletin board, never send an editable `.docx` file. Export a flattened, professional PDF.
+
+<WhereToFindIt
+  title="Where to Export to PDF in Word"
+  ribbonPath={["File", "Export", "Create PDF/XPS Document"]}
+  altRibbonPath={["File", "Save As", "PDF (*.pdf)"]}
+/>
+
+<MacNote summary="Exporting to PDF on macOS">
+  <p>
+    On Word for Mac, choose <strong>File → Save As...</strong> and set the File Format dropdown to <strong>PDF</strong>. Alternatively, choose <strong>File → Print</strong> and click the <strong>PDF</strong> dropdown at the bottom-left of the dialogue.
+  </p>
+</MacNote>
+
+---
+
+## Check Your Work: Flyer Checklist
+
+Before printing or submitting your flyer, verify each of these quality checkpoints:
+
+- [ ] **Page Border Visibility:** The bottom border line is fully visible in Print Preview (`Ctrl+P`) without truncation.
+- [ ] **Single Page Integrity:** Look at the status bar at bottom left; verify it reads **Page 1 of 1** (no blank trailing page 2).
+- [ ] **Photo Wrap:** The hero photo has a clean white margin around its right and bottom edges, with no text overlapping the picture pixels.
+- [ ] **Table Alignment:** The event details table has no visible borders, and the detail descriptions align crisply on the left.
+- [ ] **Contact Footer:** Footer text is legible and centered with at least 0.5 cm padding above the bottom border.
+
+<TryItCard
+  title="Stretch Challenge: Add a Circular Sponsor Badge"
+  steps={[
+    "Insert an oval shape (Insert → Shapes → Oval, hold Shift to keep it perfectly round).",
+    "Place the circle overlapping the top-right corner of the banner.",
+    "Click the floating Layout arch icon and set text wrap to 'In Front of Text'.",
+    "Right-click the shape → Add Text → type 'FREE ENTRY!'. Set fill to Gold/Yellow."
+  ]}
+/>
