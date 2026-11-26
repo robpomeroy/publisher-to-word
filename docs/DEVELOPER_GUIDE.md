@@ -280,3 +280,26 @@ import TryItCard from '../../components/teaching/TryItCard.astro';
   ]}
 />
 ```
+
+---
+
+## 8. Environment Variables & Optional Analytics
+
+Environment variables are documented in `.env.example` at the repository root.
+
+### Configuring Plausible Analytics
+
+1. Copy `.env.example` to `.env` (gitignored):
+   ```sh
+   cp .env.example .env
+   ```
+2. Set `PLAUSIBLE_SCRIPT_URL` to your Plausible script URL:
+   ```dotenv
+   PLAUSIBLE_SCRIPT_URL=https://plausible.example.com/js/pa-xxxxxxxxxxxxxxxxxxxxx.js
+   ```
+
+### Behaviour & Validation
+- **Production-only (`import.meta.env.PROD`):** `src/utils/analytics.ts` (`resolvePlausibleScriptUrl`) only returns the URL for production builds (`npm run build` / `npm run preview`). It returns `null` during `npm run dev` so local work does not pollute live metrics.
+- **HTTPS validation:** Values must parse as valid `https:` URLs; blank, malformed, or non-HTTPS values are ignored safely without emitting `<script>` tags.
+- **Verbatim injection:** `src/layouts/BaseLayout.astro` renders the Plausible `<script>` tags with Astro's `is:inline` directive so Vite does not bundle or defer the queue initialisation script.
+- **Testing locally:** To inspect the rendered analytics tags locally, set `PLAUSIBLE_SCRIPT_URL` in `.env` and run `npm run build && npm run preview` (or inspect `dist/index.html`).

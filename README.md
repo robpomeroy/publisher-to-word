@@ -80,7 +80,24 @@ Visit `http://localhost:4321` in your browser. Astro provides instant hot module
 
 ## 🚀 For System Administrators & Static Hosting
 
-The website compiles to a **100% static Multi-Page Application (MPA)** in `dist/`. There are no server-side runtimes, no database connections, no cookies, and no third-party tracking scripts.
+The website compiles to a **100% static Multi-Page Application (MPA)** in `dist/`. There are no server-side runtimes, no database connections, no cookies, and zero tracking scripts enabled by default.
+
+### Optional Analytics (Plausible)
+
+If you host your own instance of [Plausible Analytics](https://plausible.io/) (or use Plausible Cloud), you can enable privacy-friendly, cookie-free analytics at build time:
+
+1. Copy `.env.example` to `.env` (or configure the variable in your hosting platform's environment settings):
+   ```sh
+   cp .env.example .env
+   ```
+2. Set `PLAUSIBLE_SCRIPT_URL` to your Plausible script URL (must be a valid `https://` URL):
+   ```dotenv
+   PLAUSIBLE_SCRIPT_URL=https://plausible.example.com/js/pa-xxxxxxxxxxxxxxxxxxxxx.js
+   ```
+3. Run a production build (`npm run build` or `npm run quality`).
+
+- **Opt-in & production-only:** When `PLAUSIBLE_SCRIPT_URL` is unset or blank, no analytics markup is emitted. The snippet is also skipped during `npm run dev` so local editing does not skew statistics.
+- **Git hygiene:** `.env` files are gitignored; never commit live environment files.
 
 ### Building for Production
 ```sh
