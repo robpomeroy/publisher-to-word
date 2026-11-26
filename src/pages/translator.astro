@@ -197,7 +197,6 @@ import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
   }
 
   .search-input:focus-visible {
-    outline: none;
     border-color: var(--accent-word);
     box-shadow: 0 0 0 3px var(--accent-word-bg);
   }
@@ -496,6 +495,22 @@ import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
 
     .translator-row {
       break-inside: avoid;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .pill-btn.is-active {
+      outline: 2px solid Highlight;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .table-wrapper {
+      border: 1px solid ButtonText;
+    }
+
+    .translator-row {
+      border-bottom: 1px solid ButtonText;
     }
   }
 </style>

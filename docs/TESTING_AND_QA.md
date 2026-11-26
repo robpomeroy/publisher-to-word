@@ -1,7 +1,7 @@
 # Testing & Quality Assurance Guide: Publisher to Word
 
 > **Audience:** QA Engineers, Testers, Maintainers, and Contributors  
-> **Status:** Phase 1 Foundation Active
+> **Status:** Phase 5 Complete (Full Suite, axe-core WCAG 2.2 AA Audit & Token Integrity)
 
 ---
 
@@ -42,12 +42,13 @@ flowchart LR
 - **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}" --max-warnings 0`):** Uses `stylelint-config-standard` and `stylelint-config-html` to lint global CSS and inline `<style>` tags in Astro components. Enforces modern CSS syntax (e.g. space-separated `rgb(0 0 0 / 10%)`), logical properties (`margin-block`), and property validation, failing on any warning.
 - **Passing condition:** `0 errors, 0 warnings`.
 
-### Stage 3: Unit & DOM Controller Testing (`npm run test`)
+### Stage 3: Unit, DOM Controller & Automated Accessibility Testing (`npm run test`)
 - Runs `vitest run --coverage`.
-- Executes unit tests for utility functions (e.g. `src/utils/id.ts`) and DOM controller tests for interactive simulators (`src/utils/simulator-controllers.ts`) using `linkedom`.
-- Verifies state transitions, live region announcements, keyboard arrow cycling, and graceful degradation on partial DOM elements.
+- Executes unit tests for utility functions (e.g. `src/utils/id.ts`) and DOM controller tests for interactive simulators and reference tools (`src/utils/simulator-controllers.ts`, `src/utils/reference-controllers.ts`) using `linkedom`.
+- **Automated WCAG 2.2 AA Audit (`tests/a11y-audit.test.ts`):** Runs `axe-core` via `jsdom` across all 26 static HTML pages in `dist/` (WCAG 2.0, 2.1, 2.2 Level A/AA rules), asserting zero violations.
+- **Design Token Integrity Audit:** Scans all Astro and CSS files in `src/` to verify every `var(--*)` custom property is declared in `src/styles/tokens.css` or scoped component definitions.
 - Enforces strict coverage gates (minimum 85% lines, statements, and functions, 80% branches).
-- **Passing condition:** All test suites pass and meet or exceed coverage thresholds.
+- **Passing condition:** All test suites pass with 0 failures and meet or exceed coverage thresholds.
 
 ### Stage 4: Static Compilation (`npm run build`)
 - Runs `astro build`.

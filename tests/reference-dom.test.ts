@@ -467,5 +467,32 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
 
       ctrl?.destroy();
     });
+
+    it('opens card and clears filters on beforematch event', () => {
+      const doc = createRescueDOM();
+      const ctrl = initRescueController(doc, { items: MOCK_RESCUE_ITEMS, onHashChange: false });
+
+      const searchInput = doc.querySelector<HTMLInputElement>('#rescue-search')!;
+      const pills = doc.querySelectorAll<HTMLButtonElement>('.pill-btn');
+      const cards = doc.querySelectorAll<HTMLDetailsElement>('.rescue-card');
+
+      searchInput.value = 'jumping picture';
+      dispatchDOMEvent(searchInput, 'input');
+      // Filter to images-anchors first
+      pills[1].click();
+      expect(cards[1].hidden).toBe(true);
+
+      // Trigger beforematch on card 2
+      dispatchDOMEvent(cards[1], 'beforematch');
+
+      expect(ctrl?.getCurrentQuery()).toBe('');
+      expect(ctrl?.getCurrentCategory()).toBe('all');
+      expect(searchInput.value).toBe('');
+      expect(cards[1].hidden).toBe(false);
+      expect(cards[1].open).toBe(true);
+      expect(pills[0].classList.contains('is-active')).toBe(true);
+
+      ctrl?.destroy();
+    });
   });
 });

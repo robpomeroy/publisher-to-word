@@ -23,6 +23,7 @@
   --border-ui: #64748B;          /* Accessible non-text boundary (~4.5:1 on white, WCAG 1.4.11) */
   --border-subtle: #CBD5E1;      /* Decorative dividers */
   --border-focus: #1D4ED8;       /* High-contrast focus outline */
+  --border-accent: #1D4ED8;      /* Accent boundary alias (Word blue) */
 
   /* Accents & Status */
   --accent-word: #1D4ED8;        /* Word blue (~6.5:1 on white) */
@@ -71,6 +72,7 @@
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-pill: 9999px;
+  --radius-full: 9999px;
 
   /* Sizing Constraints */
   --max-content-width: 72rem;
