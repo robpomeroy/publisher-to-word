@@ -33,14 +33,7 @@ const plausibleScriptUrl = resolvePlausibleScriptUrl(
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title} | Publisher to Word Guide</title>
     {plausibleScriptUrl && (
-      <>
-        <!-- Privacy-friendly analytics by Plausible -->
-        <script is:inline async src={plausibleScriptUrl}></script>
-        <script is:inline>
-          window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-          plausible.init()
-        </script>
-      </>
+      <script is:inline async src={plausibleScriptUrl} data-plausible-analytics></script>
     )}
   </head>
   <body>
@@ -51,6 +44,11 @@ const plausibleScriptUrl = resolvePlausibleScriptUrl(
 
     <script>
       import { initPrintTrigger, initPrintDetailsExpansion } from "../utils/print";
+      import { initPlausible } from "../utils/analytics";
+
+      if (document.querySelector("script[data-plausible-analytics]")) {
+        initPlausible();
+      }
 
       initPrintTrigger();
       initPrintDetailsExpansion();
