@@ -84,7 +84,7 @@ const DIRECTORY_ITEMS = [
   },
   {
     publisher: "Multi-column article with banner",
-    wordLocation: "Insert → Breaks → Continuous Section Break, then Layout → Columns → Two",
+    wordLocation: "Layout tab → Breaks → Continuous, then Layout → Columns → Two",
     shortcut: "Alt+P, B, O"
   },
   {
@@ -302,15 +302,6 @@ const EMERGENCY_FIXES = [
   </main>
 </BaseLayout>
 
-<script>
-  const printBtn = document.querySelector('[data-print-trigger]');
-  if (printBtn) {
-    printBtn.addEventListener('click', () => {
-      window.print();
-    });
-  }
-</script>
-
 <style>
   .page-header {
     display: flex;
@@ -424,7 +415,7 @@ const EMERGENCY_FIXES = [
 
   .enter-keys-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
     gap: var(--space-3);
   }
 
@@ -449,12 +440,15 @@ const EMERGENCY_FIXES = [
     box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
     white-space: nowrap;
     color: var(--ink-primary);
+    flex-shrink: 0;
   }
 
   .key-desc {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
+    min-inline-size: 0;
+    overflow-wrap: break-word;
   }
 
   .key-desc strong {
@@ -471,7 +465,7 @@ const EMERGENCY_FIXES = [
   /* Wrap Styles Grid */
   .wrap-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
     gap: var(--space-3);
   }
 
@@ -518,7 +512,7 @@ const EMERGENCY_FIXES = [
   /* Anchors Section */
   .anchors-two-col {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
     gap: var(--space-4);
     margin-block-end: var(--space-3);
   }
@@ -610,7 +604,7 @@ const EMERGENCY_FIXES = [
   /* Emergency Snags */
   .emergency-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
     gap: var(--space-3);
   }
 

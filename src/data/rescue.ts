@@ -19,7 +19,7 @@ export const RESCUE_ITEMS: RescueItem[] = [
     symptom: 'My picture jumped to the next page when I typed above it!',
     category: 'images-anchors',
     cause:
-      "Word pictures are anchored to a paragraph mark (¶). In Publisher, objects rest anywhere on the page canvas. In Word, typing above an anchored picture pushes the anchor paragraph downwards. Once the paragraph crosses the page margin, Word carries the picture with it to the next page.",
+      "Word pictures are anchored to a paragraph mark (¶), causing the classic 'jumping picture' effect. In Publisher, objects rest anywhere on the page canvas. In Word, typing above an anchored picture pushes the anchor paragraph downwards. Once the paragraph crosses the page margin, Word carries the picture with it to the next page.",
     fixSteps: [
       'Select the picture and click the floating Layout Options arch icon beside its top-right corner.',
       "Under 'Position', switch from 'Move with text' to 'Fix position on page'.",
@@ -63,8 +63,8 @@ export const RESCUE_ITEMS: RescueItem[] = [
       'Hold Shift, click each object to multi-select them, go to Shape Format (or Picture Format) → Group → Group.'
     ],
     ribbonPath: 'Shape Format → Group → Group (or Arrange → Group)',
-    altPath: 'Right-click selected objects → Group → Group (Ctrl+G)',
-    tip: 'Press Ctrl+G once all selected objects have floating text wrapping applied.',
+    altPath: 'Right-click selected objects → Group → Group',
+    tip: 'All selected objects must have a floating wrap style (such as Square) applied before the Group button becomes active.',
     lessonSlug: '10-grouping-and-layering',
     lessonTitle: 'Grouping & Layering'
   },

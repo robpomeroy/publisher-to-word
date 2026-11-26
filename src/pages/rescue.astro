@@ -32,7 +32,7 @@ function getCategoryLabel(catId: string): string {
             type="search"
             id="rescue-search"
             class="search-input"
-            placeholder="Filter by symptom, tool or keyword (e.g. jumping picture, white fill, margin)..."
+            placeholder="Filter by symptom, tool or keyword (e.g. jumped picture, white fill, margins)..."
             autocomplete="off"
             spellcheck="false"
           />
@@ -46,6 +46,7 @@ function getCategoryLabel(catId: string): string {
                 class:list={["pill-btn", { "is-active": cat.id === "all" }]}
                 role="radio"
                 aria-checked={cat.id === "all" ? "true" : "false"}
+                tabindex={cat.id === "all" ? 0 : -1}
                 data-category={cat.id}
               >
                 <span>{cat.label}</span>
@@ -244,9 +245,42 @@ function getCategoryLabel(catId: string): string {
         const isActive = btn === pill;
         btn.classList.toggle("is-active", isActive);
         btn.setAttribute("aria-checked", isActive ? "true" : "false");
+        btn.setAttribute("tabindex", isActive ? "0" : "-1");
       }
 
       applyFilter();
+    });
+  }
+
+  // WAI-ARIA Radio Group keyboard navigation
+  const pillsContainer = document.querySelector(".category-pills");
+  if (pillsContainer) {
+    pillsContainer.addEventListener("keydown", (e: Event) => {
+      const keyEvent = e as KeyboardEvent;
+      const pills = Array.from(pillButtons);
+      const currentIndex = pills.findIndex(btn => btn.getAttribute("tabindex") === "0");
+      if (currentIndex === -1) return;
+
+      let nextIndex = -1;
+      if (keyEvent.key === "ArrowRight" || keyEvent.key === "ArrowDown") {
+        keyEvent.preventDefault();
+        nextIndex = (currentIndex + 1) % pills.length;
+      } else if (keyEvent.key === "ArrowLeft" || keyEvent.key === "ArrowUp") {
+        keyEvent.preventDefault();
+        nextIndex = (currentIndex - 1 + pills.length) % pills.length;
+      } else if (keyEvent.key === "Home") {
+        keyEvent.preventDefault();
+        nextIndex = 0;
+      } else if (keyEvent.key === "End") {
+        keyEvent.preventDefault();
+        nextIndex = pills.length - 1;
+      }
+
+      if (nextIndex !== -1) {
+        const nextPill = pills[nextIndex];
+        nextPill.click();
+        nextPill.focus();
+      }
     });
   }
 
@@ -283,6 +317,7 @@ function getCategoryLabel(catId: string): string {
         const isAll = btn.getAttribute("data-category") === "all";
         btn.classList.toggle("is-active", isAll);
         btn.setAttribute("aria-checked", isAll ? "true" : "false");
+        btn.setAttribute("tabindex", isAll ? "0" : "-1");
       }
 
       applyFilter();
@@ -299,6 +334,21 @@ function getCategoryLabel(catId: string): string {
 
     const targetCard = document.getElementById(hash) as HTMLDetailsElement | null;
     if (targetCard && targetCard.classList.contains("rescue-card")) {
+      const cardCategory = targetCard.getAttribute("data-category") as RescueCategory | null;
+      if (currentQuery !== "" || (currentCategory !== "all" && currentCategory !== cardCategory)) {
+        currentQuery = "";
+        currentCategory = "all";
+        if (searchInput) {
+          searchInput.value = "";
+        }
+        for (const btn of pillButtons) {
+          const isAll = btn.getAttribute("data-category") === "all";
+          btn.classList.toggle("is-active", isAll);
+          btn.setAttribute("aria-checked", isAll ? "true" : "false");
+          btn.setAttribute("tabindex", isAll ? "0" : "-1");
+        }
+        applyFilter();
+      }
       targetCard.open = true;
       targetCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
       updateToggleAllButton();
@@ -469,6 +519,11 @@ function getCategoryLabel(catId: string): string {
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
+  .rescue-card[hidden],
+  .empty-state[hidden] {
+    display: none !important;
+  }
+
   .rescue-card:hover {
     border-color: var(--border-accent);
   }
@@ -603,7 +658,7 @@ function getCategoryLabel(catId: string): string {
 
   .paths-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
     gap: var(--space-3);
   }
 

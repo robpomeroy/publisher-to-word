@@ -40,6 +40,7 @@ import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
               class:list={["pill-btn", { "is-active": cat.id === "all" }]}
               role="radio"
               aria-checked={cat.id === "all" ? "true" : "false"}
+              tabindex={cat.id === "all" ? 0 : -1}
               data-category={cat.id}
             >
               <span>{cat.label}</span>
@@ -196,11 +197,44 @@ import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
         const isActive = b === btn;
         b.classList.toggle("is-active", isActive);
         b.setAttribute("aria-checked", isActive ? "true" : "false");
+        b.setAttribute("tabindex", isActive ? "0" : "-1");
       });
 
       applyFilter();
     });
   });
+
+  // WAI-ARIA Radio Group keyboard navigation
+  const pillsContainer = document.querySelector(".category-pills");
+  if (pillsContainer) {
+    pillsContainer.addEventListener("keydown", (e: Event) => {
+      const keyEvent = e as KeyboardEvent;
+      const pills = Array.from(pillBtns);
+      const currentIndex = pills.findIndex(btn => btn.getAttribute("tabindex") === "0");
+      if (currentIndex === -1) return;
+
+      let nextIndex = -1;
+      if (keyEvent.key === "ArrowRight" || keyEvent.key === "ArrowDown") {
+        keyEvent.preventDefault();
+        nextIndex = (currentIndex + 1) % pills.length;
+      } else if (keyEvent.key === "ArrowLeft" || keyEvent.key === "ArrowUp") {
+        keyEvent.preventDefault();
+        nextIndex = (currentIndex - 1 + pills.length) % pills.length;
+      } else if (keyEvent.key === "Home") {
+        keyEvent.preventDefault();
+        nextIndex = 0;
+      } else if (keyEvent.key === "End") {
+        keyEvent.preventDefault();
+        nextIndex = pills.length - 1;
+      }
+
+      if (nextIndex !== -1) {
+        const nextPill = pills[nextIndex];
+        nextPill.click();
+        nextPill.focus();
+      }
+    });
+  }
 
   resetBtn?.addEventListener("click", () => {
     if (searchInput) {
@@ -213,6 +247,7 @@ import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
       const isAll = b.getAttribute("data-category") === "all";
       b.classList.toggle("is-active", isAll);
       b.setAttribute("aria-checked", isAll ? "true" : "false");
+      b.setAttribute("tabindex", isAll ? "0" : "-1");
     });
 
     applyFilter();
@@ -470,6 +505,11 @@ import { TRANSLATOR_CATEGORIES, TRANSLATOR_ENTRIES } from "../data/translator";
 
   .lesson-link:hover .link-arrow {
     transform: translateX(3px);
+  }
+
+  .translator-row[hidden],
+  .empty-state[hidden] {
+    display: none !important;
   }
 
   /* Empty State */

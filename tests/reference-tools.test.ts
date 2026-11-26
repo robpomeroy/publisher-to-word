@@ -144,6 +144,14 @@ describe('Reference Tools Data & Filter Utilities', () => {
       expect(jumpedMatches.length).toBeGreaterThanOrEqual(1);
       expect(jumpedMatches[0].id).toBe('snag-1');
 
+      const jumpingMatches = filterRescueItems(
+        RESCUE_ITEMS,
+        'jumping picture',
+        'all'
+      );
+      expect(jumpingMatches.length).toBeGreaterThanOrEqual(1);
+      expect(jumpingMatches[0].id).toBe('snag-1');
+
       const borderMatches = filterRescueItems(
         RESCUE_ITEMS,
         'cut off',
