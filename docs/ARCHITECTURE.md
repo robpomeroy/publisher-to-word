@@ -56,11 +56,13 @@ flowchart TD
     RescuePage["rescue.astro (/rescue)"]
     ProjectsPage["projects/index.astro (/projects)"]
     CheatSheetPage["cheat-sheet.astro (/cheat-sheet)"]
+    ContentsPage["contents.astro (/contents)"]
   end
 
   subgraph OutputLayer["Production Static Distribution (dist/)"]
-    DistHTML["Static HTML Pages<br/>(8 Pre-rendered Routes)"]
+    DistHTML["Static HTML Pages<br/>(Pre-rendered Static Routes)"]
     DistAssets["Static Assets<br/>(Optimized CSS, Bundled JS, SVG Favicon)"]
+    DistSearch["Pagefind Search Index<br/>(dist/pagefind: WASM & Indexes)"]
     DistSitemap["sitemap-index.xml & sitemap-0.xml"]
   end
 

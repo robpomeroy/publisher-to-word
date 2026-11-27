@@ -21,11 +21,12 @@ Microsoft Word thinks completely differently: it operates as a **river of text**
 | **Home** | `/` | Welcoming overview with interactive visual comparison of Publisher's canvas vs. Word's text stream. |
 | **Start Here** | `/start-here` | 5-minute orientation explaining the core mental shift and the 3 visual switches to turn on immediately in Word (Show/Hide `¶`, Ruler, Alignment Guides). |
 | **Lessons** | `/lessons` | The structured 4-module, 14-lesson curriculum taking learners from basic text flow to multi-column publishing. |
-| **Lesson 1** | `/lessons/01-how-text-flows` | The foundation: Understanding the river of text and why you should never press <kbd>Enter</kbd> 15 times to reach the next page. |
+| **Lesson 1** | `/lessons/01-how-text-flows` | The foundation: Understanding the river of text and why you should never press <kbd>Enter</kbd> multiple times to reach the next page. |
+| **Contents & Search** | `/contents` | Full-text static search powered by Pagefind, complete curriculum directory, and A–Z alphabetical topic index. |
 | **Translator** | `/translator` | Quick "Rosetta Stone" table translating familiar Publisher terms (*Scratch area*, *Picture Frame*, *Master Page*, *Nudge*) into their exact Word equivalent. |
 | **Rescue Guide** | `/rescue` | Symptom-first troubleshooting guide (*"My picture jumped onto the next page!"*, *"The Group button is greyed out!"*, *"My border gets chopped off when printing!"*). |
 | **Projects** | `/projects` | Guided mini-projects (e.g. 1-Page Event Flyer, 2-Column Newsletter) to practise layout skills from scratch. |
-| **Cheat Sheet** | `/cheat-sheet` | Clean 1-page desk reference card optimised for `@media print` to keep beside your keyboard. |
+| **Cheat Sheets** | `/cheat-sheet` | Clean 2-page desk reference cards optimised for `@media print` (1 A4 page per sheet) to keep beside your keyboard. |
 
 ---
 

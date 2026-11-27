@@ -30,7 +30,7 @@ const {
     <div class="lesson-grid">
       <LessonSidebar currentSlug={slug} />
 
-      <main id="content" class="lesson-main" tabindex="-1">
+      <main id="content" class="lesson-main" tabindex="-1" data-pagefind-body>
         <article class="lesson-article">
           <header class="lesson-header">
             <div class="module-badge">
@@ -93,6 +93,7 @@ const {
 
   .lesson-article {
     width: 100%;
+    max-inline-size: 48rem;
   }
 
   .lesson-header {
@@ -126,7 +127,7 @@ const {
     color: var(--ink-secondary);
     line-height: var(--line-height-normal);
     margin-block-end: var(--space-4);
-    max-inline-size: var(--max-prose-width);
+    max-inline-size: 100%;
   }
 
   .ribbon-tabs-used {
@@ -155,6 +156,6 @@ const {
   .lesson-body :global(p),
   .lesson-body :global(ul),
   .lesson-body :global(ol) {
-    max-inline-size: var(--max-prose-width);
+    max-inline-size: 100%;
   }
 </style>

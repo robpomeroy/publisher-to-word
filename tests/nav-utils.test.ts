@@ -5,6 +5,8 @@ import {
   measureNavFits,
   applyNavLayout,
   computeSubmenuFallbackPosition,
+  shouldHandleArrowNav,
+  handleArrowNavKey,
 } from '../src/utils/nav';
 
 describe('Navigation Utilities (src/utils/nav.ts)', () => {
@@ -192,6 +194,101 @@ describe('Navigation Utilities (src/utils/nav.ts)', () => {
       const coords = computeSubmenuFallbackPosition(triggerRect, submenuRect, viewport);
       expect(coords.top).toBe(68);
       expect(coords.left).toBe(784); // 1000 - 200 - 16
+    });
+  });
+
+  describe('shouldHandleArrowNav', () => {
+    it('allows normal arrow navigation when no modifiers or form inputs are focused', () => {
+      const event = { defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: false, shiftKey: false };
+      expect(shouldHandleArrowNav(event, null)).toBe(true);
+      expect(shouldHandleArrowNav(event, { tagName: 'DIV' })).toBe(true);
+      expect(shouldHandleArrowNav(event, { tagName: 'BODY' })).toBe(true);
+    });
+
+    it('blocks arrow navigation when modifier keys are held', () => {
+      expect(shouldHandleArrowNav({ defaultPrevented: false, altKey: true, ctrlKey: false, metaKey: false, shiftKey: false }, null)).toBe(false);
+      expect(shouldHandleArrowNav({ defaultPrevented: false, altKey: false, ctrlKey: true, metaKey: false, shiftKey: false }, null)).toBe(false);
+      expect(shouldHandleArrowNav({ defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: true, shiftKey: false }, null)).toBe(false);
+      expect(shouldHandleArrowNav({ defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: false, shiftKey: true }, null)).toBe(false);
+    });
+
+    it('blocks arrow navigation when inside interactive inputs or buttons', () => {
+      const event = { defaultPrevented: false, altKey: false, ctrlKey: false, metaKey: false, shiftKey: false };
+      expect(shouldHandleArrowNav(event, { tagName: 'INPUT' })).toBe(false);
+      expect(shouldHandleArrowNav(event, { tagName: 'TEXTAREA' })).toBe(false);
+      expect(shouldHandleArrowNav(event, { tagName: 'SELECT' })).toBe(false);
+      expect(shouldHandleArrowNav(event, { tagName: 'BUTTON' })).toBe(false);
+      expect(shouldHandleArrowNav(event, { isContentEditable: true })).toBe(false);
+      expect(shouldHandleArrowNav(event, { getAttribute: (attr: string) => attr === 'role' ? 'slider' : null })).toBe(false);
+      expect(shouldHandleArrowNav(event, { getAttribute: (attr: string) => attr === 'role' ? 'tab' : null })).toBe(false);
+    });
+  });
+
+  describe('handleArrowNavKey', () => {
+    it('calls navigate with prevUrl on ArrowLeft', () => {
+      const navigate = vi.fn();
+      const event = {
+        key: 'ArrowLeft',
+        defaultPrevented: false,
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+        shiftKey: false,
+        target: null,
+      } as unknown as KeyboardEvent;
+
+      const handled = handleArrowNavKey(event, {
+        prevUrl: '/lessons/01-how-text-flows',
+        nextUrl: '/lessons/03-finding-the-controls',
+        navigate,
+      });
+
+      expect(handled).toBe(true);
+      expect(navigate).toHaveBeenCalledWith('/lessons/01-how-text-flows');
+    });
+
+    it('calls navigate with nextUrl on ArrowRight', () => {
+      const navigate = vi.fn();
+      const event = {
+        key: 'ArrowRight',
+        defaultPrevented: false,
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+        shiftKey: false,
+        target: null,
+      } as unknown as KeyboardEvent;
+
+      const handled = handleArrowNavKey(event, {
+        prevUrl: '/lessons/01-how-text-flows',
+        nextUrl: '/lessons/03-finding-the-controls',
+        navigate,
+      });
+
+      expect(handled).toBe(true);
+      expect(navigate).toHaveBeenCalledWith('/lessons/03-finding-the-controls');
+    });
+
+    it('ignores other keys like ArrowUp, ArrowDown, Space', () => {
+      const navigate = vi.fn();
+      const event = {
+        key: 'ArrowDown',
+        defaultPrevented: false,
+        altKey: false,
+        ctrlKey: false,
+        metaKey: false,
+        shiftKey: false,
+        target: null,
+      } as unknown as KeyboardEvent;
+
+      const handled = handleArrowNavKey(event, {
+        prevUrl: '/lessons/01-how-text-flows',
+        nextUrl: '/lessons/03-finding-the-controls',
+        navigate,
+      });
+
+      expect(handled).toBe(false);
+      expect(navigate).not.toHaveBeenCalled();
     });
   });
 });

@@ -258,7 +258,7 @@ import TryItCard from '../../components/teaching/TryItCard.astro';
 
 #### 4. `<GotchaBox>`
 ```mdx
-<GotchaBox title="Common Snag — The 15 Enters Trap" collapsible={false}>
+<GotchaBox title="Common Snag — The Multiple Enters Trap" collapsible={false}>
   <p>Never press Enter multiple times to push content onto the next page!</p>
 </GotchaBox>
 ```

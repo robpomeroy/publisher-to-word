@@ -69,14 +69,182 @@
     color: #000000 !important;
   }
 
-  /* Cheat Sheet Page Breaks */
+  /* Cheat Sheet Page Breaks & Tight Print Layout (Strict 1 Page per Sheet) */
+  @page {
+    size: a4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  .cheat-main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
   .cheat-sheet-page {
     break-after: page;
-    padding-block-end: 1rem;
+    break-inside: avoid;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1.5px solid #000000 !important;
+    background: #FFFFFF !important;
   }
 
   .cheat-sheet-page:last-child {
     break-after: auto;
+  }
+
+  .sheet-container {
+    padding: 4mm 5mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .sheet-header {
+    margin-block-end: 2mm !important;
+    padding-block-end: 1mm !important;
+    border-bottom: 1.5px solid #000000 !important;
+  }
+
+  .sheet-title {
+    font-size: 11pt !important;
+  }
+
+  .sheet-subtitle {
+    font-size: 7.5pt !important;
+    margin: 0 !important;
+  }
+
+  .sheet-badge {
+    font-size: 7pt !important;
+    padding: 0.1rem 0.35rem !important;
+    background-color: #000000 !important;
+    color: #FFFFFF !important;
+  }
+
+  .sheet-grid {
+    gap: 2mm !important;
+  }
+
+  .sheet-card {
+    padding: 1.8mm 2.5mm !important;
+    border-radius: 0 !important;
+    border: 1px solid #94A3B8 !important;
+  }
+
+  .sheet-card .card-title {
+    font-size: 8pt !important;
+    margin-block-end: 1mm !important;
+  }
+
+  .sheet-card .card-intro {
+    font-size: 7pt !important;
+    margin-block-end: 1mm !important;
+  }
+
+  .enter-keys-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 1.5mm !important;
+  }
+
+  .key-item {
+    padding: 1.2mm !important;
+    gap: 1.5mm !important;
+  }
+
+  .key-badge {
+    font-size: 6.5pt !important;
+    padding: 0.1rem 0.25rem !important;
+  }
+
+  .key-desc strong {
+    font-size: 6.5pt !important;
+  }
+
+  .key-desc span {
+    font-size: 6pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .wrap-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.2mm !important;
+  }
+
+  .wrap-card {
+    padding: 1.2mm !important;
+  }
+
+  .wrap-name {
+    font-size: 6.5pt !important;
+  }
+
+  .wrap-badge {
+    font-size: 5.5pt !important;
+    padding: 0 0.2rem !important;
+  }
+
+  .wrap-usage {
+    font-size: 6pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .anchors-two-col {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2mm !important;
+  }
+
+  .anchors-two-col h4 {
+    font-size: 7pt !important;
+    margin-block-end: 0.5mm !important;
+  }
+
+  .anchors-two-col p {
+    font-size: 6pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .anchor-tip {
+    font-size: 6pt !important;
+    margin-block-start: 1mm !important;
+    padding: 0.8mm !important;
+  }
+
+  .numbered-list {
+    font-size: 6pt !important;
+    line-height: 1.25 !important;
+    padding-inline-start: 1rem !important;
+    margin: 0 !important;
+  }
+
+  .cheat-table th,
+  .cheat-table td {
+    padding: 0.8mm 1.2mm !important;
+    font-size: 6pt !important;
+    line-height: 1.2 !important;
+  }
+
+  .emergency-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1.2mm !important;
+  }
+
+  .emergency-card {
+    padding: 1.2mm !important;
+  }
+
+  .emergency-snag {
+    font-size: 6.5pt !important;
+    margin-block-end: 0.4mm !important;
+  }
+
+  .emergency-fix {
+    font-size: 6pt !important;
+    line-height: 1.2 !important;
   }
 
   .no-print,

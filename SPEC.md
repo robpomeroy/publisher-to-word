@@ -50,8 +50,9 @@ The site follows a gentle, progressive learning path while also serving as a fas
 │   └── /14-printing-and-pdf/        # Saving as PDF & Avoiding Cut-Off Borders
 ├── /translator/                     # "Publisher → Word" Quick Lookup (Rosetta Stone)
 ├── /rescue/                         # "Why Did That Happen?" Visual Troubleshooting Guide
+├── /contents/                       # Search, Complete Curriculum Directory & A–Z Topic Index
 ├── /projects/                       # Guided Mini-Projects (e.g., 1-Page Flyer, 2-Column Newsletter)
-└── /cheat-sheet/                    # Print-friendly 1–2 page quick reference cards (@media print)
+└── /cheat-sheet/                    # Print-friendly 2-page desk reference cards (@media print)
 ```
 
 ---
@@ -62,8 +63,8 @@ The site follows a gentle, progressive learning path while also serving as a fas
 
 | # | Lesson | Core Concepts Covered | Interactive / Visual Aid |
 | :-: | :--- | :--- | :--- |
-| **1** | **How Text Flows in Word** | The "Pinboard" (Publisher) vs. "River of Text" (Word) mental model. Why pressing `Enter` pushes things down. Difference between `Enter` (new paragraph), `Shift+Enter` (line break), and `Ctrl+Enter` (Page Break — instead of pressing Enter 15 times!). | Side-by-side animated/interactive SVG comparing Publisher's independent boxes vs. Word's flowing document stream. |
-| **2** | **Turn On Your X-Ray Vision** | Three stress-saving switches to turn on immediately: **Show/Hide `¶`** (`Home` tab), **Ruler** (`View` tab), and **Gridlines / Alignment Guides** (`Layout` → `Align`). Recognising paragraph marks (`¶`), page breaks, and blue object anchors (`⚓`). | Interactive toggle preview of a Word page with `¶` OFF vs. ON showing the hidden clues. |
+| **1** | **How Text Flows in Word** | The "Pinboard" (Publisher) vs. "River of Text" (Word) mental model. Why pressing `Enter` pushes things down. Difference between `Enter` (new paragraph), `Shift+Enter` (line break), and `Ctrl+Enter` (Page Break — instead of pressing Enter multiple times!). | Side-by-side animated/interactive SVG comparing Publisher's independent boxes vs. Word's flowing document stream. |
+| **2** | **Turn On Your X-Ray Vision** | Three stress-saving switches to turn on immediately: **Show/Hide `¶`** (`Home` tab), **Ruler** (`View` tab), and **Gridlines / Alignment Guides** (`Layout` → `Align`, snapping to margins and page centre). Recognising paragraph marks (`¶`), page breaks, and blue object anchors (`⚓`). | Interactive toggle preview of a Word page with `¶` OFF vs. ON showing the hidden clues. |
 | **3** | **Where Did the Buttons Go?** | Navigating Word's **three ways** to reach layout tools: (1) **Contextual Ribbon Tabs** (`Picture Format` and `Shape Format` — explaining why they vanish when you deselect!), (2) the floating **Layout Options** icon beside every picture/box, and (3) the **Right-Click** menu + **Format Picture / Format Shape** side pane. | Interactive Word interface hotspot diagram (click numbered pins to inspect Ribbon, Floating Icon, and Right-Click menu via native popovers). |
 
 ### Module 2: Placing Pictures & Text Boxes Without Fighting Word

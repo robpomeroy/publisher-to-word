@@ -22,7 +22,7 @@ const curriculum = getCurriculum(authored);
           </h1>
           <p class="hero-lead">
             Publisher was like a <strong>pinboard</strong>: you placed a box or picture anywhere and it stayed put.
-            Word is a <strong>river of text</strong>: everything flows from top to bottom. Once you understand three simple rules, laying out documents in Word becomes calm and predictable.
+            Word is a <strong>river of text</strong>: everything flows from top to bottom. Once you understand <a href="#golden-rules" class="hero-rules-link">three simple rules</a>, laying out documents in Word becomes calm and predictable.
           </p>
           <div class="hero-actions">
             <a href="/start-here" class="btn btn-primary">
@@ -97,6 +97,71 @@ const curriculum = getCurriculum(authored);
               In Publisher, items are pinned anywhere. In Word, objects anchor to paragraphs in the stream of text.
             </figcaption>
           </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Three Golden Rules Section -->
+    <section id="golden-rules" class="rules-section">
+      <div class="section-inner">
+        <div class="section-header">
+          <div class="rules-badge">
+            <span class="badge badge-ribbon">Foundational Concepts</span>
+          </div>
+          <h2 class="section-title">The Three Golden Rules of Word Layout</h2>
+          <p class="section-desc">
+            In Publisher, pages were static pinboards. In Word, layout follows three simple laws. Master them, and your documents will behave calmly and predictably.
+          </p>
+        </div>
+
+        <div class="rules-grid">
+          <div class="card rule-card">
+            <div class="rule-header">
+              <span class="rule-badge">Rule 1</span>
+              <h3 class="rule-title">Every Object Has an Anchor</h3>
+            </div>
+            <p class="rule-desc">
+              Floating pictures and text boxes don't float freely in thin air; they attach to a specific paragraph. If that paragraph moves downstream, your object travels with it.
+            </p>
+            <div class="rule-action">
+              <a href="/lessons/04-text-wrapping" class="btn btn-secondary rule-btn">
+                <span>Explore in Lesson 4</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="card rule-card">
+            <div class="rule-header">
+              <span class="rule-badge">Rule 2</span>
+              <h3 class="rule-title">Never Press Enter to Create Space</h3>
+            </div>
+            <p class="rule-desc">
+              Blank paragraphs act like invisible stepping stones that shove downstream content onto subsequent pages. Use paragraph spacing or clean page breaks (<kbd>Ctrl</kbd>+<kbd>Enter</kbd>) instead.
+            </p>
+            <div class="rule-action">
+              <a href="/lessons/01-how-text-flows" class="btn btn-secondary rule-btn">
+                <span>Explore in Lesson 1</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="card rule-card">
+            <div class="rule-header">
+              <span class="rule-badge">Rule 3</span>
+              <h3 class="rule-title">Turn on Formatting Marks</h3>
+            </div>
+            <p class="rule-desc">
+              Layout surprises happen when you work blind. Clicking the pilcrow mark (<samp>¶</samp>) instantly reveals hidden paragraph breaks, spaces, and object anchors.
+            </p>
+            <div class="rule-action">
+              <a href="/lessons/02-show-hidden-clues" class="btn btn-secondary rule-btn">
+                <span>Explore in Lesson 2</span>
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -357,5 +422,85 @@ const curriculum = getCurriculum(authored);
     font-size: var(--font-size-sm);
     margin-block-end: var(--space-4);
     flex-grow: 1;
+  }
+
+  /* Three Golden Rules Section */
+  .hero-rules-link {
+    color: var(--accent-word);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .rules-section {
+    background-color: var(--surface-card);
+    border-top: 1px solid var(--border-subtle);
+    padding-block: var(--space-10);
+  }
+
+  .rules-badge {
+    margin-block-end: var(--space-2);
+  }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-6);
+    margin-block-start: var(--space-8);
+  }
+
+  .rule-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-6);
+    background-color: var(--surface-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+  }
+
+  .rule-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-block-end: var(--space-3);
+  }
+
+  .rule-badge {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent-word);
+    background-color: var(--accent-word-bg);
+    border: 1px solid var(--accent-word-border);
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--radius-sm);
+  }
+
+  .rule-title {
+    font-size: var(--font-size-xl);
+    color: var(--ink-primary);
+    margin: 0;
+    line-height: var(--line-height-snug);
+  }
+
+  .rule-desc {
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+    margin: 0 0 var(--space-6) 0;
+    flex-grow: 1;
+  }
+
+  .rule-action {
+    margin-block-start: auto;
+  }
+
+  .rule-btn {
+    width: 100%;
+    justify-content: center;
   }
 </style>

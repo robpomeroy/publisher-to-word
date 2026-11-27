@@ -11,10 +11,15 @@ const authored = await getCollection("lessons");
 const { prev, next } = getAdjacentLessons(currentSlug, authored);
 ---
 
-<nav class="prev-next-nav" aria-label="Adjacent lessons">
+<nav
+  class="prev-next-nav"
+  aria-label="Adjacent lessons"
+  data-prev-url={prev && prev.isAvailable ? `/lessons/${prev.slug}` : undefined}
+  data-next-url={next && next.isAvailable ? `/lessons/${next.slug}` : undefined}
+>
   <div class="nav-slot prev-slot">
     {prev && (prev.isAvailable ? (
-      <a href={`/lessons/${prev.slug}`} class="nav-card">
+      <a href={`/lessons/${prev.slug}`} class="nav-card" rel="prev">
         <span class="nav-direction">← Previous Lesson</span>
         <span class="nav-title">{prev.order}. {prev.title}</span>
       </a>
@@ -28,7 +33,7 @@ const { prev, next } = getAdjacentLessons(currentSlug, authored);
 
   <div class="nav-slot next-slot">
     {next && (next.isAvailable ? (
-      <a href={`/lessons/${next.slug}`} class="nav-card">
+      <a href={`/lessons/${next.slug}`} class="nav-card" rel="next">
         <span class="nav-direction">Next Lesson →</span>
         <span class="nav-title">{next.order}. {next.title}</span>
       </a>
@@ -41,6 +46,20 @@ const { prev, next } = getAdjacentLessons(currentSlug, authored);
     ))}
   </div>
 </nav>
+
+<script>
+  import { handleArrowNavKey } from "../../utils/nav";
+
+  const navEl = document.querySelector<HTMLElement>(".prev-next-nav");
+  if (navEl) {
+    const prevUrl = navEl.dataset.prevUrl;
+    const nextUrl = navEl.dataset.nextUrl;
+
+    window.addEventListener("keydown", (event: KeyboardEvent) => {
+      handleArrowNavKey(event, { prevUrl, nextUrl });
+    });
+  }
+</script>
 
 <style>
   .prev-next-nav {
