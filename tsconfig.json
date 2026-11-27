@@ -4,5 +4,5 @@
     "strictNullChecks": true,
     "jsx": "preserve"
   },
-  "exclude": ["dist", "coverage", "node_modules"]
+  "exclude": ["dist", "coverage", "node_modules", "public"]
 }
