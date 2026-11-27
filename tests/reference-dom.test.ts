@@ -304,9 +304,9 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
       dispatchDOMEvent(searchInput, 'input');
 
       expect(ctrl?.getCurrentQuery()).toBe('jumping picture');
-      expect(cards[0].hidden).toBe(false);
-      expect(cards[1].hidden).toBe(true);
-      expect(cards[2].hidden).toBe(true);
+      expect(cards[0].hasAttribute('hidden')).toBe(false);
+      expect(cards[1].getAttribute('hidden')).toBe('until-found');
+      expect(cards[2].getAttribute('hidden')).toBe('until-found');
       expect(filterStatus.textContent).toContain('Showing 1 of 3');
     });
 
@@ -369,14 +369,14 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
 
       pills[1].click(); // images-anchors
       expect(ctrl?.getCurrentCategory()).toBe('images-anchors');
-      expect(cards[0].hidden).toBe(false);
-      expect(cards[1].hidden).toBe(true);
+      expect(cards[0].hasAttribute('hidden')).toBe(false);
+      expect(cards[1].getAttribute('hidden')).toBe('until-found');
 
       // Arrow navigation
       sendKey(pillsContainer, 'ArrowRight');
       expect(ctrl?.getCurrentCategory()).toBe('objects-layering');
-      expect(cards[0].hidden).toBe(true);
-      expect(cards[1].hidden).toBe(false);
+      expect(cards[0].getAttribute('hidden')).toBe('until-found');
+      expect(cards[1].hasAttribute('hidden')).toBe(false);
     });
 
     it('handles direct hash navigation and resets filters if target card was filtered', () => {
@@ -397,13 +397,13 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
 
       // First set category to images-anchors (which excludes snag-2 and snag-3)
       pills[1].click();
-      expect(cards[1].hidden).toBe(true);
+      expect(cards[1].getAttribute('hidden')).toBe('until-found');
 
       // Navigate to hash with leading # and custom scrollIntoView
       ctrl?.handleHashNavigation('#snag-2');
 
       expect(ctrl?.getCurrentCategory()).toBe('all');
-      expect(cards[1].hidden).toBe(false);
+      expect(cards[1].hasAttribute('hidden')).toBe(false);
       expect(cards[1].open).toBe(true);
       expect(pills[0].classList.contains('is-active')).toBe(true);
       expect(scrolled).toBe(true);
@@ -461,9 +461,9 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
       expect(ctrl?.getCurrentCategory()).toBe('all');
       expect(searchInput.value).toBe('');
       expect(pills[0].classList.contains('is-active')).toBe(true);
-      expect(cards[0].hidden).toBe(false);
-      expect(cards[1].hidden).toBe(false);
-      expect(cards[2].hidden).toBe(false);
+      expect(cards[0].hasAttribute('hidden')).toBe(false);
+      expect(cards[1].hasAttribute('hidden')).toBe(false);
+      expect(cards[2].hasAttribute('hidden')).toBe(false);
 
       ctrl?.destroy();
     });
@@ -480,7 +480,7 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
       dispatchDOMEvent(searchInput, 'input');
       // Filter to images-anchors first
       pills[1].click();
-      expect(cards[1].hidden).toBe(true);
+      expect(cards[1].getAttribute('hidden')).toBe('until-found');
 
       // Trigger beforematch on card 2
       dispatchDOMEvent(cards[1], 'beforematch');
@@ -488,7 +488,7 @@ describe('Reference Tools DOM Integration Controllers (src/utils/reference-contr
       expect(ctrl?.getCurrentQuery()).toBe('');
       expect(ctrl?.getCurrentCategory()).toBe('all');
       expect(searchInput.value).toBe('');
-      expect(cards[1].hidden).toBe(false);
+      expect(cards[1].hasAttribute('hidden')).toBe(false);
       expect(cards[1].open).toBe(true);
       expect(pills[0].classList.contains('is-active')).toBe(true);
 

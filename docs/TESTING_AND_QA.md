@@ -23,9 +23,9 @@ Running `npm run quality` executes six distinct verification engines in sequence
 flowchart LR
   Step1["1. astro check<br/>(Types & Schemas)"]
   Step2["2. eslint & stylelint<br/>(Code & CSS Standards)"]
-  Step3["3. vitest<br/>(Unit & DOM Tests)"]
-  Step4["4. astro build<br/>(Static Compilation)"]
-  Step5["5. verify:dist<br/>(Rendered HTML & A11y Audit)"]
+  Step3["3. astro build<br/>(Static Compilation)"]
+  Step4["4. vitest<br/>(Unit, DOM & A11y Tests)"]
+  Step5["5. verify:dist<br/>(Rendered HTML & Integrity)"]
   Step6["6. verify:mwg<br/>(Modern Web Guidance Scan)"]
 
   Step1 --> Step2 --> Step3 --> Step4 --> Step5 --> Step6
@@ -42,19 +42,19 @@ flowchart LR
 - **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}" --max-warnings 0`):** Uses `stylelint-config-standard` and `stylelint-config-html` to lint global CSS and inline `<style>` tags in Astro components. Enforces modern CSS syntax (e.g. space-separated `rgb(0 0 0 / 10%)`), logical properties (`margin-block`), and property validation, failing on any warning.
 - **Passing condition:** `0 errors, 0 warnings`.
 
-### Stage 3: Unit, DOM Controller & Automated Accessibility Testing (`npm run test`)
-- Runs `vitest run --coverage`.
-- Executes unit tests for utility functions (e.g. `src/utils/id.ts`) and DOM controller tests for interactive simulators and reference tools (`src/utils/simulator-controllers.ts`, `src/utils/reference-controllers.ts`) using `linkedom`.
-- **Automated WCAG 2.2 AA Audit (`tests/a11y-audit.test.ts`):** Runs `axe-core` via `jsdom` across all 26 static HTML pages in `dist/` (WCAG 2.0, 2.1, 2.2 Level A/AA rules), asserting zero violations.
-- **Design Token Integrity Audit:** Scans all Astro and CSS files in `src/` to verify every `var(--*)` custom property is declared in `src/styles/tokens.css` or scoped component definitions.
-- Enforces strict coverage gates (minimum 85% lines, statements, and functions, 80% branches).
-- **Passing condition:** All test suites pass with 0 failures and meet or exceed coverage thresholds.
-
-### Stage 4: Static Compilation (`npm run build`)
+### Stage 3: Static Compilation (`npm run build`)
 - Runs `astro build`.
 - Generates pre-rendered HTML files and static assets into `dist/`.
 - Generates `sitemap-index.xml` and `sitemap-0.xml`.
 - **Passing condition:** Successful exit code with all expected routes generated.
+
+### Stage 4: Unit, DOM Controller & Automated Accessibility Testing (`npm run test`)
+- Runs `vitest run --coverage`.
+- Executes unit tests for utility functions (e.g. `src/utils/id.ts`) and DOM controller tests for interactive simulators and reference tools (`src/utils/simulator-controllers.ts`, `src/utils/reference-controllers.ts`) using `linkedom`.
+- **Automated WCAG 2.2 AA Audit (`tests/a11y-audit.test.ts`):** Runs `axe-core` via `jsdom` across all 26 fresh static HTML pages in `dist/` (WCAG 2.0, 2.1, 2.2 Level A/AA rules), asserting zero violations.
+- **Design Token Integrity Audit:** Scans all Astro and CSS files in `src/` to verify every `var(--*)` custom property is declared in `src/styles/tokens.css` or scoped component definitions.
+- Enforces strict coverage gates (minimum 85% lines, statements, and functions, 80% branches).
+- **Passing condition:** All test suites pass with 0 failures and meet or exceed coverage thresholds.
 
 ### Stage 5: Rendered Static HTML & Link Audit (`npm run verify:dist`)
 - Runs `node scripts/verify-dist.mjs`.

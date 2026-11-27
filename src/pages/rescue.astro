@@ -331,7 +331,7 @@ function getCategoryLabel(catId: string): string {
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
 
-  .rescue-card[hidden],
+  .rescue-card[hidden]:not([hidden="until-found"]),
   .empty-state[hidden] {
     display: none !important;
   }

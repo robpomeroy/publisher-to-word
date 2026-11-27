@@ -13,7 +13,7 @@
     "lint": "npm run lint:eslint && npm run lint:stylelint",
     "verify:dist": "node scripts/verify-dist.mjs",
     "verify:mwg": "node scripts/verify-mwg.mjs",
-    "quality": "npm run check && npm run lint && npm run test && npm run build && npm run verify:dist && npm run verify:mwg",
+    "quality": "npm run check && npm run lint && npm run build && npm run test && npm run verify:dist && npm run verify:mwg",
     "test": "vitest run --coverage",
     "prepare": "node scripts/setup-hooks.mjs"
   },

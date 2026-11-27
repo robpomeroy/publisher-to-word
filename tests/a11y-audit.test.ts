@@ -86,7 +86,7 @@ describe('Accessibility & WCAG 2.2 AA Audit Suite (axe-core + jsdom)', () => {
               localDefs.add(localDefMatch[1]);
             }
 
-            const varUsageRegex = /var\(\s*(--[\w-]+)(?:\s*,[^)]+)?\)/g;
+            const varUsageRegex = /var\(\s*(--[\w-]+)/g;
             let usageMatch: RegExpExecArray | null;
             while ((usageMatch = varUsageRegex.exec(content)) !== null) {
               const token = usageMatch[1];
