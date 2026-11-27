@@ -51,7 +51,7 @@ flowchart LR
 ### Stage 4: Unit, DOM Controller & Automated Accessibility Testing (`npm run test`)
 - Runs `vitest run --coverage`.
 - Executes unit tests for utility functions (e.g. `src/utils/id.ts`) and DOM controller tests for interactive simulators and reference tools (`src/utils/simulator-controllers.ts`, `src/utils/reference-controllers.ts`) using `linkedom`.
-- **Automated WCAG 2.2 AA Audit (`tests/a11y-audit.test.ts`):** Runs `axe-core` via `jsdom` across all 26 fresh static HTML pages in `dist/` (WCAG 2.0, 2.1, 2.2 Level A/AA rules), asserting zero violations.
+- **Automated WCAG 2.2 AA Audit (`tests/a11y-audit.test.ts`):** Runs `axe-core` via `jsdom` across all 26 fresh static HTML pages in `dist/` (WCAG 2.0, 2.1, 2.2 Level A/AA rules), asserting zero violations. Note: In the headless JSDOM environment without canvas or computed CSS, `axe-core` validates semantic DOM structure, landmarks, ARIA roles, form labels, and SVG accessibility; colour contrast and visual reflow are governed by design tokens (`tokens.css`) and manual audit protocols.
 - **Design Token Integrity Audit:** Scans all Astro and CSS files in `src/` to verify every `var(--*)` custom property is declared in `src/styles/tokens.css` or scoped component definitions.
 - Enforces strict coverage gates (minimum 85% lines, statements, and functions, 80% branches).
 - **Passing condition:** All test suites pass with 0 failures and meet or exceed coverage thresholds.
