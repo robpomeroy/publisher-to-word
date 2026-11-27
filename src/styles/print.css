@@ -8,8 +8,12 @@
   .site-footer,
   .skip-link,
   .lesson-sidebar,
-  .btn,
+  .breadcrumbs,
   .prev-next-nav,
+  .project-prev-next-nav,
+  .btn,
+  .print-btn,
+  .print-action-btn,
   [popover] {
     display: none !important;
   }

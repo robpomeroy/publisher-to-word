@@ -78,9 +78,13 @@ export function initRescueController(
   let currentCategory: RescueCategory = 'all';
   let currentQuery = '';
 
+  function isCardFilteredOut(card: HTMLDetailsElement): boolean {
+    return card.hasAttribute('hidden');
+  }
+
   function updateToggleAllButton(): void {
     if (!toggleAllBtn || !toggleAllText) return;
-    const visibleCards = cards.filter(card => !card.hidden);
+    const visibleCards = cards.filter(card => !isCardFilteredOut(card));
     if (visibleCards.length === 0) {
       toggleAllBtn.disabled = true;
       return;
@@ -99,9 +103,11 @@ export function initRescueController(
     for (const card of cards) {
       const cardId = card.getAttribute('data-id') || '';
       const isVisible = visibleIds.has(cardId);
-      card.hidden = !isVisible;
       if (isVisible) {
+        card.removeAttribute('hidden');
         visibleCount++;
+      } else {
+        card.setAttribute('hidden', 'until-found');
       }
     }
 
@@ -166,7 +172,7 @@ export function initRescueController(
   };
 
   const handleToggleAllClick = () => {
-    const visibleCards = cards.filter(card => !card.hidden);
+    const visibleCards = cards.filter(card => !isCardFilteredOut(card));
     const allOpen = visibleCards.every(card => card.open);
     const targetState = !allOpen;
 
@@ -178,10 +184,33 @@ export function initRescueController(
   };
 
   const cardToggleHandlers = new Map<HTMLDetailsElement, () => void>();
+  const cardBeforeMatchHandlers = new Map<HTMLDetailsElement, () => void>();
   for (const card of cards) {
-    const handler = () => updateToggleAllButton();
-    cardToggleHandlers.set(card, handler);
-    card.addEventListener('toggle', handler);
+    const toggleHandler = () => updateToggleAllButton();
+    cardToggleHandlers.set(card, toggleHandler);
+    card.addEventListener('toggle', toggleHandler);
+
+    const beforeMatchHandler = () => {
+      // If user uses browser Find-in-Page (Ctrl+F), ensure all cards are visible and active card opens
+      if (currentQuery !== '' || currentCategory !== 'all') {
+        currentQuery = '';
+        currentCategory = 'all';
+        if (searchInput) {
+          searchInput.value = '';
+        }
+        for (const btn of pillButtons) {
+          const isAll = btn.getAttribute('data-category') === 'all';
+          btn.classList.toggle('is-active', isAll);
+          btn.setAttribute('aria-checked', isAll ? 'true' : 'false');
+          btn.setAttribute('tabindex', isAll ? '0' : '-1');
+        }
+        applyFilter();
+      }
+      card.open = true;
+      updateToggleAllButton();
+    };
+    cardBeforeMatchHandlers.set(card, beforeMatchHandler);
+    card.addEventListener('beforematch', beforeMatchHandler);
   }
 
   const handleResetClick = () => {
@@ -269,6 +298,9 @@ export function initRescueController(
       }
       for (const [card, handler] of cardToggleHandlers) {
         card.removeEventListener('toggle', handler);
+      }
+      for (const [card, handler] of cardBeforeMatchHandlers) {
+        card.removeEventListener('beforematch', handler);
       }
       if (win && options.onHashChange !== false) {
         win.removeEventListener('hashchange', handleWindowHashChange);
