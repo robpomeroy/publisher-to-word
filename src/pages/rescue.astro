@@ -336,6 +336,21 @@ function getCategoryLabel(catId: string): string {
     display: none !important;
   }
 
+  /* When filtered out with hidden="until-found", collapse outer box and margins completely while preserving search discovery */
+  .rescue-card[hidden="until-found"] {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    block-size: 0 !important;
+    min-block-size: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .rescue-card[hidden="until-found"] > summary {
+    display: none !important;
+  }
+
   .rescue-card:hover {
     border-color: var(--accent-word);
   }
