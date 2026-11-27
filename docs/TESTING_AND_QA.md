@@ -42,11 +42,11 @@ flowchart LR
 - **`npm run lint:stylelint` (`stylelint "src/**/*.{css,astro}" --max-warnings 0`):** Uses `stylelint-config-standard` and `stylelint-config-html` to lint global CSS and inline `<style>` tags in Astro components. Enforces modern CSS syntax (e.g. space-separated `rgb(0 0 0 / 10%)`), logical properties (`margin-block`), and property validation, failing on any warning.
 - **Passing condition:** `0 errors, 0 warnings`.
 
-### Stage 3: Static Compilation (`npm run build`)
-- Runs `astro build`.
-- Generates pre-rendered HTML files and static assets into `dist/`.
+### Stage 3: Static Compilation & Search Indexing (`npm run build`)
+- Runs `astro build && npx pagefind --site dist`.
+- Generates pre-rendered HTML files, static assets, and Pagefind WebAssembly search indexes into `dist/`.
 - Generates `sitemap-index.xml` and `sitemap-0.xml`.
-- **Passing condition:** Successful exit code with all expected routes generated.
+- **Passing condition:** Successful exit code with all expected routes and search indexes generated.
 
 ### Stage 4: Unit, DOM Controller & Automated Accessibility Testing (`npm run test`)
 - Runs `vitest run --coverage`.

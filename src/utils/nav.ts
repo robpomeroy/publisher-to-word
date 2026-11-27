@@ -111,3 +111,71 @@ export function computeSubmenuFallbackPosition(
 
   return { top, left };
 }
+
+/**
+ * Determines whether a keyboard event should trigger adjacent lesson navigation.
+ * Prevents intercepting arrow keys when typing into inputs, sliders, buttons, or with modifier keys.
+ */
+export function shouldHandleArrowNav(
+  event: Pick<KeyboardEvent, 'defaultPrevented' | 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey'>,
+  target: unknown
+): boolean {
+  if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+    return false;
+  }
+  if (!target || typeof target !== 'object') {
+    return true;
+  }
+
+  const el = target as { tagName?: string; getAttribute?: (attr: string) => string | null; isContentEditable?: boolean };
+  if (typeof el.tagName === 'string') {
+    const tag = el.tagName.toUpperCase();
+    if (['INPUT', 'TEXTAREA', 'SELECT', 'OPTION', 'BUTTON'].includes(tag)) {
+      return false;
+    }
+  }
+  if (el.isContentEditable) {
+    return false;
+  }
+  if (typeof el.getAttribute === 'function') {
+    const role = el.getAttribute('role');
+    if (role === 'slider' || role === 'tab' || role === 'combobox' || role === 'textbox') {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Handles ArrowLeft and ArrowRight keydown navigation.
+ */
+export function handleArrowNavKey(
+  event: KeyboardEvent,
+  options: {
+    prevUrl?: string;
+    nextUrl?: string;
+    navigate?: (url: string) => void;
+  }
+): boolean {
+  if (!shouldHandleArrowNav(event, event.target)) {
+    return false;
+  }
+
+  const navigate = options.navigate || ((url: string) => {
+    if (typeof window !== 'undefined' && window.location) {
+      window.location.href = url;
+    }
+  });
+
+  if (event.key === 'ArrowLeft' && options.prevUrl) {
+    navigate(options.prevUrl);
+    return true;
+  }
+  if (event.key === 'ArrowRight' && options.nextUrl) {
+    navigate(options.nextUrl);
+    return true;
+  }
+
+  return false;
+}
+

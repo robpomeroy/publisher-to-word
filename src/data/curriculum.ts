@@ -72,7 +72,7 @@ export const MODULE_OUTLINES: ModuleMeta[] = [
         slug: "04-text-wrapping",
         order: 4,
         title: "Text Wrapping Options",
-        summary: "Tour all 7 wrap styles: In Line with Text, Square, Tight, Top & Bottom, and In Front of Text.",
+        summary: "Tour all 7 wrap styles: In Line, Square, Tight, Through, Top & Bottom, Behind Text, and In Front of Text.",
         module: 2,
         isAvailable: false
       },

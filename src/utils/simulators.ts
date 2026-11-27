@@ -28,7 +28,7 @@ export const HOTSPOTS: Hotspot[] = [
     xPercent: 62,
     yPercent: 14,
     summary:
-      "A coloured tab (gold or amber) that appears on Word's top Ribbon only when a picture, shape, or text box is actively selected.",
+      "A contextual tab that appears at the right of Word's top Ribbon only when a picture, shape, or text box is actively selected.",
     tip: "Houses Shape Fill, Shape Outline, Wrap Text, and precision alignment tools. If you click away, this tab vanishes instantly.",
     ribbonRoute: ["Select Object", "Picture Format or Shape Format", "Arrange or Shape Styles"],
   },

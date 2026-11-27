@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npx pagefind --site dist && node -e \"fs.cpSync('dist/pagefind', 'public/pagefind', {recursive: true})\"",
+    "pagefind": "npx pagefind --site dist && node -e \"fs.cpSync('dist/pagefind', 'public/pagefind', {recursive: true})\"",
     "preview": "astro preview",
     "check": "astro check --minimumFailingSeverity hint",
     "lint:eslint": "eslint . --max-warnings 0",

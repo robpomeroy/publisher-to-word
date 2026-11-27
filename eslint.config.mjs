@@ -33,6 +33,7 @@ export default [
       'coverage/**',
       '.astro/**',
       'node_modules/**',
+      'public/**',
       'package-lock.json',
     ],
   },

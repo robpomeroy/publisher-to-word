@@ -205,7 +205,7 @@ export const TRANSLATOR_ENTRIES: TranslatorEntry[] = [
     id: 'smart-guides',
     category: 'align-layer',
     publisher: 'Smart Alignment Guides (Green snapping lines)',
-    word: 'Layout tab → Align drop-down → Tick \'Use Alignment Guides\'. Word displays green guidelines when shapes line up with margins or photos.',
+    word: 'Layout tab → Align drop-down → Tick \'Use Alignment Guides\'. Word displays green guidelines when shapes line up with page margins or the centre of the page.',
     ribbonPath: 'Layout → Arrange → Align → Use Alignment Guides',
     altPath: 'Shape Format → Align → Use Alignment Guides',
     tip: 'If objects refuse to snap neatly, hold Alt while dragging to temporarily disable grid snapping.',

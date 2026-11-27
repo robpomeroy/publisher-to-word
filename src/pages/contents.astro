@@ -1,0 +1,634 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import { getCurriculum } from "../data/curriculum";
+
+const authored = await getCollection("lessons");
+const curriculum = getCurriculum(authored);
+
+const TOPIC_INDEX = [
+  {
+    letter: "A",
+    topics: [
+      { name: "Alignment Guides (Green snapping lines)", href: "/lessons/02-show-hidden-clues", label: "Lesson 2" },
+      { name: "Align & Distribute (Align to Margin vs. Objects)", href: "/lessons/09-align-and-distribute", label: "Lesson 9" },
+      { name: "Anchor Icon (⚓) & Object Pinning", href: "/lessons/05-anchors-and-positioning", label: "Lesson 5" },
+      { name: "Autofit Table Contents", href: "/projects/01-community-event-flyer", label: "Project 1" },
+    ]
+  },
+  {
+    letter: "B",
+    topics: [
+      { name: "Behind Text Wrap (Watermarks)", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+      { name: "Bleed & Unprintable Margins", href: "/lessons/14-printing-and-pdf", label: "Lesson 14" },
+      { name: "Booklet Printing (Book Fold)", href: "/projects/03-event-programme-booklet", label: "Project 3" },
+      { name: "Borders & Fills (Shape Outline vs Page Border)", href: "/lessons/08-borders-and-fills", label: "Lesson 8" },
+      { name: "Breaks (Page Break vs Section Break)", href: "/lessons/01-how-text-flows", label: "Lesson 1" },
+    ]
+  },
+  {
+    letter: "C",
+    topics: [
+      { name: "Club Newsletter Project", href: "/projects/02-club-newsletter", label: "Project 2" },
+      { name: "Columns & Sections (Multi-column newsletters)", href: "/lessons/13-headers-footers-pages", label: "Lesson 13" },
+      { name: "Contextual Ribbon Tabs (Picture Format, Shape Format)", href: "/lessons/03-finding-the-controls", label: "Lesson 3" },
+      { name: "Continuous Section Breaks", href: "/lessons/13-headers-footers-pages", label: "Lesson 13" },
+      { name: "Ctrl+Enter (Page Break shortcut)", href: "/lessons/01-how-text-flows", label: "Lesson 1" },
+    ]
+  },
+  {
+    letter: "D",
+    topics: [
+      { name: "Distribute Horizontally & Vertically", href: "/lessons/09-align-and-distribute", label: "Lesson 9" },
+      { name: "Draw Text Box (Unformatted container)", href: "/lessons/06-text-boxes-and-margins", label: "Lesson 6" },
+      { name: "Duplex Printing (Flip on Short Edge)", href: "/projects/03-event-programme-booklet", label: "Project 3" },
+    ]
+  },
+  {
+    letter: "E",
+    topics: [
+      { name: "Enter Key (Paragraph break vs Soft break)", href: "/lessons/01-how-text-flows", label: "Lesson 1" },
+      { name: "Emergency Troubleshooting", href: "/rescue", label: "Rescue Guide" },
+      { name: "Eyedropper Colour Picker", href: "/lessons/08-borders-and-fills", label: "Lesson 8" },
+    ]
+  },
+  {
+    letter: "F",
+    topics: [
+      { name: "Fix Position on Page (Static placement)", href: "/lessons/05-anchors-and-positioning", label: "Lesson 5" },
+      { name: "Floating Layout Options Arch", href: "/lessons/03-finding-the-controls", label: "Lesson 3" },
+      { name: "Formatting Marks (Show/Hide ¶)", href: "/lessons/02-show-hidden-clues", label: "Lesson 2" },
+      { name: "Flyer Design Project", href: "/projects/01-community-event-flyer", label: "Project 1" },
+    ]
+  },
+  {
+    letter: "G",
+    topics: [
+      { name: "Grouping Objects (Shape Format → Group)", href: "/lessons/10-grouping-and-layering", label: "Lesson 10" },
+      { name: "Guides & Snapping", href: "/lessons/02-show-hidden-clues", label: "Lesson 2" },
+    ]
+  },
+  {
+    letter: "H",
+    topics: [
+      { name: "Headers & Footers (Unlinking Previous)", href: "/lessons/13-headers-footers-pages", label: "Lesson 13" },
+    ]
+  },
+  {
+    letter: "I",
+    topics: [
+      { name: "In Front of Text Wrap (Publisher freedom)", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+      { name: "In Line with Text Wrap (Word default)", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+      { name: "Internal Text Box Margins (Padding)", href: "/lessons/06-text-boxes-and-margins", label: "Lesson 6" },
+      { name: "Invisible Tables for Side-by-Side Content", href: "/lessons/12-invisible-tables", label: "Lesson 12" },
+    ]
+  },
+  {
+    letter: "L",
+    topics: [
+      { name: "Layering & Z-Order (Bring Forward / Send Backward)", href: "/lessons/10-grouping-and-layering", label: "Lesson 10" },
+      { name: "Link Text Boxes (Story overflow)", href: "/lessons/06-text-boxes-and-margins", label: "Lesson 6" },
+    ]
+  },
+  {
+    letter: "M",
+    topics: [
+      { name: "Mac Keyboard Differences", href: "/start-here", label: "Start Here" },
+      { name: "Master Pages (Word Header/Footer equivalent)", href: "/translator", label: "Translator" },
+      { name: "Move with Text vs. Fix Position", href: "/lessons/05-anchors-and-positioning", label: "Lesson 5" },
+    ]
+  },
+  {
+    letter: "N",
+    topics: [
+      { name: "Newsletter Layout Project", href: "/projects/02-club-newsletter", label: "Project 2" },
+      { name: "Nudge Positioning (Ctrl + Arrow keys)", href: "/lessons/09-align-and-distribute", label: "Lesson 9" },
+    ]
+  },
+  {
+    letter: "O",
+    topics: [
+      { name: "Object Anchors (⚓)", href: "/lessons/05-anchors-and-positioning", label: "Lesson 5" },
+      { name: "Outlines & Fills (Shape styling)", href: "/lessons/08-borders-and-fills", label: "Lesson 8" },
+    ]
+  },
+  {
+    letter: "P",
+    topics: [
+      { name: "Page Borders (Measure from Text)", href: "/lessons/11-page-borders-and-setup", label: "Lesson 11" },
+      { name: "Page Breaks (Ctrl + Enter)", href: "/lessons/01-how-text-flows", label: "Lesson 1" },
+      { name: "PDF Export (Press-ready quality)", href: "/lessons/14-printing-and-pdf", label: "Lesson 14" },
+      { name: "Pilcrow Mark (¶)", href: "/lessons/02-show-hidden-clues", label: "Lesson 2" },
+      { name: "Printable Cheat Sheets", href: "/cheat-sheet", label: "Cheat Sheets" },
+    ]
+  },
+  {
+    letter: "R",
+    topics: [
+      { name: "Rescue Guide (Troubleshooting)", href: "/rescue", label: "Rescue Guide" },
+      { name: "River of Text Mental Model", href: "/lessons/01-how-text-flows", label: "Lesson 1" },
+      { name: "Ruler & Margin Indents", href: "/lessons/02-show-hidden-clues", label: "Lesson 2" },
+    ]
+  },
+  {
+    letter: "S",
+    topics: [
+      { name: "Sandboxes (Interactive Simulators)", href: "/sandboxes", label: "Sandboxes" },
+      { name: "Scratch Area Alternative", href: "/translator", label: "Translator" },
+      { name: "Section Breaks (Next Page vs Continuous)", href: "/lessons/13-headers-footers-pages", label: "Lesson 13" },
+      { name: "Selection Pane (Managing hidden/stacked layers)", href: "/lessons/10-grouping-and-layering", label: "Lesson 10" },
+      { name: "Shift+Enter (Soft line break)", href: "/lessons/01-how-text-flows", label: "Lesson 1" },
+      { name: "Square Text Wrapping", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+    ]
+  },
+  {
+    letter: "T",
+    topics: [
+      { name: "Table Grids for Layout Alignment", href: "/lessons/12-invisible-tables", label: "Lesson 12" },
+      { name: "Text Box Padding (Zero margins)", href: "/lessons/06-text-boxes-and-margins", label: "Lesson 6" },
+      { name: "Text Wrapping (All 7 modes)", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+      { name: "Tight & Through Wrap", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+      { name: "Translator (Publisher to Word Terms)", href: "/translator", label: "Translator" },
+    ]
+  },
+  {
+    letter: "W",
+    topics: [
+      { name: "Watermarks (Behind Text wrap)", href: "/lessons/04-text-wrapping", label: "Lesson 4" },
+      { name: "Where Did the Buttons Go?", href: "/lessons/03-finding-the-controls", label: "Lesson 3" },
+      { name: "Wrap Text Simulator", href: "/sandboxes", label: "Sandboxes" },
+    ]
+  },
+  {
+    letter: "X",
+    topics: [
+      { name: "X-Ray Vision (Show/Hide Formatting Clues)", href: "/lessons/02-show-hidden-clues", label: "Lesson 2" },
+    ]
+  }
+];
+---
+
+<BaseLayout title="Contents & Topic Index">
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" slot="head" />
+  <script is:inline src="/pagefind/pagefind-ui.js" slot="head"></script>
+
+  <main id="content" class="page-main contents-main" tabindex="-1">
+    <header class="page-header">
+      <span class="badge badge-ribbon">Site Overview</span>
+      <h1>Contents & Topic Index</h1>
+      <p class="lead">
+        Search the entire website instantly, or explore our structured curriculum, companion tools, and alphabetical topic index.
+      </p>
+    </header>
+
+    <!-- Search Section -->
+    <section class="section search-section">
+      <div class="search-header">
+        <h2 class="section-title">Instant Search</h2>
+        <p class="section-desc">
+          Type any Word or Publisher term to search all 14 lessons, reference tools, and troubleshooting guides.
+        </p>
+      </div>
+
+      <div id="search" class="search-box">
+        <form class="search-fallback-form" role="search" onsubmit="return false;">
+          <label for="search-input-field" class="visually-hidden">Search this guide</label>
+          <div class="search-input-wrapper">
+            <svg class="search-input-icon" viewBox="0 0 20 20" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9z" clip-rule="evenodd" />
+            </svg>
+            <input
+              type="search"
+              id="search-input-field"
+              class="search-fallback-input"
+              placeholder="Search lessons, sandboxes, translator, and rescue guide..."
+              autocomplete="off"
+            />
+          </div>
+        </form>
+      </div>
+
+      <noscript>
+        <div class="callout callout-publisher">
+          <p>
+            Instant search requires JavaScript to run the local Pagefind index. You can still browse the full curriculum and alphabetical index below.
+          </p>
+        </div>
+      </noscript>
+    </section>
+
+    <!-- Companion Reference Tools -->
+    <section class="section tools-overview-section">
+      <h2 class="section-title">Companion Reference Tools</h2>
+      <div class="tools-grid">
+        <div class="card tool-card">
+          <h3 class="tool-title">Start Here</h3>
+          <p class="tool-desc">A five-minute visual orientation covering Word's core mental model shift and the three essential visual switches.</p>
+          <a href="/start-here" class="btn btn-secondary">Open Start Here →</a>
+        </div>
+        <div class="card tool-card">
+          <h3 class="tool-title">Interactive Sandboxes</h3>
+          <p class="tool-desc">Four visual playgrounds for hands-on experimentation with text wrapping, object anchors, text box padding, and precision alignment.</p>
+          <a href="/sandboxes" class="btn btn-secondary">Open Sandboxes →</a>
+        </div>
+        <div class="card tool-card">
+          <h3 class="tool-title">Publisher → Word Translator</h3>
+          <p class="tool-desc">Instant cross-reference table translating 18 familiar Publisher concepts directly into modern Word equivalents.</p>
+          <a href="/translator" class="btn btn-secondary">Open Translator →</a>
+        </div>
+        <div class="card tool-card">
+          <h3 class="tool-title">Rescue Guide</h3>
+          <p class="tool-desc">Visual triage guide for when objects jump across pages, buttons disappear, or text boxes misbehave.</p>
+          <a href="/rescue" class="btn btn-secondary">View Rescue Guide →</a>
+        </div>
+        <div class="card tool-card">
+          <h3 class="tool-title">Printable Cheat Sheets</h3>
+          <p class="tool-desc">Two compact reference sheets formatted for clean A4 printing to keep beside your keyboard.</p>
+          <a href="/cheat-sheet" class="btn btn-secondary">Get Cheat Sheets →</a>
+        </div>
+        <div class="card tool-card">
+          <h3 class="tool-title">Hands-On Projects</h3>
+          <p class="tool-desc">Three realistic end-to-end design tutorials: Community Event Flyer, Neighbourhood Newsletter, and Folded Event Programme.</p>
+          <a href="/projects" class="btn btn-secondary">View Projects →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full Curriculum Overview -->
+    <section class="section curriculum-section">
+      <h2 class="section-title">Step-by-Step Curriculum</h2>
+      <div class="modules-list">
+        {curriculum.map(mod => (
+          <div class="card module-block">
+            <div class="module-header">
+              <span class="badge badge-ribbon">Module {mod.number}</span>
+              <h3 class="module-title">{mod.title}</h3>
+            </div>
+            <p class="module-summary">{mod.summary}</p>
+            <ul class="lesson-items">
+              {mod.lessons.map(lesson => (
+                <li class="lesson-item">
+                  <a href={`/lessons/${lesson.slug}`} class="lesson-link">
+                    <span class="lesson-num">{lesson.order}.</span>
+                    <span class="lesson-text-wrap">
+                      <span class="lesson-name">{lesson.title}</span>
+                      <span class="lesson-desc">{lesson.summary}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Alphabetical Topic Index -->
+    <section class="section index-section">
+      <h2 class="section-title">A–Z Topic & Feature Index</h2>
+      <p class="section-desc">Quickly find specific tools, settings, and techniques across the guide:</p>
+
+      <div class="index-grid">
+        {TOPIC_INDEX.map(group => (
+          <div class="card index-card">
+            <h3 class="index-letter">{group.letter}</h3>
+            <ul class="index-list">
+              {group.topics.map(topic => (
+                <li class="index-item">
+                  <a href={topic.href} class="index-link">
+                    <span class="topic-name">{topic.name}</span>
+                    <span class="badge badge-contextual topic-badge">{topic.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+<script>
+  function initPagefind(): void {
+    const container = document.querySelector("#search");
+    if (!container) return;
+
+    const win = window as unknown as { PagefindUI?: new (opts: Record<string, unknown>) => void };
+
+    if (typeof win.PagefindUI !== "undefined") {
+      if (container.querySelector(".pagefind-ui")) return;
+
+      // Preserve any search text typed into the placeholder input
+      const fallbackInput = document.getElementById("search-input-field") as HTMLInputElement | null;
+      const pendingQuery = fallbackInput ? fallbackInput.value : "";
+
+      new win.PagefindUI({
+        element: "#search",
+        showSubResults: true,
+        showImages: false,
+        translations: {
+          placeholder: "Search lessons, sandboxes, translator, and rescue guide...",
+          clear_search: "Clear",
+          load_more: "Load more results",
+          search_label: "Search this guide",
+          filters_label: "Filters",
+          zero_results: 'No results found for "[SEARCH_TERM]"',
+          many_results: '[COUNT] results found for "[SEARCH_TERM]"',
+          one_result: '1 result found for "[SEARCH_TERM]"',
+          alt_search: 'No results found for "[SEARCH_TERM]". Showing results for "[DIFFERENT_TERM]" instead',
+          search_suggestion: 'No results found for "[SEARCH_TERM]". Try one of the following searches:',
+          searching: 'Searching for "[SEARCH_TERM]"...'
+        }
+      });
+
+      if (pendingQuery) {
+        const pagefindInput = container.querySelector(".pagefind-ui__search-input") as HTMLInputElement | null;
+        if (pagefindInput) {
+          pagefindInput.value = pendingQuery;
+          pagefindInput.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
+    } else {
+      setTimeout(initPagefind, 50);
+    }
+  }
+
+  initPagefind();
+  window.addEventListener("DOMContentLoaded", initPagefind);
+</script>
+</BaseLayout>
+
+<style>
+  .contents-main {
+    max-inline-size: 64rem;
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    padding-block: var(--space-8);
+  }
+
+  .page-header {
+    margin-block-end: var(--space-8);
+    padding-block-end: var(--space-6);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .lead {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-normal);
+    color: var(--ink-secondary);
+    margin-block-start: var(--space-2);
+  }
+
+  .section {
+    margin-block-end: var(--space-10);
+  }
+
+  .section-title {
+    font-size: var(--font-size-2xl);
+    color: var(--ink-primary);
+    margin-block-end: var(--space-2);
+  }
+
+  .section-desc {
+    font-size: var(--font-size-base);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+    margin-block-end: var(--space-6);
+  }
+
+  /* Pagefind Search Box Custom Styling */
+  .search-section {
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 4%);
+  }
+
+  .search-box {
+    margin-block-start: var(--space-4);
+
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-primary: var(--accent-word);
+    --pagefind-ui-text: var(--ink-primary);
+    --pagefind-ui-background: var(--surface-card);
+    --pagefind-ui-border: var(--border-ui);
+    --pagefind-ui-tag: var(--surface-subtle);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: var(--radius-md);
+    --pagefind-ui-font: var(--font-sans);
+  }
+
+  .search-fallback-form {
+    inline-size: 100%;
+  }
+
+  .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+  }
+
+  .search-input-icon {
+    position: absolute;
+    inset-inline-start: var(--space-3);
+    color: var(--ink-secondary);
+    pointer-events: none;
+  }
+
+  .search-fallback-input {
+    inline-size: 100%;
+    padding: var(--space-3) var(--space-4);
+    padding-inline-start: 2.5rem;
+    font-size: var(--font-size-base);
+    font-family: var(--font-sans);
+    color: var(--ink-primary);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-ui);
+    border-radius: var(--radius-md);
+    box-sizing: border-box;
+    outline-offset: 2px;
+  }
+
+  .search-fallback-input:focus-visible {
+    outline: 3px solid var(--border-focus);
+    border-color: var(--border-focus);
+  }
+
+  /* Tools Grid */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-4);
+  }
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-5);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .tool-title {
+    font-size: var(--font-size-lg);
+    margin-block: 0 var(--space-2);
+  }
+
+  .tool-desc {
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+    margin-block-end: var(--space-4);
+    flex-grow: 1;
+  }
+
+  /* Curriculum Module Blocks */
+  .modules-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .module-block {
+    padding: var(--space-6);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .module-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-block-end: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .module-title {
+    font-size: var(--font-size-xl);
+    color: var(--ink-primary);
+    margin: 0;
+  }
+
+  .module-summary {
+    font-size: var(--font-size-sm);
+    color: var(--ink-secondary);
+    margin-block: 0 var(--space-4);
+  }
+
+  .lesson-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+    gap: var(--space-3);
+  }
+
+  .lesson-item {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background-color: var(--surface-page);
+    transition: border-color 0.15s ease;
+  }
+
+  .lesson-item:hover {
+    border-color: var(--accent-word);
+  }
+
+  .lesson-link {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    text-decoration: none;
+    color: var(--ink-primary);
+  }
+
+  .lesson-num {
+    font-weight: 700;
+    color: var(--accent-word);
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+  }
+
+  .lesson-text-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .lesson-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--accent-word);
+  }
+
+  .lesson-desc {
+    font-size: var(--font-size-xs);
+    color: var(--ink-secondary);
+    line-height: var(--line-height-normal);
+  }
+
+  /* Index Grid */
+  .index-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+    gap: var(--space-4);
+  }
+
+  .index-card {
+    padding: var(--space-5);
+    background-color: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+  }
+
+  .index-letter {
+    font-size: var(--font-size-2xl);
+    font-weight: 800;
+    color: var(--accent-word);
+    margin: 0 0 var(--space-3) 0;
+    border-bottom: 2px solid var(--accent-word-border);
+    padding-bottom: var(--space-1);
+  }
+
+  .index-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .index-item {
+    display: flex;
+  }
+
+  .index-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    text-decoration: none;
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-normal);
+    color: var(--ink-primary);
+    padding: 0.2rem 0;
+  }
+
+  .index-link:hover .topic-name {
+    color: var(--accent-word);
+    text-decoration: underline;
+  }
+
+  .topic-badge {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+</style>

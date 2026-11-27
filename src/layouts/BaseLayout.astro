@@ -35,6 +35,7 @@ const plausibleScriptUrl = resolvePlausibleScriptUrl(
     {plausibleScriptUrl && (
       <script is:inline async src={plausibleScriptUrl} data-plausible-analytics></script>
     )}
+    <slot name="head" />
   </head>
   <body>
     <a href="#content" class="skip-link visually-hidden">Skip to main content</a>
